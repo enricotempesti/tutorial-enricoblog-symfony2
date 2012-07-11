@@ -1,0 +1,1159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0075)http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic — symblog - A Symfony2 Tutorial</title>
+    
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina contatti,vista,Twig,assetic,symblog" /> 
+    
+    <link rel="stylesheet" href="pag5_files/haiku.css" type="text/css">
+    <link rel="stylesheet" href="pag5_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="pag5_files/print.css" type="text/css">
+    
+    <script src="pag5_files/ga_002.js" async="" type="text/javascript"></script><script gapi_processed="true" src="pag5_files/plusone_002.js" async="" type="text/javascript"></script><script async="" src="pag5_files/cbgapi.loaded_0"></script><script src="pag5_files/cbgapi.txt" async=""></script><script type="text/javascript" async="" src="pag5_files/ga.js"></script><script type="text/javascript" async="" src="pag5_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script gapi_processed="true" type="text/javascript" src="pag5_files/jquery.js"></script>
+    <script type="text/javascript" src="pag5_files/underscore.js"></script>
+    <script type="text/javascript" src="pag5_files/doctools.js"></script>
+    <script type="text/javascript" src="pag5_files/theme_extras.js"></script>
+    <link rel="top" title="symblog - A Symfony2 Tutorial" href="http://tutorial.symblog.co.uk/index.html">
+    <link rel="next" title="[Part 6] - Testing: Unit and Functional with PHPUnit" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html">
+    <link rel="prev" title="[Part 4] - The Comments Model: Adding comments, Doctrine Repositories and Migrations" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html">
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="pag5_files/css.txt" rel="stylesheet" type="text/css">
+<link href="pag5_files/css1.txt" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  <script type="text/javascript" async="" src="pag5_files/embed.js"></script><script src="pag5_files/thread.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag5_files/defaults.css"><script src="pag5_files/disqus.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag5_files/theme.css"><script src="pag5_files/theme.js" async="" charset="UTF-8"></script><script src="pag5_files/event.js" async="" charset="UTF-8"></script><script src="pag5_files/embed_002.js" async="" type="text/javascript"></script><script charset="UTF-8" async="" src="pag5_files/thread_002.js"></script><link href="pag5_files/defaults_002.css" type="text/css" rel="stylesheet"><script charset="UTF-8" async="" src="pag5_files/disqus_002.js"></script></head>
+  <body data-twttr-rendered="true">
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0px; left: 0px; border: 0px none;" src="pag5_files/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f676974687562.htm" alt="Fork me on GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk/" class="en">EN</a></li>
+                    <li><a href="http://symblog.site90.net/" class="es">ES</a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr">FR</a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp">JP</a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="http://tutorialsymfony2.eu5.org/">Home</a></li>
+                    <li><a href="http://enricoblog.eu5.org">Demo</a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog">Source</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="http://tutorialsymfony2.eu5.org/">symblog</a></h2>
+            <h3><a href="http://tutorialsymfony2.eu5.org/">creating a blog in Symfony2</a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs">Looking for a PHP Development job using Symfony2 to build a cutting edge web application - check out DeskPRO Jobs</a>
+
+  <div class="topnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag4.htm">[Part 4] - The Comments Model: Adding comments,  Doctrine Repositories and Migrations</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag6.htm">[Part 6] - Testing: Unit and Functional with PHPUnit</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <div id="___plusone_0" style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background-color: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; background-position: initial initial; background-repeat: initial initial; "><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="width: 80px; margin: 0px; border-style: none; height: 24px; position: static; left: 0px; top: 0px; visibility: visible;" tabindex="0" vspace="0" id="I0_1338386259938" name="I0_1338386259938" src="pag5_files/fastbutton.htm" title="+1" frameborder="0" scrolling="no" width="100%"></iframe></div>
+        </div>
+
+        <iframe allowtransparency="true" src="pag5_files/tweet_button.htm" class="twitter-share-button twitter-count-horizontal" style="width: 110px; height: 20px;" title="Twitter Tweet Button" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="pag5_files/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="part-5-customising-the-view-twig-extensions-the-sidebar-and-assetic">
+<h1>[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#part-5-customising-the-view-twig-extensions-the-sidebar-and-assetic" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2><font><font>Panoramica </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#overview" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>In questo capitolo continuerà la costruzione per il frontend di symblog. </font><font>Andiamo a  modificare la home page per visualizzare le informazioni relative ai commenti per un post sul blog con indirizzamento SEO aggiungendo il titolo del blog per l'URL. </font><font>Si andrà  anche  a lavorare sulla barra laterale per i aggiungere 2 comuni componenti blog ; La Tag Cloud e i commenti più recenti. </font><font>Esploreremo i vari ambienti in Symfony2 per imparare a gestire symblog nell'ambiente di produzione. </font><font>Il  motore Twig dei template sarà esteso per fornire un nuovo filtro, e si introduce Assetic per gestire i file del sito di asset. </font><font>Alla fine di questo capitolo avrete i commenti integrati nella home page, con un tag cloud e la lista decrescente degli ultimi commenti sulla barra laterale </font><font>Avrete anche fatto lavorare symblog  in ambiente di produzione.</font></font></p>
+</div>
+<div class="section" id="the-homepage-blogs-and-comments">
+<h2><font><font>La Homepage - Blog e commenti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#the-homepage-blogs-and-comments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Finora il sito elenca le ultime entrate del blog, ma non fornisce tutte le informazioni riguardanti i commenti per i blog. </font><font>Ora che abbiamo costruito l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> andiamo a rivedere  la homepage peri fornire queste informazioni. </font><font>Sicome abbiamo istituito il collegamento tra l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> sappiamo che Doctrine 2 sarà in grado di recuperare i commenti per un blog (ricordo che abbiamo aggiunto un
+  membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font>nell'entità l </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> ).Andiamo ad</font><font> aggiornare il modello View  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / index.html.twig</font></font></span></tt>.</p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+
+{# .. #}
+
+<span class="nt">&lt;footer</span> <span class="na">class=</span><span class="s">"meta"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Comments: {{ blog.comments|length }}<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Posted by <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.author }}<span class="nt">&lt;/span&gt;</span> at {{ blog.created|date('h:iA') }}<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Tags: <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.tags }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/footer&gt;</span>
+
+{# .. #}
+</pre></div>
+</div>
+<p><font><font>Abbiamo usato </font></font><tt class="docutils literal"><span class="pre"><font><font>commenti</font></font></span></tt><font><font> getter per recuperare i commenti del blog per poi passarli alla collezione attraverso il filtro Twig</font></font> <tt class="docutils literal"><span class="pre">length</span></tt><font><font> Se ora diamo uno sguardo alla homepage con </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> si vedrà il numero dei commenti di ogni blog che viene visualizzato.</font></font></p>
+<p><font><font>Come spiegato in precedenza, abbiamo già informato  Dcttrine 2 che il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> dell'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> è mappato all'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font>. </font><font>Abbiamo fatto questo nel capitolo precedente con i metadati  nell'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog")</span>
+<span class="sd"> */</span>
+<span class="k">protected</span> <span class="nv">$comments</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><font><font>Così sappiamo che Doctrine 2 è a conoscenza del rapporto tra blog e commenti, ma come ha fatto compilare il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> con le relative entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font>. </font><font>Se vi ricordate il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> che abbiamo creato (vedi sotto) per ottenere i blogs della homepage senza nessuna selezione per recuperare le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font>.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Repository/BlogRepository.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getLatestBlogs</span><span class="p">(</span><span class="nv">$limit</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$qb</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">addOrderBy</span><span class="p">(</span><span class="s1">'b.created'</span><span class="p">,</span> <span class="s1">'DESC'</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">is_null</span><span class="p">(</span><span class="nv">$limit</span><span class="p">))</span>
+        <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">setMaxResults</span><span class="p">(</span><span class="nv">$limit</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+              <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Tuttavia, Doctrine 2 utilizza un processo chiamato lazy loading dove le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Comment</font></font></span></tt><font><font> vengono recuperati  dal database come e quando richiesto, nel nostro caso, quando è stata fatta la chiamata a</font></font><tt class="docutils literal"><span class="pre">{{</span> <span class="pre">blog.comments|length</span> <span class="pre">}}</span></tt> is made. <font><font>Siamo in grado di dimostrare questo processo utilizzando la barra degli strumenti dello sviluppatore. </font><font>Abbiamo già iniziato ad esplorare le basi della barra degli strumenti di sviluppo è giunta l'ora di introdurre una delle sue caratteristiche più utili, il  profiler Doctrine 2 . </font><font>Il profiler Doctrine 2 può essere accessibile facendo clic sull'ultima icona nella barra degli strumenti di sviluppo. </font><font>Il numero accanto a questa icona mostra il numero di query eseguite sul database per la richiesta HTTP corrente.</font></font></p>
+<img alt="Developer toolbar - Doctrine 2 icon" class="align-center" src="pag5_files/doctrine_2_toolbar_icon.jpg">
+<p><font><font>Se si fa clic sull'icona di Doctrine 2 ti verrànno presentate tutte  le informazioni riguardanti le query che sono state eseguite da Doctrine 2 sulla base dei dati per la richiesta HTTP corrente</font></font></p>
+<img alt="Developer toolbar - Doctrine 2 queries" class="align-center" src="pag5_files/doctrine_2_toolbar_queries.jpg">
+<p><font><font>Come si può vedere nella schermata qui sopra, ci sono un certo numero di query eseguite per una richiesta alla homepage. </font><font>La seconda query eseguita recupera le entità blog dal database e viene eseguito come conseguenza del metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getLatestBlogs ()</font></font></span></tt><font><font> sula classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font>. </font><font>A seguito di questa query si noterà un numero di query che vanno ad osservare il database, un blog alla volta. </font><font>Possiamo vedere questo a causa</font></font> di <tt class="docutils literal"><span class="pre">WHERE</span> <span class="pre">t0.blog_id</span> <span class="pre">=</span> <span class="pre">?</span></tt> in ogniuna delle queries, dove il <tt class="docutils literal"><span class="pre">?</span></tt> è replicato per i valori del parametro ( blog
+Id) . Ogniuna di queste query sono il risultato di una chiamata a 
+<tt class="docutils literal"><span class="pre">{{</span> <span class="pre">blog.comments</span> <span class="pre">}}</span></tt> nel template homepage . Questa funzione è esecutata ogni volta da, Doctrine 2 che carica le entità <tt class="docutils literal"><span class="pre">Comment</span></tt> dalle relative entità <tt class="docutils literal"><span class="pre">Blog</span></tt>.</p>
+<p><font><font>Mentre lazy loading è molto efficace per il recupero di entità correlate dal database, non è sempre il modo più efficace per realizzare questo compito. </font><font>Doctrine 2 offre la possibilità di </font></font><tt class="docutils literal"><span class="pre"><font><font>unire</font></font></span></tt><font><font> le entità correlate insieme per l'interrogazione del database. </font><font>In questo modo possiamo recuperare l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> e  relative </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font> dal database in una sola query. </font><font>Aggiornare il codice </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> nel </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Repository / BlogRepository.php</font></font></span></tt><font><font> facendo un join su i commenti.</font></font>ts.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Repository/BlogRepository.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getLatestBlogs</span><span class="p">(</span><span class="nv">$limit</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$qb</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'b, c'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">leftJoin</span><span class="p">(</span><span class="s1">'b.comments'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">addOrderBy</span><span class="p">(</span><span class="s1">'b.created'</span><span class="p">,</span> <span class="s1">'DESC'</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">is_null</span><span class="p">(</span><span class="nv">$limit</span><span class="p">))</span>
+        <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">setMaxResults</span><span class="p">(</span><span class="nv">$limit</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+              <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Se ora si aggiorna la homepage ed esaminiamo le  uscite di Doctrine 2 nella barra degli strumenti di sviluppo si noterà il numero di queries è diminuito. </font><font>È inoltre possibile consultare la tabella commento è stata unita alla tabella blog.</font></font></p>
+<p>Lazy loading and joining  <font><font>i due concetti correlati sono molto potenti, ma hanno bisogno di essere usati correttamente. </font><font>Il giusto equilibrio tra i 2 deve essere trovato per assicurare che l'applicazione venga eseguita nel modo più efficiente possibile. </font><font>In un primo momento potrebbe sembrare un'ottima opportunità di fare un collegamento per ogni entità , quindi non sarà necessario caricare lazy e il numero di query di database rimarrà sempre bassa. </font><font>Tuttavia, è importante ricordare che più informazioni si recupera dal database,più elaborazione  deve essere fatta da Doctrine 2</font></font><font><font>per riportare questo negli oggetti entità. </font><font>Più  dati significa anche maggiore quantità di memoria che viene utilizzato dal server per memorizzare gli oggetti entità.</font></font></p>
+<p><font><font>. </font><font>Aggiornare il template homepage  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / index.html.twig</font></font></span></tt><font><font> per aggiungere un link per visualizzare i commenti del blog.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+
+{# .. #}
+
+<span class="nt">&lt;footer</span> <span class="na">class=</span><span class="s">"meta"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Comments: <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}#comments"</span><span class="nt">&gt;</span>{{ blog.comments|length }}<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Posted by <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.author }}<span class="nt">&lt;/span&gt;</span> at {{ blog.created|date('h:iA') }}<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Tags: <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.tags }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/footer&gt;</span>
+
+{# .. #}
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-sidebar">
+<h2><font><font>La Sidebar </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#the-sidebar" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Attualmente la barra laterale di symblog è un po 'vuota. </font><font>Provvederemo ad aggiornare questa  con 2 componenti comuni, ai blog la tag cloud e una lista degli ultimi commenti.</font></font></p>
+<div class="section" id="tag-cloud">
+<h3>Tag Cloud<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#tag-cloud" title="Permalink to this headline">¶</a></h3>
+<p><font><font>La Tag Cloud mostra i tag più pertinenti per ogni blog  in un modo che consente di visualizzare i tag più comuni e più in vista . </font><font>Per raggiungere questo obiettivo abbiamo bisogno di un modo per recuperare tutti i tag per tutti i blog. </font><font>Dobbiamo   creare alcuni nuovi metodi nella classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> per fare questo. </font><font>Aggiornare la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Repository / BlogRepository.php</font></font></span></tt><font><font> con il seguente codice .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Repository/BlogRepository.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getTags</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$blogTags</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'b.tags'</span><span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+                     <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+
+    <span class="nv">$tags</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$blogTags</span> <span class="k">as</span> <span class="nv">$blogTag</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$tags</span> <span class="o">=</span> <span class="nb">array_merge</span><span class="p">(</span><span class="nb">explode</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="nv">$blogTag</span><span class="p">[</span><span class="s1">'tags'</span><span class="p">]),</span> <span class="nv">$tags</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$tags</span> <span class="k">as</span> <span class="o">&amp;</span><span class="nv">$tag</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$tag</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$tag</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$tags</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getTagWeights</span><span class="p">(</span><span class="nv">$tags</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$tagWeights</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$tags</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nv">$tagWeights</span><span class="p">;</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$tags</span> <span class="k">as</span> <span class="nv">$tag</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$tagWeights</span><span class="p">[</span><span class="nv">$tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$tagWeights</span><span class="p">[</span><span class="nv">$tag</span><span class="p">]))</span> <span class="o">?</span> <span class="nv">$tagWeights</span><span class="p">[</span><span class="nv">$tag</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Shuffle the tags</span>
+    <span class="nb">uksort</span><span class="p">(</span><span class="nv">$tagWeights</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">rand</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nb">rand</span><span class="p">();</span>
+    <span class="p">});</span>
+
+    <span class="nv">$max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nv">$tagWeights</span><span class="p">);</span>
+
+    <span class="c1">// Max of 5 weights</span>
+    <span class="nv">$multiplier</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$max</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">?</span> <span class="mi">5</span> <span class="o">/</span> <span class="nv">$max</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$tagWeights</span> <span class="k">as</span> <span class="o">&amp;</span><span class="nv">$tag</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$tag</span> <span class="o">=</span> <span class="nb">ceil</span><span class="p">(</span><span class="nv">$tag</span> <span class="o">*</span> <span class="nv">$multiplier</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$tagWeights</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-php">
+  <div class="highlight"></div>
+</div>
+<p><font><font>Poiché i tag vengono memorizzati nel database come valori separati da virgola (CSV) abbiamo bisogno di un modo per dividerli e restituirli come un array. </font><font>Ciò è ottenuto dal metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getTags ()</font></font></span></tt><font><font>. </font>Il metodo </font><tt class="docutils literal"><span class="pre"><font><font>getTagWeights()</font></font></span></tt><font><font> è quindi in grado di utilizzare una matrice di tag per calcolare il peso di ciascuna etichetta in base alla sua popolarità all'interno della matrice. </font><font>I tag sono mescolati in modo random per la visualizzazione della pagina.</font></font></p>
+<p><font><font>Ora siamo in grado di generare il tag cloud, abbiamo bisogno di visualizzarla. </font><font>Creare una nuova azione nella </font></font><tt class="docutils literal"><span class="pre"><font><font>PageController</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> per gestire la barra laterale.</font></font></p>
+<p>&nbsp;</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">sidebarAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$em</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDoctrine</span><span class="p">()</span>
+               <span class="o">-&gt;</span><span class="na">getEntityManager</span><span class="p">();</span>
+
+    <span class="nv">$tags</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">getTags</span><span class="p">();</span>
+
+    <span class="nv">$tagWeights</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="na">getTagWeights</span><span class="p">(</span><span class="nv">$tags</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:sidebar.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'tags'</span> <span class="o">=&gt;</span> <span class="nv">$tagWeights</span>
+    <span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>L'azione è molto semplice, utilizza i 2 nuovi metodi </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> per generare il tag cloud, e passa questo  alla vista. </font><font>Ora andiamo a creare questa  vista situata in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / sidebar.html.twig</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig #}
+
+<span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"section"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h3&gt;</span>Tag Cloud<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"tags"</span><span class="nt">&gt;</span>
+        {% for tag, weight in tags %}
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"weight-{{ weight }}"</span><span class="nt">&gt;</span>{{ tag }}<span class="nt">&lt;/span&gt;</span>
+        {% else %}
+            <span class="nt">&lt;p&gt;</span>There are no tags<span class="nt">&lt;/p&gt;</span>
+        {% endfor %}
+    <span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/section&gt;</span>
+</pre></div>
+</div>
+<p><font><font>Il template è anche molto semplice</font></font>.<font><font>Si itera poco più dei vari tags e una classe si occupa del peso del tag. </font><font>Il </font></font><font><font> ciclo for ci introduce per accedere alle </font></font><tt>chiavi </tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>al  valore</font></font></span></tt><font><font> delle coppie, dove </font></font><tt class="docutils literal"><span class="pre"><font><font>tag</font></font></span></tt><font><font> inizia la chiave e </font></font><tt>weight </tt><font><font> il valore. </font><font>Ci sono un certo numero di varianti di come utilizzare il ciclo </font></font><tt>for </tt><font><font> fornite nella </font></font><a class="reference external" href="http://twig.sensiolabs.org/doc/templates.html#for"><font><font>Twig documentazione</font></font></a><font><font> .</font></font></p>
+<p><font><font>Se si guarda indietro al template principale di layout </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / layout.html.twig</font></font></span></tt><font><font> noterete che abbiamo messo un segnaposto per il blocco nella sidebar.Possiamo ora </font><font>i sostituire questo  rendendo la nuova azione sidebar. </font><font>Ricordate dal capitolo precedente che il metodo Twig </font></font><tt class="docutils literal"><span class="pre"><font><font>render</font></font></span></tt><font><font> rende i contenuti da una azione di controllo, in questo caso l' azione </font></font><tt>sidebar</tt><font><font> della </font></font><tt class="docutils literal"><span class="pre"><font><font>pagina</font></font></span></tt><font><font> controller.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+
+{# .. #}
+
+{% block sidebar %}
+    {% render "BloggerBlogBundle:Page:sidebar" %}
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Infine, aggiungiamo il CSS per il tag cloud. </font><font>Aggiungere un nuovo foglio di stile  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / public / css / sidebar.css</font></font></span></tt><font><font> </font></font>.</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nc">.sidebar</span> <span class="nc">.section</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nt">h3</span> <span class="p">{</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span> <span class="k">background</span><span class="o">:</span> <span class="m">#eee</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>  <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nt">p</span> <span class="p">{</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1.5em</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nt">ul</span> <span class="p">{</span> <span class="k">list-style</span><span class="o">:</span> <span class="k">none</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="p">{</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1.5em</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.small</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.comment</span> <span class="nt">p</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.comment</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">padding-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="p">{</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="nt">span</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#000</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="nc">.weight-1</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="nc">.weight-2</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="nc">.weight-3</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">18px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="nc">.weight-4</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">21px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="nc">.tags</span> <span class="nc">.weight-5</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">24px</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Infine, aggiungiamo il CSS per il tag cloud. </font><font>Aggiungere un nuovo foglio di stile  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / public / css / sidebar.css</font></font></span></tt><font><font> </font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+
+{# .. #}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset('bundles/bloggerblog/css/blog.css') }}"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset('bundles/bloggerblog/css/sidebar.css') }}"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span>
+{% endblock %}
+
+{# .. #}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p><font><font>Se non si sta utilizza il metodo di collegamento simbolico per fare riferimento alle attività del bundle nella cartella </font></font><tt class="docutils literal"><span class="pre"><font><font>web</font></font></span></tt><font><font> è necessario eseguire nuovamente il task asset per copiare il nuovo file CSS</font></font></p>
+<div class="last highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console assets:install web
+</pre></div>
+</div>
+</div>
+<p><font><font>Se ora si aggiorna il sito symblog vedrete la tag cloud  nella barra laterale. </font><font>Al fine di ottenere i tag  con pesi diversi, potrebbe essere necessario aggiornare le fixture blog così alcuni tag vengono visualizzati più di altri.</font></font>.</p>
+</div>
+<div class="section" id="recent-comments">
+<h3><font><font>Commenti recenti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#recent-comments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Ora il Tag Cloud è a posto, andiamo ad aggiungere l'ultimo componente i Commenti alla barra laterale.</font></font></p>
+<p><font><font>In primo luogo abbiamo bisogno di un modo per recuperare gli ultimi commenti per i blog. </font><font>Per fare questo si aggiunge un nuovo metodo al </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentRepository</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Repository / CommentRepository.php</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Repository/CommentRepository.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getLatestComments</span><span class="p">(</span><span class="nv">$limit</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$qb</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">(</span><span class="s1">'c'</span><span class="p">)</span>
+                <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'c'</span><span class="p">)</span>
+                <span class="o">-&gt;</span><span class="na">addOrderBy</span><span class="p">(</span><span class="s1">'c.id'</span><span class="p">,</span> <span class="s1">'DESC'</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">is_null</span><span class="p">(</span><span class="nv">$limit</span><span class="p">))</span>
+        <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">setMaxResults</span><span class="p">(</span><span class="nv">$limit</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+              <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Prossimo aggiornamento per l'azione sidebar  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> per recuperare gli ultimi commenti e passarli  alla vista.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">sidebarAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="nv">$commentLimit</span>   <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span>
+                           <span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'blogger_blog.comments.latest_comment_limit'</span><span class="p">);</span>
+    <span class="nv">$latestComments</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Comment'</span><span class="p">)</span>
+                         <span class="o">-&gt;</span><span class="na">getLatestComments</span><span class="p">(</span><span class="nv">$commentLimit</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:sidebar.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'latestComments'</span>    <span class="o">=&gt;</span> <span class="nv">$latestComments</span><span class="p">,</span>
+        <span class="s1">'tags'</span>              <span class="o">=&gt;</span> <span class="nv">$tagWeights</span>
+    <span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Noterete che abbiamo usato un nuovo parametro chiamato </font></font><tt class="docutils literal"><span class="pre"><font><font>blogger_blog.comments.latest_comment_limit</font></font></span></tt><font><font> per limitare il numero di commenti recuperati. </font><font>Per creare questo parametro aggiornare il file config  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / config.yml</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/config.yml</span>
+
+<span class="l-Scalar-Plain">parameters</span><span class="p-Indicator">:</span>
+    <span class="c1"># ..</span>
+
+    <span class="c1"># Blogger max latest comments</span>
+    <span class="l-Scalar-Plain">blogger_blog.comments.latest_comment_limit</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">10</span>
+</pre></div>
+</div>
+<p><font><font>Infine abbiamo bisogno di rendere gli ultimi commenti nel template sidebar. </font><font>Aggiornare il template in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / sidebar.html.twig</font></font></span></tt><font><font> con il seguente</font></font>.</p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig #}
+
+{# .. #}
+
+<span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"section"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h3&gt;</span>Latest Comments<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+    {% for comment in latestComments %}
+        <span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"comment"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;header&gt;</span>
+                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"small"</span><span class="nt">&gt;&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ comment.user }}<span class="nt">&lt;/span&gt;</span> commented on
+                    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': comment.blog.id }) }}#comment-{{ comment.id }}"</span><span class="nt">&gt;</span>
+                        {{ comment.blog.title }}
+                    <span class="nt">&lt;/a&gt;</span>
+                    [<span class="nt">&lt;em&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ comment.created|date('c') }}"</span><span class="nt">&gt;</span>{{ comment.created|date('Y-m-d h:iA') }}<span class="nt">&lt;/time&gt;&lt;/em&gt;</span>]
+                <span class="nt">&lt;/p&gt;</span>
+            <span class="nt">&lt;/header&gt;</span>
+            <span class="nt">&lt;p&gt;</span>{{ comment.comment }}<span class="nt">&lt;/p&gt;</span>
+            <span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/article&gt;</span>
+    {% else %}
+        <span class="nt">&lt;p&gt;</span>There are no recent comments<span class="nt">&lt;/p&gt;</span>
+    {% endfor %}
+<span class="nt">&lt;/section&gt;</span>
+</pre></div>
+</div>
+<p><font><font>Se ora si aggiorna il sito symblog potrete vedere gli ultimi commenti  visualizzati nella barra laterale sotto la Tag Cloud.</font></font></p>
+<img alt="Sidebar - Tag Cloud and Latest Comments" class="align-center" src="pag5_files/sidebar.jpg">
+</div>
+</div>
+<div class="section" id="twig-extensions">
+<h2>Twig Extensions<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#twig-extensions" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Finora abbiamo pubblicato  la visualizzazione della data per i commenti del blog in un formato data standard quale </font></font><cite><font><font>2011/04/21</font></font></cite><font><font> . </font><font>Un approccio molto più bello sarebbe quello di visualizzare le date di commento, in termini di quanto tempo fa il commento è stato pubblicato, come </font></font><cite><font><font>inviato 3 ore fa</font></font></cite><font><font> . </font><font>Potremmo aggiungere un metodo alle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font> per raggiungere questo obiettivo e modificare i template per usare questo metodo al posto di </font></font><tt class="docutils literal"><span class="pre"><font><font>{{ </font></font></span> <span class="pre"><font><font>comment.created | date ('Ymd </font></font></span> <span class="pre"><font><font>h: iA ') </font></font></span> <span class="pre"><font><font>}}</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Si può decidere di utilizzare questa metodo altrimenti dove sarebbe più sensato spostare questo fuori dall'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Comment</font></font></span></tt><font><font>. </font><font>Trasformare la data è un compito specifico della  vista, dobbiamo attuare questa operazione utilizzando il motore di template Twig. </font><font> che ha questa capacità, fornendo un'interfaccia Extension.</font></font></p>
+<p><font><font>Siamo in grado di utilizzare l' </font></font><a class="reference external" href="http://www.twig-project.org/doc/extensions.html"><font><font>estensione</font></font></a><font><font> interfaccia di Twig estendendo le funzionalità predefinite che fornisce. </font><font>Stiamo per creare un nuovo filtro Twig  che può essere utilizzato come segue.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{{ comment.created|created_ago }}
+</pre></div>
+</div>
+<p><font><font>Questo farà tornare la data del  commento  in un formato come </font></font><cite><font><font>pubblicato 2 giorni fa</font></font></cite><font><font> .</font></font></p>
+<div class="section" id="the-extension">
+<h3><font><font>L'estensione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#the-extension" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Creare un file per l'estensione Twig  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Ramoscello / Extensions / BloggerBlogExtension.php</font></font></span></tt><font><font> e aggiornate con il seguente contenuto.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogExtension.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Twig\Extensions</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BloggerBlogExtension</span> <span class="k">extends</span> <span class="nx">\Twig_Extension</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getFilters</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'created_ago'</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nx">\Twig_Filter_Method</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">'createdAgo'</span><span class="p">),</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">createdAgo</span><span class="p">(</span><span class="nx">\DateTime</span> <span class="nv">$dateTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$delta</span> <span class="o">=</span> <span class="nb">time</span><span class="p">()</span> <span class="o">-</span> <span class="nv">$dateTime</span><span class="o">-&gt;</span><span class="na">getTimestamp</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nx">\InvalidArgumentException</span><span class="p">(</span><span class="s2">"createdAgo is unable to handle dates in the future"</span><span class="p">);</span>
+
+        <span class="nv">$duration</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Seconds</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nv">$delta</span><span class="p">;</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" second"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;=</span> <span class="mi">3600</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Mins</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">(</span><span class="nv">$delta</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" minute"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;=</span> <span class="mi">86400</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Hours</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">(</span><span class="nv">$delta</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">);</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" hour"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="c1">// Days</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">(</span><span class="nv">$delta</span> <span class="o">/</span> <span class="mi">86400</span><span class="p">);</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" day"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$duration</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'blogger_blog_extension'</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Creazione l'estensione è abbastanza semplice. </font><font>Abbiamo sovrascritto </font></font><tt class="docutils literal"><span class="pre"><font><font>getFilters ()</font></font></span></tt><font><font> per restituire dei i filtri che vogliamo siano disponibili. </font><font>In questo caso abbiamo creato il filtro </font></font><tt class="docutils literal"><span class="pre"><font><font>created_ago</font></font></span></tt><font><font>. </font><font>Questo filtro usa il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>createdAgo</font></font></span></tt><font><font> , che trasforma semplicemente un oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>DateTime</font></font></span></tt><font><font> in una stringa che riporta il valore del tempo trascorso memorizzato nell'oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>DateTime</font></font></span></tt><font><font>.</font></font></p>
+<p>Qui in un formato  inglese per averlo in italiano apportare le varie modifiche alle diciture.</p>
+</div>
+<div class="section" id="registering-the-extension">
+<h3><font><font>Registrazione del Extension </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#registering-the-extension" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Per avere a disposizione un estensione  Twig  abbiamo bisogno di aggiornare il file dei servizi  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / services.yml</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">services</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">blogger_blog.twig.extension</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">class</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Blogger\BlogBundle\Twig\Extensions\BloggerBlogExtension</span>
+        <span class="l-Scalar-Plain">tags</span><span class="p-Indicator">:</span>
+            <span class="p-Indicator">-</span> <span class="p-Indicator">{</span> <span class="nv">name</span><span class="p-Indicator">:</span> <span class="nv">twig.extension</span> <span class="p-Indicator">}</span>
+</pre></div>
+</div>
+<p><font><font>Potete vedere questo  registrando il nuovo servizio alla classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogExtension</font></font></span></tt><font><font> dell'estensione Twig  che abbiamo appena creato.</font></font></p>
+</div>
+<div class="section" id="updating-the-view">
+<h3><font><font>Aggiornamento della vista </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#updating-the-view" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Il nuovo Twig filtro è ora pronto per essere utilizzato. </font><font>Ci consente di aggiornare l'elenco aggiornato della sidebar commenti e di utilizzare il filtro </font></font><tt class="docutils literal"><span class="pre"><font><font>created_ago</font></font></span></tt><font> <font>Aggiornare il template di sidebar  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / sidebar.html.twig</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig #}
+
+{# .. #}
+
+<span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"section"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h3&gt;</span>Latest Comments<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+    {% for comment in latestComments %}
+        {# .. #}
+        <span class="nt">&lt;em&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ comment.created|date('c') }}"</span><span class="nt">&gt;</span>{{ comment.created|created_ago }}<span class="nt">&lt;/time&gt;&lt;/em&gt;</span>
+        {# .. #}
+    {% endfor %}
+<span class="nt">&lt;/section&gt;</span>
+</pre></div>
+</div>
+<p><font><font>Se ora puntate il browser a </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> potrete vedere le date dei commenti aggiornate che utilizzano il filtro di Twig per rendere il tempo a ora dal momento che il commento è stato pubblicato.</font></font></p>
+<p><font><font>Andiamo ad  aggiornare anche i commenti elencati nella pagina show blog per utilizzare il nuovo filtro. </font><font>Sostituire il contenuto del template in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / commento / index.html.twig</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Comment/index.html.twig #}
+
+{% for comment in comments %}
+    <span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"comment {{ cycle(['odd', 'even'], loop.index0) }}"</span> <span class="na">id=</span><span class="s">"comment-{{ comment.id }}"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;header&gt;</span>
+            <span class="nt">&lt;p&gt;&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ comment.user }}<span class="nt">&lt;/span&gt;</span> commented <span class="nt">&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ comment.created|date('c') }}"</span><span class="nt">&gt;</span>{{ comment.created|created_ago }}<span class="nt">&lt;/time&gt;&lt;/p&gt;</span>
+        <span class="nt">&lt;/header&gt;</span>
+        <span class="nt">&lt;p&gt;</span>{{ comment.comment }}<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/article&gt;</span>
+{% else %}
+    <span class="nt">&lt;p&gt;</span>There are no comments for this post. Be the first to comment...<span class="nt">&lt;/p&gt;</span>
+{% endfor %}
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p class="last"><font><font>Ci sono una serie di utili Twig estensioni disponibili tramite la libreria </font></font><a class="reference external" href="https://github.com/fabpot/Twig-extensions"><font><font>Twig  Extensions</font></font></a><font><font> su GitHub. </font><font>Se si crea un utile estensione si può inviare una richiesta di pull per questo repository in modo che altre persone la possono utilizzare.</font></font></p>
+</div>
+</div>
+</div>
+<div class="section" id="slugifying-the-url">
+<h2><font><font>Slugifying l'URL </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#slugifying-the-url" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Attualmente l'URL di ogni post del blog mostra solo l'Id blog. </font><font>Mentre questo è perfettamente accettabile da un punto di vista funzionale, non è grande per il SEO. </font><font>Ad esempio, l'URL </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/1</font></font></span></tt><font><font> non fornisce alcuna informazione  circa il contenuto del blog, qualcosa di simile </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/1/a-day-with-symfony2</font></font></span></tt><font><font> sarebbe molto migliore. </font><font>Per raggiungere questo obiettivo noi  slugify  il titolo del blog per poi usarlo come parte di questa URL. </font><font>Slugifying il titolo sarà rimuovere tutti i caratteri non ASCII e sostituirli con un </font></font><tt class="docutils literal"><span class="pre"><font><font>-</font></font></span></tt><font><font> .</font></font></p>
+<div class="section" id="update-the-routing">
+<h3><font><font>Aggiornare il routing </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#update-the-routing" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Per iniziare dobbiamo  modificare la regola di routing per la mostra pagina blog per aggiungere il componente slug. </font><font>Aggiornare la regola di routing  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/routing.yml</span>
+
+<span class="l-Scalar-Plain">BloggerBlogBundle_blog_show</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/{id}/{slug}</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Blog</span><span class="p-Indicator">:</span><span class="nv">show</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET</span>
+        <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">\d+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-controller">
+<h3><font><font>Il controller </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#the-controller" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Come con l'attuale componente </font></font><tt class="docutils literal"><span class="pre"><font><font>id</font></font></span></tt><font><font> , il nuovo componente </font></font><tt class="docutils literal"><span class="pre"><font><font>slug</font></font></span></tt><font><font> verrà passato alla azione di controllo come argomento,  aggiornare il controllore  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / BlogController.php</font></font></span></tt><font><font> per riflettere questo.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/BlogController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">showAction</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$slug</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>L'ordine in cui vengono passati gli argomenti nell' azione di controllo non importa, solo con il nome . </font><font>Symfony2 è in grado di abbinare gli argomenti di routing con la lista dei parametri . </font><font>Anche se non abbiamo ancora utilizzato la  componente di default per i valori menzionati qui. </font><font>Se abbiamo aggiunto un altro componente sulla regola di routing si può specificare un valore predefinito per il componente come opzione di </font></font><tt class="docutils literal"><span class="pre"><font><font>default</font></font></span></tt><font><font>.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">BloggerBlogBundle_blog_show</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/{id}/{slug}/{comments}</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Blog</span><span class="p-Indicator">:</span><span class="nv">show</span><span class="p-Indicator">,</span> <span class="nv">comments</span><span class="p-Indicator">:</span> <span class="nv">true</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET</span>
+        <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">\d+</span>
+</pre></div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="k">public</span> <span class="k">function</span> <span class="nf">showAction</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="nv">$slug</span><span class="p">,</span> <span class="nv">$comments</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="last"><font><font>Utilizzando questo metodo, di richiesta </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/1/symfony2-blog</font></font></span></tt><font><font> comporterebbe che la variabile </font></font><tt class="docutils literal"><span class="pre"><font><font> $ comments</font></font></span></tt><font><font> debba essere impostata su true nella </font></font><tt class="docutils literal"><span class="pre"><font><font>showAction</font></font></span></tt><font><font> .</font></font></p>
+</div>
+</div>
+<div class="section" id="slugifying-the-title">
+<h3>Slugifying del titolo <a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#slugifying-the-title" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Sicome si desidera generare lo slug dal titolo del blog, verra automaticamente generato il valore slug. </font><font>Potremmo semplicemente eseguire questa operazione in fase di esecuzione sul campo del titolo, ma invece si memorizzerà lo slug nelle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> per persisterlo nel database.</font></font></p>
+</div>
+<div class="section" id="updating-the-blog-entity">
+<h3><font><font>Aggiornare l'entità Blog </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#updating-the-blog-entity" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Andiamo ad aggiungere un nuovo membro alle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> per memorizzare lo slug. </font><font>Aggiornare l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="string")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$slug</span><span class="p">;</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ora generare le funzioni di accesso per il nuovo membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ slug</font></font></span></tt><font><font>. </font><font>Come prima eseguire il seguente comando.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:generate:entities Blogger
+</pre></div>
+</div>
+<p>Successivamente aggiornate lo schema del database.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:migrations:diff
+<span class="nv">$ </span>php app/console doctrine:migrations:migrate
+</pre></div>
+</div>
+<p><font><font>Per generare il valore di slug useremo il metodo slugify dal 1 tutorial symfony </font></font><a class="reference external" href="http://www.symfony-project.org/jobeet/1_4/Propel/en/08"><font><font>Jobeet</font></font></a><font><font>. </font><font>Aggiungere il </font></font><tt class="docutils literal"><span class="pre"><font><font>metodo slugify</font></font></span></tt><font><font> alle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">slugify</span><span class="p">(</span><span class="nv">$text</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// replace non letter or digits by -</span>
+    <span class="nv">$text</span> <span class="o">=</span> <span class="nb">preg_replace</span><span class="p">(</span><span class="s1">'#[^\\pL\d]+#u'</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">,</span> <span class="nv">$text</span><span class="p">);</span>
+
+    <span class="c1">// trim</span>
+    <span class="nv">$text</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$text</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">);</span>
+
+    <span class="c1">// transliterate</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">function_exists</span><span class="p">(</span><span class="s1">'iconv'</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="nv">$text</span> <span class="o">=</span> <span class="nb">iconv</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">,</span> <span class="s1">'us-ascii//TRANSLIT'</span><span class="p">,</span> <span class="nv">$text</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// lowercase</span>
+    <span class="nv">$text</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$text</span><span class="p">);</span>
+
+    <span class="c1">// remove unwanted characters</span>
+    <span class="nv">$text</span> <span class="o">=</span> <span class="nb">preg_replace</span><span class="p">(</span><span class="s1">'#[^-\w]+#'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="nv">$text</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$text</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'n-a'</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$text</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Sicome si desidera generare automaticamente lo slug dal titolo saremo in grado di generare lo slug quando il valore del titolo è impostato. </font><font>Per questo andiamo ad aggiornare il </font></font><tt class="docutils literal"><span class="pre"><font><font>setTitle</font></font></span></tt><font><font> di accesso per impostare anche il valore dello slug. </font><font>Aggiornare l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">setTitle</span><span class="p">(</span><span class="nv">$title</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">title</span> <span class="o">=</span> <span class="nv">$title</span><span class="p">;</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setSlug</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Successivamente aggiorneremo  il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>setSlug</font></font></span></tt><font><font> per slugify  prima che lo slug venga impostato.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">setSlug</span><span class="p">(</span><span class="nv">$slug</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">slug</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="nv">$slug</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+  <font><font>Ora ricarichiamo le fixture di dati per generare lo slug blog.</font></font></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:fixtures:load
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-generated-routes">
+<h3><font><font>Aggiornamento delle rotte generate </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#updating-the-generated-routes" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Infine abbiamo bisogno di aggiornare le chiamate esistenti per la generazione di percorsi alla pagina di show blog. </font><font>Ci sono un certo numero di posizioni tutte queste devono essere aggiornate.</font></font></p>
+<p><font><font>Aprire il template home page  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / index.html.twig</font></font></span></tt><font><font> e sostituirne il contenuto con il seguente. </font><font>Ci sono  3 modifiche alla generazione del
+  percorso </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle_blog_show</font></font></span></tt><font><font> in questo template . </font><font>Le modifiche sono semplicemente passare  slug blog per la funzione di Twig </font></font><tt class="docutils literal"><span class="pre"><font><font>path</font></font></span></tt></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block body %}
+    {% for blog in blogs %}
+        <span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"blog"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"date"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ blog.created|date('c') }}"</span><span class="nt">&gt;</span>{{ blog.created|date('l, F j, Y') }}<span class="nt">&lt;/time&gt;&lt;/div&gt;</span>
+            <span class="nt">&lt;header&gt;</span>
+                <span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}"</span><span class="nt">&gt;</span>{{ blog.title }}<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+            <span class="nt">&lt;/header&gt;</span>
+
+            <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{{ asset(['images/', blog.image]|join) }}"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"snippet"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;p&gt;</span>{{ blog.blog(500) }}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"continue"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}"</span><span class="nt">&gt;</span>Continue reading...<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+
+            <span class="nt">&lt;footer</span> <span class="na">class=</span><span class="s">"meta"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;p&gt;</span>Comments: <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}#comments"</span><span class="nt">&gt;</span>{{ blog.comments|length }}<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+                <span class="nt">&lt;p&gt;</span>Posted by <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.author }}<span class="nt">&lt;/span&gt;</span> at {{ blog.created|date('h:iA') }}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;p&gt;</span>Tags: <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.tags }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+            <span class="nt">&lt;/footer&gt;</span>
+        <span class="nt">&lt;/article&gt;</span>
+    {% else %}
+        <span class="nt">&lt;p&gt;</span>There are no blog entries for symblog<span class="nt">&lt;/p&gt;</span>
+    {% endfor %}
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Inoltre, un aggiornamento deve essere fatto per l'ultima sezione Commenti del template sidebar  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / sidebar.html.twig</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig #}
+
+{# .. #}
+
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': comment.blog.id, 'slug': comment.blog.slug }) }}#comment-{{ comment.id }}"</span><span class="nt">&gt;</span>
+    {{ comment.blog.title }}
+<span class="nt">&lt;/a&gt;</span>
+
+{# .. #}
+</pre></div>
+</div>
+<p><font><font>Infine il </font></font><tt class="docutils literal"><span class="pre"><font><font>createAction</font></font></span></tt><font><font> del </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentController</font></font></span></tt><font><font> deve essere aggiornato quando si reindirizza alla pagina show blog su un commento postato con successo. </font><font>Aggiornare il </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentController</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / CommentController.php</font></font></span></tt><font><font> con le seguenti.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/CommentController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">createAction</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$form</span><span class="o">-&gt;</span><span class="na">isValid</span><span class="p">())</span> <span class="p">{</span>
+        <span class="c1">// ..</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">generateUrl</span><span class="p">(</span><span class="s1">'BloggerBlogBundle_blog_show'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'id'</span>    <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getBlog</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">(),</span>
+            <span class="s1">'slug'</span>  <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getBlog</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getSlug</span><span class="p">()))</span> <span class="o">.</span>
+            <span class="s1">'#comment-'</span> <span class="o">.</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ora, se si passa alla homepage symblog a </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> e facciamo clik su uno dei titoli del blog vedrete che lo  slug blog è stato aggiunto alla fine dell'URL.</font></font></p>
+</div>
+</div>
+<div class="section" id="environments">
+<h2><font><font>Ambienti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#environments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Gli ambienti è una funzionalità molto potente, ma semplice  fornita da Symfony2. </font><font>Potreste non essere a conoscenza, ma sono stati utilizzati gli ambienti dal punto 1 di questo tutorial. </font><font>Con ambienti possiamo configurare vari aspetti di Symfony2 di come eseguire l'applicazione  in modo diverso a seconda delle esigenze specifiche  durante il ciclo di vita delle applicazioni. </font><font>Per impostazione predefinita Symfony2 viene configurato con 3 ambienti:</font></font></p>
+<ol class="arabic simple">
+  <li><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> - Sviluppo</font></font></li>
+  <li><tt class="docutils literal"><span class="pre"><font><font>Test</font></font></span></tt><font><font> - Test</font></font></li>
+  <li><tt class="docutils literal"><span class="pre"><font><font>prod</font></font></span></tt><font><font> - Produzione</font></font></li>
+</ol>
+<p><font><font>Lo scopo di questi ambienti è di per sé esplicativo, ma per quanto riguarda questi ambienti come sono stati configurati in modo diverso per le loro esigenze individuali. </font><font>Nello sviluppare l' applicazione è utile avere la barra degli strumenti di sviluppo sullo schermo con le eccezioni e gli errori descrittivi per essere visualizzati, mentre nella produzione non si vuole nulla di tutto questo. </font><font>In effetti, avere queste informazioni visualizzate sarebbe un rischio per la sicurezza perchè un sacco di dettagli riguardanti l'interno dell'applicazione e del server sarebbero esposti. </font><font>Nella produzione sarebbe meglio  visualizzare le pagine di errore personalizzate con messaggi semplificati, mettere la registrazione di queste informazioni in file di testo. </font><font>Sarebbe anche utile avere lo strato di memorizzazione nella cache attivata per garantire che l'applicazione venga eseguita al meglio. </font><font>Avere lo strato di caching abilitato nel ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font> sarebbe un critico perchè  si avrebbe bisogno di svuotare la cache ogni volta che sono state apportate modifiche ai file di configurazione, ecc</font></font></p>
+<p><font><font> Il </font></font><tt>test</tt><font><font> ambiente. </font><font>Questo viene utilizzato quando si esegue il test dell'applicazione come unità o test funzionale. </font><font>Non abbiamo ancora parlato di test, ma vi assicuro che sarà fatto in modo approfondito nei prossimi capitoli.</font></font></p>
+<div class="section" id="front-controllers">
+<h3><font><font>Front controller </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#front-controllers" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Finora in questo tutorial abbiamo utilizzato un unico ambiente </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font>. </font></font><font><font> utilizzando </font></font><tt class="docutils literal"><span class="pre"><font><font>app_dev.php</font></font></span></tt><font><font> front controller al momento della richiesta di symblog, ad esempio </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/about</font></font></span></tt><font><font> . </font><font>Se diamo uno sguardo al front controller  in </font></font><tt class="docutils literal"><span class="pre"><font><font>web / app_dev.php</font></font></span></tt><font><font> vedrete la riga seguente:</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$kernel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppKernel</span><span class="p">(</span><span class="s1">'dev'</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><font><font>Questa linea è quello che inizia Symfony2 per  andare avanti. </font><font>Qui è  'creata una nuova istanza della Symfony2 </font></font><tt class="docutils literal"><span class="pre"><font><font>AppKernel</font></font></span></tt><font><font> che imposta l'ambiente </font></font><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Al contrario, se guardiamo al front controller per l'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione </font></font></span></tt><font><font> situato al </font></font><tt class="docutils literal"><span class="pre"><font><font>web / app.php</font></font></span></tt><font><font> vediam</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$kernel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AppKernel</span><span class="p">(</span><span class="s1">'prod'</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><font><font>L'ambiente di test non dovrebbe essere eseguito tramite il browser web ed è per questo non vi è alcuna </font></font><tt class="docutils literal"><span class="pre"><font><font>app_test.php</font></font></span></tt><font><font> front controller.</font></font></p>
+</div>
+<div class="section" id="configuration-settings">
+<h3><font><font>Impostazioni di configurazione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#configuration-settings" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Abbiamo visto sopra come i front controller vengono utilizzati per modificare l'ambiente,di come l'applicazione viene eseguita . </font><font>Ora vedremo come le varie impostazioni vengono modificate durante l'esecuzione in ogni ambiente. </font><font>Se si da uno sguardo ai file in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config</font></font></span></tt><font><font> vedrai un certo numero di </font></font><tt class="docutils literal"><span class="pre"><font><font>file config.yml</font></font></span></tt><font><font>. </font><font>In particolare vi è uno principale, denominato </font></font><tt class="docutils literal"><span class="pre"><font><font>config.yml</font></font></span></tt><font><font> e tutti gli altri 3 con suffisso con il nome di un ambiente; </font></font><tt class="docutils literal"><span class="pre"><font><font>config_dev.yml</font></font></span></tt><font><font> , </font></font><tt class="docutils literal"><span class="pre"><font><font>config_test.yml</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>config_prod.yml</font></font></span></tt><font><font> . </font><font>Ognuno di questi file viene caricato a seconda del contesto attuale. </font><font>Se esplorate il </font></font><tt class="docutils literal"><span class="pre"><font><font>config_dev.yml</font></font></span></tt><font><font> si vedranno le seguenti righe nella parte superiore.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">imports</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="p-Indicator">{</span> <span class="nv">resource</span><span class="p-Indicator">:</span> <span class="nv">config.yml</span> <span class="p-Indicator">}</span>
+</pre></div>
+</div>
+<p>La direttiva <tt class="docutils literal"><span class="pre"><font><font>import</font></font></span></tt><font><font> caricherà il file </font></font><tt class="docutils literal"><span class="pre"><font><font>config.yml</font></font></span></tt><font><font>. </font><font>La stessa </font></font><tt class="docutils literal"><span class="pre"><font><font>import</font></font></span></tt><font><font> direttiva può essere trovata nella parte superiore dei file d'ambiente di configurazione, </font></font><tt class="docutils literal"><span class="pre"><font><font>config_test.yml</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>config_prod.yml</font></font></span></tt><font><font> . </font><font>Con l'inclusione di un insieme comune di impostazioni di configurazione definite in </font></font><tt class="docutils literal"><span class="pre"><font><font>config.yml</font></font></span></tt><font><font> siamo in grado di ignorare le impostazioni specifiche per ogni ambiente. </font><font>Possiamo vedere nella file config di </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config_dev.yml</font></font></span></tt><font><font> le seguenti righe configurano l'utilizzo della barra degli strumenti di sviluppo.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># app/config/config_dev.yml</span>
+
+<span class="l-Scalar-Plain">web_profiler</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">toolbar</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</pre>
+  <font><font>Questa impostazione è assente dal file di config di </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione </font></font></span></tt><font><font>, siccome non vogliamo in questo ambiente che la barra degli strumenti venga visualizzata</font></font></div>
+</div>
+</div>
+<div class="section" id="running-in-production">
+<h3><font><font>Esecuzione in produzione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#running-in-production" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Per quelli di voi ansiosi di vedere il tuo sito in esecuzione nell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione</font></font></span></tt><font><font> ora è il momento.</font></font></p>
+<p><font><font>In primo luogo abbiamo bisogno di cancellare la cache utilizzando uno dei task di Symfony2 .</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console cache:clear --env<span class="o">=</span>prod
+</pre></div>
+</div>
+<p><font><font>Ora puntate il browser su </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/</font></font></span></tt><font><font> . </font><font>Si noti la mancanza di </font></font><tt class="docutils literal"><span class="pre"><font><font>app_dev.php</font></font></span></tt><font><font> front controller .</font></font></p>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p><font><font>Per quelli di voi con la configurazione Dynamic  degli host virtuali come mostrato nella prima parte, è necessario aggiungere quanto segue al file. Htaccess  in </font></font><tt class="docutils literal"><span class="pre"><font><font>web / .htaccess</font></font></span></tt><font><font> .</font></font></p>
+<div class="last highlight-text"><div class="highlight"><pre>&lt;IfModule mod_rewrite.c&gt;
+    RewriteBase /
+    # ..
+&lt;/IfModule&gt;
+</pre></div>
+</div>
+</div>
+<p><font><font>Si noterà che il sito sembra più o meno lo stesso, ma alcune caratteristiche importanti sono diversi. </font><font>La barra degli strumenti di sviluppo è ormai sparita e il messaggio di eccezione dettagliati non vengono più visualizzati, provare ad andare a</font></font><tt class="docutils literal"><span class="pre">http://symblog.dev/999</span></tt>.</p>
+<img alt="Production - 404 Error" class="align-center" src="pag5_files/production_error.jpg">
+<p><font><font>Il messaggio d'errore dettagliato è sostituito da un messaggio semplificato che informa l'utente del problema. </font><font>Questa schermata di eccezione può essere personalizzata in base al look and feel dell'applicazione. </font><font>Esploreremo questo nei capitoli successivi.</font></font></p>
+<p><font><font>Inoltre si noterà il file </font></font><tt class="docutils literal"><span class="pre"><font><font>app / logs / prod.log</font></font></span></tt><font><font> si sta riempiendo con i registri in materia di esecuzione dell'applicazione. </font><font>Questo è un utile punto di chiamata quando si hanno problemi con l'applicazione in </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione</font></font></span></tt><font><font> come errori e  ecc</font></font></p>
+<p>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p>Come la richiesta a  <tt class="docutils literal"><span class="pre">http://symblog.dev/</span></tt> finisce per chiamare la rotta attraverso il 
+file <tt class="docutils literal"><span class="pre">app.php</span></tt>? <font><font>Sono sicuro che  tutti utilizzano <tt class="docutils literal"><span class="pre"><font><font>index.html</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>index.php</font></font></span></tt> per la creazione di file </font></font><font><font> che agiscono come l'indice di siti, ma come </font></font><tt class="docutils literal"><span class="pre"><font><font>app.php</font></font></span></tt><font><font> può sostituire questo. </font><font>Questo grazie ad una RewriteRule nel file </font></font><tt class="docutils literal"><span class="pre"><font><font>web / .htaccess</font></font></span></tt></p>
+<div class="highlight-text"><div class="highlight"><pre>RewriteRule ^(.*)$ app.php [QSA,L]
+</pre></div>
+</div>
+<p><font><font>Possiamo vedere che questa linea ha una espressione regolare che corrisponde a qualsiasi testo, indicato con </font></font><tt class="docutils literal"><span class="pre"><font><font>^ (. *) $</font></font></span></tt><font><font> e passa questo </font></font><tt class="docutils literal"><span class="pre"><font><font>app.php</font></font></span></tt><font><font> .</font></font></p>
+</div>
+<p><font><font>Mentre sono stati affrontati i principi fondamentali dell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font> produzione</font></font></span></tt><font><font>, non abbiamo coperto molte altre attività connesse</font></font><font><font>, quali personalizzazione delle pagine di errore e di distribuzione su server di </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione </font></font></span></tt><font><font> utilizzando strumenti come </font></font><a class="reference external" href="http://capifony.org/"><font><font>capifony</font></font></a><font><font> . </font><font>Questi argomenti verranno trattati nei capitoli successivi.</font></font></p>
+</div>
+<div class="section" id="creating-new-environments">
+<h3><font><font>Creazione di nuovi ambienti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#creating-new-environments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Infine vale la pena notare che è possibile impostare i propri ambienti facilmente in Symfony2. </font><font>Ad esempio, è possibile un ambiente di staging che sarà eseguito sul server di produzione, ma la produzione con alcune delle informazioni di debug, come eccezioni. </font><font>Ciò consentirebbe di testare la piattaforma  manualmente sul server di produzione effettivo, siccome le configurazioni di produzione e sviluppo di server possono differire.</font></font></p>
+<p><font><font>Lla creazione di un nuovo ambiente è un compito semplice, ma non rientra nell'ambito di questo tutorial. </font><font>C'è un ottimo </font></font><a class="reference external" href="http://symfony.com/doc/current/cookbook/configuration/environments.html"><font><font>articolo</font></font></a><font><font> nel libro di  Symfony2 che si occupa di questo.</font></font></p>
+</div>
+</div>
+<div class="section" id="assetic">
+<h2>Assetic<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#assetic" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Symfony2 distribuzione standard viene fornito con una libreria per la gestione di asset chiamata </font></font><a class="reference external" href="https://github.com/kriswallsmith/assetic"><font><font>Assetic</font></font></a><font><font> . </font><font>La libreria è stato sviluppato da </font></font><a class="reference external" href="https://twitter.com/#!/kriswallsmith"><font><font>Kris Wallsmith</font></font></a><font><font> ed è stato ispirato dalla libreria Python </font></font><a class="reference external" href="http://elsdoerfer.name/files/docs/webassets/"><font><font>webassets</font></font></a><font><font> .</font></font></p>
+<p><font><font>Offre Assetic con 2 parti di asset management, le attività come immagini, fogli di stile e JavaScript e dei filtri che possono essere applicati a tali attività. </font><font>Questi filtri sono in grado di svolgere compiti utili quali minifying CSS e JavaScript, passando </font></font><a class="reference external" href="http://jashkenas.github.com/coffee-script/"><font><font>file CoffeeScript</font></font></a><font><font> attraverso il compilatore CoffeeScript, e combinare file di asset insieme per ridurre il numero di richieste HTTP al server.</font></font></p>
+<p><font><font>Attualmente abbiamo usato la funzione Twig </font></font><tt class="docutils literal"><span class="pre"><font><font>asset</font></font></span></tt><font><font> per includere attività nel template come segue.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset('bundles/bloggerblog/css/blog.css') }}"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>La chiamata alla funzione  <tt class="docutils literal"><span class="pre">asset</span></tt> sarà sostituita per Assetic.</p>
+<div class="section" id="assets">
+<h3>Assets<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#assets" title="Permalink to this headline">¶</a></h3>
+<p><font><font>La libreria Assetic descrive una risorsa come segue:</font></font></p>
+<p><cite><font><font>Un'attività Assetic è qualcosa con contenuti filtrabile che può essere caricato e scaricato. </font><font>Un'attività comprende anche i metadati, alcuni dei quali possono essere manipolati e alcune delle quali è immutabile.</font></font></cite></p>
+<p><font><font>In parole povere, le attività sono le risorse, che l'applicazione utilizza come ad esempio i fogli di stile e immagini.</font></font></p>
+<div class="section" id="stylesheets">
+<h4><font><font>Fogli di stile </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#stylesheets" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Iniziamo sostituendo le chiamate correnti per </font></font><tt>asset </tt><font><font> per i fogli di stile nel template principale di layout </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font>Aggiornare il contenuto del template in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / layout.html.twig</font></font></span></tt><font><font> con il seguente</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+
+{# .. #}
+
+{% block stylesheets %}
+    {{ parent () }}
+
+    {% stylesheets
+        '@BloggerBlogBundle/Resources/public/css/*'
+    %}
+        <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+    {% endstylesheets %}
+{% endblock %}
+
+{# .. #}
+</pre></div>
+</div>
+<p><font><font>Abbiamo sostituito i due precedenti link per i file CSS con alcune funzionalità Assetic. </font><font>Utilizzando </font></font><tt class="docutils literal"><span class="pre"><font><font>i fogli di stile</font></font></span></tt><font><font> da Assetic abbiamo specificato che tutti i file CSS nel percorso </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / public / css</font></font></span></tt><font><font> deve essere combinati in un file e poi liberati .L' </font><font>Unione dei file è un modo molto semplice ma efficace per ottimizzare il vostro sito web frontend, riducendo il numero dei file necessari. </font><font>Meno file significa meno richieste HTTP al server. </font><font>Anche se abbiamo usato il </font></font><tt class="docutils literal"><span class="pre"><font><font>*</font></font></span></tt><font><font> per specificare tutti i file nella </font></font><tt class="docutils literal"><span class="pre"><font><font>css</font></font></span></tt><font><font> directory avremmo potuto semplicemente elencare ogni singolo file come segue.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+
+{# .. #}
+
+{% block stylesheets %}
+    {{ parent () }}
+
+    {% stylesheets
+        '@BloggerBlogBundle/Resources/public/css/blog.css'
+        '@BloggerBlogBundle/Resources/public/css/sidebar.css'
+    %}
+        <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+    {% endstylesheets %}
+{% endblock %}
+
+{# .. #}
+</pre></div>
+</div>
+<p><font><font>Il risultato finale in entrambi i casi è lo stesso. </font><font>La prima opzione con il </font></font><tt class="docutils literal"><span class="pre"><font><font>*</font></font></span></tt><font><font> assicura che quando nuovi file CSS vengono aggiunti alla directory, essi saranno sempre inclusi nel file CSS combinato da Assetic. </font><font>Questo può non essere la funzionalità desiderata per il tuo sito, in modo da utilizzare uno dei due metodi sopra per soddisfare le vostre esigenze.</font></font></p>
+<p><font><font>Se si da uno sguardo a l'output HTML via </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> vedrete il CSS è stato inserito qualcosa di simile a questo (si noti che stiamo correndo nell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font> di nuovo).</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"/app_dev.php/css/d8f44a4_part_1_blog_1.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"/app_dev.php/css/d8f44a4_part_1_sidebar_2.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p><font><font>In primo luogo vi state chiedendo perché ci sono 2 file. </font><font>Sopra  si affermava che  Assetic avrebbe combinato i file in 1 file CSS. </font><font>Questo perché siamo in esecuzione di symblog nell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font>. </font><font>Possiamo chiedere Assetic per l'esecuzione in modalità non-debug impostando il flag di debug su false come segue.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+
+{# .. #}
+
+{% stylesheets
+    '@BloggerBlogBundle/Resources/public/css/*'
+    debug=false
+%}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+{% endstylesheets %}
+
+{# .. #}
+</pre></div>
+</div>
+<p><font><font>Ora, se si guarda il codice HTML rendering si vedrà qualcosa di simile.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"/app_dev.php/css/3c7da45.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p><font><font>Se si visualizzano i contenuti di questo file potrete vedere i 2 file CSS, </font></font><tt class="docutils literal"><span class="pre"><font><font>blog.css</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>sidebar.css</font></font></span></tt><font><font> sono stati combinati in 1 file. </font><font>Il nome dato al file generato CSS viene generato in modo casuale da Assetic. </font><font>Se si desidera controllare il nome dato al file generato utilizzare l'opzione </font></font><tt>output </tt><font><font> come segue.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{% stylesheets
+    '@BloggerBlogBundle/Resources/public/css/*'
+    output='css/blogger.css'
+%}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+{% endstylesheets %}
+</pre></div>
+</div>
+<p><font><font>Prima di continuare rimuovere il flag di debug dallo snippet di codice precedente siccome vogliamo riprendere il comportamento di default sul assets.</font></font></p>
+<p><font><font>Abbiamo anche bisogno di aggiornare il template di base dell' applicazioni  in </font></font><tt class="docutils literal"><span class="pre"><font><font>/ app / views / Resources base.html.twig</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# app/Resources/views/base.html.twig #}
+
+{# .. #}
+
+{% block stylesheets %}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">'http://fonts.googleapis.com/css?family=Irish+Grover'</span> <span class="na">rel=</span><span class="s">'stylesheet'</span> <span class="na">type=</span><span class="s">'text/css'</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">'http://fonts.googleapis.com/css?family=La+Belle+Aurore'</span> <span class="na">rel=</span><span class="s">'stylesheet'</span> <span class="na">type=</span><span class="s">'text/css'</span><span class="nt">&gt;</span>
+    {% stylesheets
+        'css/*'
+    %}
+        <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+    {% endstylesheets %}
+{% endblock %}
+
+{# .. #}
+</pre></div>
+</div>
+</div>
+<div class="section" id="javascripts">
+<h4>JavaScripts<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#javascripts" title="Permalink to this headline">¶</a></h4>
+<p><font><font>Mentre attualmente non abbiamo alcun file Javascipt nella nostra applicazione, il suo uso in Assetic è molto simile a come usare i fogli di stile</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{% javascripts
+    '@BloggerBlogBundle/Resources/public/js/*'
+%}
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"{{ asset_url }}"</span><span class="nt">&gt;&lt;/script&gt;</span>
+{% endjavascripts %}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="filters">
+<h3><font><font>Filtri </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#filters" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Il vero potere in Assetic proviene dai filtri. </font><font>I filtri possono essere applicati ad assets o collezioni di assets. </font><font>Ci sono numerosi filtri previsti all'interno del nucleo della libreria compresi i seguenti filtri comuni:</font></font></p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">CssMinFilter</span></tt>: minifies CSS</li>
+<li><tt class="docutils literal"><span class="pre">JpegoptimFilter</span></tt>: optimize your JPEGs</li>
+<li><tt class="docutils literal"><span class="pre">Yui\CssCompressorFilter</span></tt>: compresses CSS using the YUI compressor</li>
+<li><tt class="docutils literal"><span class="pre">Yui\JsCompressorFilter</span></tt>: compresses JavaScript using the YUI compressor</li>
+<li><tt class="docutils literal"><span class="pre">CoffeeScriptFilter</span></tt>: compiles CoffeeScript into JavaScript</li>
+</ol>
+<p><font><font>C'è una lista completa dei filtri disponibili nel</font></font><a class="reference external" href="https://github.com/kriswallsmith/assetic/blob/master/README.md">Assetic Readme</a>.</p>
+<p><font><font>Molti di questi filtri passa il compito attuale su un altro programma o libreria, come YUI Compressor, quindi potrebbe essere necessario installare o configurare le librerie necessarie per utilizzare alcuni dei filtri.</font></font></p>
+<p><font><font>Scarica il </font></font><a class="reference external" href="http://yuilibrary.com/download/yuicompressor/"><font><font>YUI Compressor</font></font></a><font><font> , estrarre l'archivio e copiare il file che si trova nella </font></font><tt class="docutils literal"><span class="pre"><font><font>compilazione</font></font></span></tt><font><font> directory </font></font><tt class="docutils literal"><span class="pre"><font><font>app/Resources/java/yuicompressor-2.4.6.jar</font></font></span></tt><font><font> . </font><font>Questo presuppone che è stata scaricata la </font></font><tt class="docutils literal"><span class="pre"><font><font>2.4.6</font></font></span></tt><font><font> versione di YUI Compressor. </font><font>Se non cambia il numero di versione di conseguenza.</font></font></p>
+<p><font><font>Successivamente, si configura un filtro Assetic al minify il CSS utilizzando il YUI Compressor. </font><font>Aggiornare l'applicazione di configurazione  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config.yml</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-yaml"><pre># app/config/config.yml
+
+# ..
+
+assetic:
+    filters:
+        yui_css:
+            jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.6.jar
+
+# ..</pre>
+</div>
+<p><font><font>Abbiamo configurato un filtro chiamato </font></font><tt class="docutils literal"><span class="pre"><font><font>yui_css</font></font></span></tt><font><font> che utilizzerà il YUI Compressor eseguibile Java l'abbiamo messo nella directory di risorse dell'applicazioni . </font><font>Per poter utilizzare il filtro è necessario specificare per quali attività si desidera che il filtro venga applicato. </font><font>Aggiornare il template in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / layout.html.twig</font></font></span></tt><font><font> per applicare il </font></font><tt class="docutils literal"><span class="pre"><font><font>yui_css</font></font></span></tt><font><font> filtro.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+
+{# .. #}
+
+{% stylesheets
+    '@BloggerBlogBundle/Resources/public/css/*'
+    output='css/blogger.css'
+    filter='yui_css'
+%}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+{% endstylesheets %}
+
+{# .. #}
+</pre></div>
+</div>
+<p><font><font>Ora, se si aggiorna il sito symblog per visualizzare l'output dei file Assetic noterete che sono state ridotte La</font><font> minimizzazione è grande per i server di produzione, ma può fare il debug difficile, specialmente quando si tratta di JavaScript. </font><font>Siamo in grado di disattivare la minimizzazione durante l'esecuzione nell'ambiente </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font> anteponendo il filtro con un </font></font><tt class="docutils literal"><span class="pre"><font><font>?</font></font></span></tt><font><font> come segue.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{% stylesheets
+    '@BloggerBlogBundle/Resources/public/css/*'
+    output='css/blogger.css'
+    filter='?yui_css'
+%}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset_url }}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+{% endstylesheets %}
+</pre></div>
+</div>
+</div>
+<div class="section" id="dumping-the-assets-for-production">
+<h3>Dumping the assets for production<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#dumping-the-assets-for-production" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Nella produzione siamo in grado di eseguire il dump dei file di asset utilizzando Assetic in modo che essi diventano risorse effettive sul disco pronto per essere servito dal server web. </font><font>Il processo di creazione delle attività attraverso Assetic ad ogni richiesta di pagina può essere molto lenta, soprattutto quando i filtri vengono applicati alle attività.il </font><font>Dumping per le attività di </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione</font></font></span></tt><font><font> garantisce che Assetic non venga utilizzato per servire i beni e invece i file pre-elaborati  di asset sono serviti direttamente dal server web. </font><font>Eseguire l'operazione seguente per creare il dump dei file di asset.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>app/console --env<span class="o">=</span>prod assetic:dump
+</pre></div>
+</div>
+<p><font><font>Si noterà un certo numero di file CSS che sono stati creati in </font></font><tt class="docutils literal"><span class="pre"><font><font>web / css</font></font></span></tt><font><font> compreso il combinato </font></font><tt class="docutils literal"><span class="pre"><font><font>blogger.css</font></font></span></tt><font><font>. </font><font>Ora, se eseguite li sito Web symblog nell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>produzione</font></font></span></tt><font><font> attraverso </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/</font></font></span></tt><font><font> i file verranno serviti direttamente da questa cartella.</font></font></p>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>Se avete dump  di asset per i file su disco e si desidera tornare nell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>sviluppo</font></font></span></tt><font><font> , sarà necessario ripulire i file di asset creati in </font></font><tt class="docutils literal"><span class="pre"><font><font>web /</font></font></span></tt><font><font> per Assetic per consentire di ricrearli..</font></font></p>
+</div>
+</div>
+<div class="section" id="additional-reading">
+<h3><font><font>Letture aggiuntive </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#additional-reading" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Noi qui abbiamo usato solo la superficie di ciò che Assetic è in grado di eseguire. </font><font>Ci sono molte risorse disponibili on-line in particolare nel libro di  Symfony2 tra cui:</font></font></p>
+<p><a class="reference external" href="http://symfony.com/doc/current/cookbook/assetic/asset_management.html"><font><font>Come utilizzare Assetic per l'Asset Management</font></font></a></p>
+<p><a class="reference external" href="http://symfony.com/doc/current/cookbook/assetic/yuicompressor.html"><font><font>Come minify JavaScript e Fogli di stile con YUI Compressor</font></font></a></p>
+<p><a class="reference external" href="http://symfony.com/doc/current/cookbook/assetic/jpeg_optimize.html"><font><font>Come utilizzare Assetic per l'ottimizzazione dell'immagine con le funzioni di Twig</font></font></a></p>
+<p><a class="reference external" href="http://symfony.com/doc/current/cookbook/assetic/apply_to_option.html"><font><font>Come applicare un filtro Assetic ad una estensione del file specifico</font></font></a></p>
+<p><font><font>Ci sono anche una serie di grand</font></font><font><font>i articoli scritti da </font></font><a class="reference external" href="https://twitter.com/#!/mr_r_miller"><font><font>Richard Miller</font></font></a><font><font> , tra cui:</font></font></p>
+<p><a class="reference external" href="http://miller.limethinking.co.uk/2011/05/16/symfony2-using-coffeescript-with-assetic/"><font><font>Symfony2: Utilizzo CoffeeScript con Assetic</font></font></a></p>
+<p><a class="reference external" href="http://miller.limethinking.co.uk/2011/06/02/symfony2-a-few-assetic-notes/"><font><font>Symfony2: alcune note Assetic</font></font></a></p>
+<p><a class="reference external" href="http://miller.limethinking.co.uk/2011/06/23/symfony2-assetic-twig-functions/"><font><font>Symfony2: Assetic e Twig Funzioni</font></font></a></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><font><font>Vale la pena ricordare qui che Richard Miller ha una collezione di articoli eccellenti per quanto riguarda un certo numero di aree di Symfony2 sul suo sito tra Dependency Injection, Servizi e le guide di  Assetic. </font><font>Basta cercare i post con tag </font></font><a class="reference external" href="http://miller.limethinking.co.uk/tag/symfony2/"><font><font>symfony2</font></font></a></p>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><font><font>Conclusione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html#conclusion" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo coperto un certo numero di nuove aree per quanto riguarda Symfony2 compresi gli ambienti Symfony2  e come utilizzare la libreria Assetic . </font><font>Abbiamo anche fatto miglioramenti alla home page e aggiunto alcuni componenti per la sidebar.</font></font></p>
+<p><font><font>Nel prossimo capitolo si passerà ai test. </font><font>Esploreremo sia test unit e test funzionali con PHPUnit. </font><font>Vedremo come Symfony2 viene fornito con una serie di classi per aiutare nella scrittura dei test funzionali che simulano le richieste web,che ci permettono di compilare form e fare clic su collegamenti e poi ispezionare la risposta restituita.</font></font></p>
+</div>
+</div>
+
+
+    <div id="disqus_thread">We were unable to load Disqus. If you are a moderator please see our <a href="http://docs.disqus.com/help/83/">troubleshooting guide</a>.<div style="display: none;" id="dsq-content"></div></div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="http://disqus.com/" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag4.htm">[Part 4] - The Comments Model: Adding comments,  Doctrine Repositories and Migrations</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag6.htm">[Part 6] - Testing: Unit and Functional with PHPUnit</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer">
+        © Copyright 2011, dsyph3r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  
+<iframe name="easyXDM_DISQUS_net_default3534_provider" id="easyXDM_DISQUS_net_default3534_provider" style="position: absolute; top: -2000px; left: 0px;" src="pag5_files/def.htm" frameborder="0"></iframe></body></html>

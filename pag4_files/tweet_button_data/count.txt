@@ -1,0 +1,1 @@
+twttr.receiveCount({"count":6,"url":"http:\/\/tutorial.symblog.co.uk\/docs\/extending-the-model-blog-comments.html\/"});

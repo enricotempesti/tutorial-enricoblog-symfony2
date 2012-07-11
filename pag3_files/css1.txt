@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'La Belle Aurore';
+  font-style: normal;
+  font-weight: normal;
+  src: local('La Belle Aurore'), local('LaBelleAurore'), url('http://themes.googleusercontent.com/static/fonts/labelleaurore/v3/Irdbc4ASuUoWDjd_Wc3mdyPuxW3DwjEqq93dVR72jP4.woff') format('woff');
+}

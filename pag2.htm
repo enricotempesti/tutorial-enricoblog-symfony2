@@ -1,0 +1,824 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0060)http://tutorial.symblog.co.uk/docs/validators-and-forms.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>[Part 2] - Contact Page: Validators, Forms and Emailing — symblog - A Symfony2 Tutorial</title>
+    
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina contatti,validators,email,emailng" /> 
+    
+    <link rel="stylesheet" href="pag2_files/haiku.css" type="text/css">
+    <link rel="stylesheet" href="pag2_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="pag2_files/print.css" type="text/css">
+    
+    
+    <script src="pag2_files/ga_002.js" async="" type="text/javascript"></script><script gapi_processed="true" src="pag2_files/plusone_002.js" async="" type="text/javascript"></script><script async="" src="pag2_files/cbgapi.loaded_0"></script><script src="pag2_files/cbgapi.txt" async=""></script><script type="text/javascript" async="" src="pag2_files/ga.js"></script><script type="text/javascript" async="" src="pag2_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script gapi_processed="true" type="text/javascript" src="pag2_files/jquery.js"></script>
+    <script type="text/javascript" src="pag2_files/underscore.js"></script>
+    <script type="text/javascript" src="pag2_files/doctools.js"></script>
+    <script type="text/javascript" src="pag2_files/theme_extras.js"></script>
+    <link rel="top" title="symblog - A Symfony2 Tutorial" href="http://tutorial.symblog.co.uk/index.html">
+    <link rel="next" title="[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html">
+    <link rel="prev" title="[Part 1] - Symfony2 Configuration and Templating" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html">
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="pag2_files/css.txt" rel="stylesheet" type="text/css">
+<link href="pag2_files/css1.txt" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  <script type="text/javascript" async="" src="pag2_files/embed.js"></script><script src="pag2_files/thread.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag2_files/defaults.css"><script src="pag2_files/disqus.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag2_files/theme.css"><script src="pag2_files/theme.js" async="" charset="UTF-8"></script><script src="pag2_files/event.js" async="" charset="UTF-8"></script><script src="pag2_files/embed_002.js" async="" type="text/javascript"></script><script charset="UTF-8" async="" src="pag2_files/thread_002.js"></script><link href="pag2_files/defaults_002.css" type="text/css" rel="stylesheet"><script charset="UTF-8" async="" src="pag2_files/disqus_002.js"></script></head>
+  <body data-twttr-rendered="true">
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0px; left: 0px; border: 0px none;" src="pag2_files/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f676974687562.htm" alt="Fork me on GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk/" class="en">EN</a></li>
+                    <li><a href="http://symblog.site90.net/" class="es">ES</a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr">FR</a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp">JP</a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="http://tutorialsymfony2.eu5.org/index.html">Home</a></li>
+                    <li><a href="http://enricoblog.eu5.org">Demo</a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog">Source</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="http://tutorialsymfony2.eu5.org/index.html">symblog</a></h2>
+            <h3><a href="http://tutorialsymfony2.eu5.org/index.html"">creating a blog in Symfony2</a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs">Looking for a PHP Development job using Symfony2 to build a cutting edge web application - check out DeskPRO Jobs</a>
+
+  <div class="topnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/index.html/pag1.htm">[Part 1] - Symfony2 Configuration and Templating</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag3.htm">[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <div id="___plusone_0" style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background-color: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; background-position: initial initial; background-repeat: initial initial; "><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="width: 80px; margin: 0px; border-style: none; height: 24px; position: static; left: 0px; top: 0px; visibility: visible;" tabindex="0" vspace="0" id="I0_1338403624857" name="I0_1338403624857" src="pag2_files/fastbutton.htm" title="+1" frameborder="0" scrolling="no" width="100%"></iframe></div>
+        </div>
+
+        <iframe allowtransparency="true" src="pag2_files/tweet_button.htm" class="twitter-share-button twitter-count-horizontal" style="width: 110px; height: 20px;" title="Twitter Tweet Button" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="pag2_files/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="part-2-contact-page-validators-forms-and-emailing">
+<h1>[Part 2] - <font><font> Pagina contatto: validatori,</font></font> Forms and Emailing<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#part-2-contact-page-validators-forms-and-emailing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2><font><font>Panoramica </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#overview" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font class="">Ora abbiamo i template HTML di base a posto, andiamo a fare una  pagina funzionale. </font><font>Inizieremo con una delle pagine più semplici; La pagina di contatto. </font><font>Alla fine di questo capitolo si avrà una pagina di contatto che permette agli utenti di inviare le richieste contattare il webmaster. </font><font>Tali richieste saranno inviate al webmaster.</font></font></p>
+<p><font><font>Le seguenti aree verranno dimostrate in questo capitolo:</font></font></p>
+<ol class="arabic simple">
+  <li><font><font>Validatori</font></font></li>
+  <li><font><font>Forms</font></font></li>
+  <li><font><font>Impostazione dei valori di configurazione del bundle</font></font></li>
+</ol>
+</div>
+<div class="section" id="contact-page">
+<h2>Pagina Contatti<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#contact-page" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="routing">
+<h3>Routing<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#routing" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Come per la pagina About che abbiamo creato nell'ultimo capitolo, inizieremo con la definizione del percorso pagina dei contatti. </font><font>Aprire il file</font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> che si trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt><font><font> e aggiungere la seguente regola di routing.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/routing.yml</span>
+<span class="l-Scalar-Plain">BloggerBlogBundle_contact</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/contact</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Page</span><span class="p-Indicator">:</span><span class="nv">contact</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET</span>
+</pre></div>
+</div>
+<p><font><font>Non c'è niente di nuovo qui, la regola corrisponde al percorso </font></font><tt class="docutils literal"><span class="pre"><font><font>/ contatto</font></font></span></tt><font><font> , per ilmetodo HTTP </font></font><font><font> GET che esegue l' azione </font></font><tt class="docutils literal"><span class="pre"><font><font>contact</font></font></span></tt><font><font> della </font></font><tt class="docutils literal"><span class="pre"><font><font>pagina</font></font></span></tt><font><font> controller nel </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> .</font></font></p>
+</div>
+<div class="section" id="controller">
+<h3>Controller<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#controller" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Dopo dobbiamo aggiungere l'azione   contact per la page</font></font><font><font>controller in </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> che si trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+<span class="c1">// ..</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">contactAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:contact.html.twig'</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// ..</span>
+</pre></div>
+</div>
+<p><font><font>Per ora l'azione è molto semplice, rende solo la visualizzazione della pagina di contatto. </font><font>Torneremo in seguito al controller.</font></font></p>
+</div>
+<div class="section" id="view">
+<h3>View<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#view" title="Permalink to this headline">¶</a></h3>
+<h3><font><font>Creare la visualizzazione della pagina di contatto in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / contact.html.twig</font></font></span></tt><font><font> e aggiungere il seguente contenuto.</font></font></h3>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block title %}Contact{% endblock%}
+
+{% block body %}
+    <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Contact symblog<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+
+    <span class="nt">&lt;p&gt;</span>Want to contact symblog?<span class="nt">&lt;/p&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Anche questo template è abbastanza semplice.E</font><font>stende il modello di layout </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font>, dove prevale il blocco del titolo per impostare un titolo personalizzato e definisce alcuni contenuti per il blocco del corpo.</font></font></p>
+</div>
+<div class="section" id="linking-to-the-page">
+<h3><font><font>Collegamento alla pagina </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#linking-to-the-page" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Infine abbiamo bisogno di aggiornare il link nel template base.html.twig  in </font></font><tt class="docutils literal"><span class="pre"><font><font>/ app / views / Resources base.html.twig </font></font></span></tt><font><font>per  collegarsi alla pagina dei contatti.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="c">&lt;!-- app/Resources/views/base.html.twig --&gt;</span>
+{% block navigation %}
+    <span class="nt">&lt;nav&gt;</span>
+        <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"navigation"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_homepage') }}"</span><span class="nt">&gt;</span>Home<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_about') }}"</span><span class="nt">&gt;</span>About<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_contact') }}"</span><span class="nt">&gt;</span>Contact<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;/ul&gt;</span>
+    <span class="nt">&lt;/nav&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Se si punta il browser a </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> e cliccate sul link contatto nella barra di navigazione, si dovrebbe vedere una pagina di contatto molto semplice. </font><font>Ora abbiamo la pagina correttamente impostata, è tempo di iniziare a lavorare sul form di contatto. </font><font>Questo è suddiviso in 2 parti distinte; i validatori e il form. </font><font>Prima di poter affrontare il concetto di validatori e il form abbiamo bisogno di pensare a come gestire i dati della richiesta di contatto.</font></font></p>
+</div>
+</div>
+<div class="section" id="contact-entity">
+<h2>Contact Entity<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#contact-entity" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Iniziamo con la creazione di una classe che rappresenta una richiesta di contatto da un utente. </font><font>Vogliamo intercettare alcune informazioni di base come il nome,l'email,l' oggetto e il corpo del messaggio. </font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Enquiry.php</font></font></span></tt><font><font> e incollare il seguente contenuto.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Enquiry.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Entity</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Enquiry</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$name</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$email</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$subject</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$body</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setName</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">name</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getEmail</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">email</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setEmail</span><span class="p">(</span><span class="nv">$email</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">email</span> <span class="o">=</span> <span class="nv">$email</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getSubject</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">subject</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setSubject</span><span class="p">(</span><span class="nv">$subject</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">subject</span> <span class="o">=</span> <span class="nv">$subject</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getBody</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">body</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setBody</span><span class="p">(</span><span class="nv">$body</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">body</span> <span class="o">=</span> <span class="nv">$body</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Come si può vedere questa classe definisce solo alcune variabilii protette e le funzioni di accesso per queste. </font><font>Qui non c'è nulla che definisce un modo per la validazione dei membri, o come questi sono relazionati con il form. </font><font>Torneremo su questo più avanti.</font></font></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Diamo uno sguardo veloce per parlare dei namespaces in Symfony2. La classe entity 
+che abbiamo creato impostando namespace a <tt class="docutils literal"><span class="pre">Blogger\BlogBundle\Entity</span></tt>. Come Symfony2
+autocarica il supporto 
+<a class="reference external" href="http://groups.google.com/group/php-standards/web/psr-0-final-proposal?pli=1">PSR-0 standard</a>
+la directori namespace  mappa il Bundle con la struttura delle cartelle. La <tt class="docutils literal"><span class="pre">Enquiry</span></tt> entity class
+localizzata in <tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/Entity/Enquiry.php</span></tt> assicura per Sy2 di poter autocaricare correttamente la classe.</p>
+<p>Come può Sy2 autocaricare e conoscere <tt class="docutils literal"><span class="pre">Blogger</span></tt> namespace che si trova nella directori <tt class="docutils literal"><span class="pre">src</span></tt>
+? Questo grazie alla configurazione dell' autoloader in <tt class="docutils literal"><span class="pre">app/autoloader.php</span></tt></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// app/autoloader.php</span>
+<span class="nv">$loader</span><span class="o">-&gt;</span><span class="na">registerNamespaceFallbacks</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+    <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../src'</span><span class="p">,</span>
+<span class="p">));</span>
+</pre></div>
+</div>
+<p>Questo $loader  registra uno spazio per i namespaces non ancora registrati .<font><font>Come il </font></font><tt class="docutils literal"><span class="pre"><font><font>Blogger</font></font></span></tt><font><font> namespace che non è registrato, il caricatore Symfony2 cercherà i file richiesti nella directori</font></font><tt class="docutils literal"><span class="pre"><font><font> src</font></font></span></tt><font><font>.</font></font></p>
+<p class="last"><font><font>Autoloading e namespace sono un concetto molto potente in Symfony2. </font><font>Se si hanno degli errori in cui PHP non è in grado di trovare le classi, è probabile che l'errore sia in namespace o nella struttura delle cartelle. </font><font>Controllate anche se namespace è stato registrato con autoloader come mostrato sopra. </font><font>Non si dovrebbe essere tentati di </font></font><tt class="docutils literal"><span class="pre"><font><font>risolvere</font></font></span></tt><font><font> questo utilizzando le funzioni PHP</font></font></p>
+<p><tt class="docutils literal"><span class="pre">require</span></tt> o <tt class="docutils literal"><span class="pre">include</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="forms">
+<h2>Forms<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#forms" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Successivamente creeremo il form. </font><font>Symfony2 viene fornito  con un componente per la creazione di form molto potente che facilita il compito di impostare il form. </font><font>Come per tutti i componenti Symfony2 anche questo può essere utilizzato al di fuori di Symfony2 nei vostri progetti. </font><font>La </font></font><a class="reference external" href="https://github.com/symfony/Form"><font><font>sorgente Component Form</font></font></a><font><font> è disponibile su Github. </font><font>Inizieremo con la creazione di una classe </font></font><tt class="docutils literal"><span class="pre"><font><font>AbstractType</font></font></span></tt><font><font> che rappresenta il modulo di richiesta. </font><font>Avremmo potuto creare il modulo direttamente nel controller e non perdere tempo con questa classe, tuttavia separare il form nella propria classe ci permette di riutilizzare il form in tutta l'applicazione. </font><font>Inoltre, impedisce dii riempire il controller. </font><font>Dopo tutto, il controller dovrebbe essere semplice. </font><font>Con  'lo scopo di fornire solo il collante tra il modello e la vista.</font></font></p>
+<div class="section" id="enquirytype">
+<h3>EnquiryType<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#enquirytype" title="Permalink to this headline">¶</a></h3>
+<p>Create un nuovo file in <tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/Form/EnquiryType.php</span></tt> e aggiungete questo contenuto..</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Form/EnquiryType.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Form</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Component\Form\AbstractType</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Form\FormBuilder</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">EnquiryType</span> <span class="k">extends</span> <span class="nx">AbstractType</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">buildForm</span><span class="p">(</span><span class="nx">FormBuilder</span> <span class="nv">$builder</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$options</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$builder</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
+        <span class="nv">$builder</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="s1">'email'</span><span class="p">);</span>
+        <span class="nv">$builder</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'subject'</span><span class="p">);</span>
+        <span class="nv">$builder</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'body'</span><span class="p">,</span> <span class="s1">'textarea'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'contact'</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>La classe <tt class="docutils literal"><span class="pre">EnquiryType</span></tt> introduce la classe <tt class="docutils literal"><span class="pre">FormBuilder</span></tt> . La classe <tt class="docutils literal"><span class="pre">FormBuilder</span></tt> è il tuo migliore amico quando devi creare un forms.<font><font>È in grado di semplificare il processo di definizione campi con i metadati dati al campo stesso</font></font>. Quindi noi avevamo 
+Enquiry entity molto semplice non avevamo ancora impostato i metadata di default vengono impostati a campi tipo imput text..Questo è buono per molti campi eccetto
+ body dove necessitiamo di una <tt class="docutils literal"><span class="pre">textarea</span></tt>, e email dove vogliamo approfittare dei nuovi  email input type di HTML5.</p>
+<div class="admonition note">
+<p class="first admonition-title">nota</p>
+<p class="first admonition-title"><span class="last"><font><font>Un punto fondamentale da ricordare è che la funzione </font></font><tt class="docutils literal"><span class="pre"><font><font>getName</font></font></span></tt><font><font> deve restituire un identificatore univoco.</font></font></span></p>
+</div>
+</div>
+<div class="section" id="creating-the-form-in-the-controller">
+<h3>Creating the form in the controller<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#creating-the-form-in-the-controller" title="Permalink to this headline">¶</a></h3>
+<p>Ora abbiamo definito le classi <tt class="docutils literal"><span class="pre">Enquiry</span></tt> entity and <tt class="docutils literal"><span class="pre">EnquiryType</span></tt>, e possiamo aggiornare la contact action per usarle. Sostituire il contenuto della contact action in 
+<tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/Controller/PageController.php</span></tt> con il seguente..</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">contactAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$enquiry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Enquiry</span><span class="p">();</span>
+    <span class="nv">$form</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createForm</span><span class="p">(</span><span class="k">new</span> <span class="nx">EnquiryType</span><span class="p">(),</span> <span class="nv">$enquiry</span><span class="p">);</span>
+
+    <span class="nv">$request</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="na">getMethod</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'POST'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">bindRequest</span><span class="p">(</span><span class="nv">$request</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$form</span><span class="o">-&gt;</span><span class="na">isValid</span><span class="p">())</span> <span class="p">{</span>
+            <span class="c1">// Perform some action, such as sending an email</span>
+
+            <span class="c1">// Redirect - This is important to prevent users re-posting</span>
+            <span class="c1">// the form if they refresh the page</span>
+            <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">generateUrl</span><span class="p">(</span><span class="s1">'BloggerBlogBundle_contact'</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:contact.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'form'</span> <span class="o">=&gt;</span> <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">createView</span><span class="p">()</span>
+    <span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Iniziamo con la creazione di un istanza per <tt class="docutils literal"><span class="pre">Enquiry</span></tt> entity. Questa rappresenta i dati per una richiesta di contatto. Dopo di che creiamo il form . Dove specifichiamo il tipo di campo con 
+<tt class="docutils literal"><span class="pre">EnquiryType creata in precedenza </span></tt> , e poi gli passiamo il nostror enquiry entity oggetto.Il metodo 
+<tt class="docutils literal"><span class="pre">createForm</span></tt> può usare questi 2 blueprints per creare una rappresentazione di form..</p>
+<p><font><font>Dato che questa azione di controllo si occuperà della visualizzazione e l'elaborazione del form inviato, abbiamo bisogno di controllare il metodo HTTP. </font><font>I form  inviati vengono inviati normalmente tramite </font></font><tt class="docutils literal"><span class="pre"><font><font>POST</font></font></span></tt><font><font> , e il nostro form non farà eccezione.</font></font>. Se il metodo di richiesta è <tt class="docutils literal"><span class="pre">POST</span></tt>, una chiamata a <tt class="docutils literal"><span class="pre">bindRequest</span></tt> trasformerà i dati in menbri del nostro oggetto <tt class="docutils literal"><span class="pre">$enquiry</span></tt> . A questo punto il nostro oggetto <tt class="docutils literal"><span class="pre">$enquiry</span></tt> potrà essere rinviato nuovamente..</p>
+<p><font><font>Più avanti facciamo un controllo per vedere se il modulo è valido. </font><font>Sicome non abbiamo specificato nessun validatore ancora, il modulo sarà sempre valido.</font></font></p>
+<p><font><font>Infine dobbiamo  specificare il form per il rendering. </font><font>Si noti che stiamo  passando anche una rappresentazione della vista  . </font><font>Questo oggetto ci permette di rendere il form alla vista</font></font></p>
+<p><font><font>Siccome  abbiamo usato 2 nuove classi nel nostro controller abbiamo bisogno di importare i namespacei. </font><font>Aggiornare il file controller che si trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> con il seguente.</font></font>. Le dichiarazioni devono essere messe sotto l'esistente dichiarazione use .......</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Controller\Controller</span><span class="p">;</span>
+<span class="c1">// Import new namespaces</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Enquiry</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Form\EnquiryType</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">PageController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="c1">// ..</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rendering-the-form">
+<h3>Rendering the form<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#rendering-the-form" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Grazie a metodi di Ramoscello di rendering di forme è molto semplice. </font><font>Twig fornisce un sistema stratificato per il rendering del form che permette di rendere il form come una intera entità, o come singoli errori e singoli elementi, a seconda del livello di personalizzazione richiesto.</font></font></p>
+<p><font><font>Per dimostrare la potenza dei metodi di Twig  possiamo utilizzare il seguente frammento di redering per l'intero modulo.</font></font></p>
+<div class="highlight-html"><pre>&lt;form action="{{ path('BloggerBlogBundle_contact') }}" method="post" {{ form_enctype(form) }}&gt;
+    {{ form_widget(form) }}
+
+    &lt;input type="submit" /&gt;
+&lt;/form&gt;</pre>
+</div>
+<p><font><font>Mentre questo è molto utile per  form  semplici ha però i suoi limiti quando sono necessarie personalizzazioni estese , che è spesso il caso con i form.</font></font></p>
+<p><font><font>Per il nostro form di contatto, si opterà per una via di mezzo. </font><font>Sostituire il codice del template  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / contact.html.twig</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-html"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block title %}Contact{% endblock%}
+
+{% block body %}
+    &lt;header&gt;
+        &lt;h1&gt;Contact symblog&lt;/h1&gt;
+    &lt;/header&gt;
+
+    &lt;p&gt;Want to contact symblog?&lt;/p&gt;
+
+    &lt;form action="{{ path('BloggerBlogBundle_contact') }}" method="post" {{ form_enctype(form) }} class="blogger"&gt;
+        {{ form_errors(form) }}
+
+        {{ form_row(form.name) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.subject) }}
+        {{ form_row(form.body) }}
+
+        {{ form_rest(form) }}
+
+        &lt;input type="submit" value="Submit" /&gt;
+    &lt;/form&gt;
+{% endblock %}</pre>
+</div>
+<p><font><font>Come potete vedere, usiamo 4 nuovi metodi Twig per rendere il form.</font></font></p>
+<p><font><font>Il primo metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>form_enctype</font></font></span></tt><font><font> imposta il tipo di contenuto del form. </font><font>Questo deve essere impostato quando il form si occupa di ricaricare  file. </font><font>La buona pratica , dice sempre di utilizzare questo su tutti i form nel caso in cui è possibile aggiungere il caricamento di file in futuro. </font><font>Debug di un form che gestisce il caricamento di file senza alcun tipo di contenuto impostato può essere un rompicapo.</font></font></p>
+<p><font><font>Il  secondo metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>form_errors</font></font></span></tt><font><font> renderà eventuali errori  del form nel caso in cui la convalida non è riuscita.</font></font></p>
+<p><font><font>Il terzo metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>form_row</font></font></span></tt><font><font> emette gli elementi interi relativi ad ogni campo del form. </font><font>Questo include gli eventuali errori per il campo, l'etichetta del campo e l'elemento di campo effettivo.</font></font></p>
+<p><font><font>Infine usiamo ilmetodo </font></font><tt class="docutils literal"><span class="pre"><font><font>form_rest</font></font></span></tt><font><font>. </font><font>E 'sempre una mossa sicura per utilizzare questo metodo alla fine del form per rendere tutti i campi che potreste aver dimenticato, tra cui i campi nascosti e il modulo di Symfony2 CSRF token.</font></font></p>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>Cross-Site Request Forgery (CSRF) è spiegato in dettaglio nel </font></font><a class="reference external" href="http://symfony.com/doc/current/book/forms.html#csrf-protection"><font><font>capitolo Form</font></font></a><font><font> del libro Symfony2.</font></font></p>
+</div>
+</div>
+<div class="section" id="styling-the-form">
+<h3>Styling the form<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#styling-the-form" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Se si visualizza il form di contatto ora con </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/contact</font></font></span></tt><font><font> noterete non sembra molto attraente. </font><font>Andiamo ad agginungere  aggiungere alcuni stili per migliorare questo aspetto. </font><font>Poiché gli stili sono specifici per il form all'interno del nostro Bundle Blog creeremo gli stili in un nuovo foglio di stile all'interno dello stesso bundle. </font><font>Creiamo un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / public / css / blog.css</font></font></span></tt><font><font> e incolliamo il seguente contenuto.</font></font>t.</p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nc">.blogger-notice</span> <span class="p">{</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">background</span><span class="o">:</span> <span class="m">#DFF2BF</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#4F8A10</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="p">{</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">div</span> <span class="p">{</span> <span class="k">clear</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">label</span> <span class="p">{</span> <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span> <span class="k">margin-right</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">100px</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span> <span class="k">vertical-align</span><span class="o">:</span> <span class="k">top</span><span class="p">;</span> <span class="k">padding-top</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="s2">"text"</span><span class="o">],</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="s2">"email"</span><span class="o">]</span>
+    <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">500px</span><span class="p">;</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">26px</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">min-height</span><span class="o">:</span> <span class="m">26px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">textarea</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">500px</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">150px</span><span class="p">;</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">26px</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="s2">"submit"</span><span class="o">]</span> <span class="p">{</span> <span class="k">margin-left</span><span class="o">:</span> <span class="m">110px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">508px</span><span class="p">;</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">26px</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">min-height</span><span class="o">:</span> <span class="m">26px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nt">form</span><span class="nc">.blogger</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#ff0000</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Dobbiamo far sapere alll'applicazione  che vogliamo usare questo foglio di stile. </font><font>Potremmo importare il foglio di stile nel form di contatto, ma potremmo dover utilizzare questo foglio di stile in seguito, ha senso  importarlo nel
+ layout </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> che abbiamo creato nel capitolo 1. </font><font>Aprire il </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / resources / views / layout.html.twig</font></font></span></tt><font><font> e sostituirlo con il seguente contenuto.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset('bundles/bloggerblog/css/blog.css') }}"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span>
+{% endblock %}
+
+{% block sidebar %}
+    Sidebar content
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Si può vedere che abbiamo definito un blocco di foglio di stile per eseguire l'override del blocco foglio di stile definito nel modello  genitore. </font><font>Tuttavia, è importante notare la chiamata al
+ metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>genitore</font></font></span></tt><font><font>. </font><font>Questo importa il contenuto dal blocco fogli di stile nel modello di genitore  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / Resources / base.html.twig</font></font></span></tt><font><font> , e ci permette di aggiungere il nostro nuovo foglio di stile. </font><font>Dopo tutto, non vogliamo sostituire i fogli di stile esistenti.</font></font></p>
+<p><font><font>Affinché la </font></font><font><font> funzione asset  colleghi correttamente la risorsa che dobbiamo copiare o collegare al bundle nella cartella </font></font><tt class="docutils literal"><span class="pre"><font><font>web</font></font></span></tt><font><font>. </font><font>Ciò può essere fatto con i seguenti</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console assets:install web --symlink
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p><font><font>Se si utilizza un sistema operativo che non supporta i link simbolici, comei Windows, si deve far arrivare l'opzione link simbolico come segue.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>php app/console assets:install web
+</pre></div>
+</div>
+<p class="last"><font><font>Questo metodo in realtà copia le risorse dei bundle </font></font><tt class="docutils literal"><span class="pre"><font><font>pubblico</font></font></span></tt><font><font> nella cartella i </font></font><tt class="docutils literal"><span class="pre"><font><font>web</font></font></span></tt><font><font> dell'applicazione. </font><font>Poiché i file vengono copiati in realtà, sarà necessario eseguire questa operazione ogni volta che si apporta una modifica a una risorsa del bundlei pubblico.</font></font></p>
+</div>
+<p><font><font>Ora, se si aggiorna la pagina dei contatti il form avrà un nuovo stile..</font></font></p>
+<img alt="symblog contact form" class="align-center" src="pag2_files/contact.jpg">
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="first admonition-title"></p>
+<p class="last"><font><font>Mentre la </font></font><font><font> funzione asset fornisce le funzionalità di cui abbiamo bisogno per utilizzare le risorse, c'è una soluzione migliore per questo. </font></font><a class="reference external" href="https://github.com/kriswallsmith/assetic"><font><font>Assetic</font></font></a><font><font> libreria </font></font><a class="reference external" href="https://github.com/kriswallsmith"><font><font>Kris Wallsmith</font></font></a><font><font> è fornito in bundle con la distribuzione standard di Symfony2 per impostazione predefinita. </font><font>Questa libreria fornisce gestione patrimoniale ben oltre le normali capacità Symfony2. </font><font>Assetic ci permette di eseguire i filtri sulle attività di combinare automaticamente, minify e gzip . </font><font>E 'inoltre possibile eseguire filtri di compressione sulle immagini. </font><font>Assetic ci consente inoltre di fare riferimento a risorse direttamente all'interno della cartella bundle pubblico senza dover eseguire il </font></font><tt class="docutils literal"><span class="pre"><font><font>comando </font></font>assets:install</span></tt><font><font>. </font><font>Esploreremo l'uso di Assetic nei capitoli successi</font></font></p>
+<p class="last">&nbsp;</p>
+</div>
+</div>
+</div>
+<div class="section" id="failure-to-submit">
+<h2><font><font>La mancata presentazione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#failure-to-submit" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>I più impazienti  potrebbero aver già provato a inviare il modulo per essere accolti con un errore Symfony2.</font></font></p>
+<img alt="No route found for &quot;POST /contact&quot;: Method Not Allowed (Allow: GET, HEAD)" class="align-center" src="pag2_files/post_error.jpg">
+<p><font><font>Questo errore ci sta dicendo che non c'è rotta chei corrisponde a </font></font><tt class="docutils literal"><span class="pre"><font><font>/ contact</font></font></span></tt><font><font> con il metodo HTTP POST. </font><font>Il percorso accetta solo le richieste GET e HEAD. </font><font>Questo perché abbiamo configurato il nostro percorso con l'esigenza del metodo GET.</font></font></p>
+<p><font><font>Andiamo ad  aggiornare il percorso di contatto  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt><font><font> per consentire anche richieste POST.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/routing.yml</span>
+<span class="l-Scalar-Plain">BloggerBlogBundle_contact</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/contact</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Page</span><span class="p-Indicator">:</span><span class="nv">contact</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET|POST</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><font><font>Ci possiamo chiedere  perché il percorso permette il metodo GET HEAD solo quando  è stato specificato. </font><font>Questo perché HEAD è una richiesta GET, ma solo le intestazioni HTTP vengono restituiti.</font></font></p>
+</div>
+<p><font><font>Ora, quando si invia il modulo questo andrà a funzionare come previsto, anche se in realtà non dovrebbe fare molto ancora. </font><font>La pagina  solo reindirizzerà di nuovo al modulo di contatto.</font></font></p>
+</div>
+<div class="section" id="validators">
+<h2>Validators<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#validators" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Il componente validatore di Sy2 ci permette di eseguire il compito di convalida dei dati. </font><font>La convalida è un compito comune quando si tratta di dati da form. </font><font>La convalida deve inoltre essere eseguita sui dati prima che venga sottoposto ad un database. </font><font>Il validatore Symfony2 ci consente di separare la logica di convalida lontano dai componenti che possono utilizzarla, come ad esempio il componente form o il componente Database. </font><font>Questo approccio significa che abbiamo un insieme di regole di convalida per un oggetto.</font></font></p>
+<p><font><font>Cominciamo con l'aggiornamento di </font></font><tt class="docutils literal"><span class="pre"><font><font>Enquiry</font></font></span></tt><font><font> entity  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Enquiry.php</font></font></span></tt><font><font> per specificare alcuni validatori. </font><font>Assicurarsi di aggiungere i 5 nuovi</font></font> <tt class="docutils literal"><span class="pre">use</span></tt><font><font> dichiarazioni nella parte superiore del file.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Enquiry.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Entity</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Mapping\ClassMetadata</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Constraints\NotBlank</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Constraints\Email</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Constraints\MinLength</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Constraints\MaxLength</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Enquiry</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">loadValidatorMetadata</span><span class="p">(</span><span class="nx">ClassMetadata</span> <span class="nv">$metadata</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">NotBlank</span><span class="p">());</span>
+
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Email</span><span class="p">());</span>
+
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'subject'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">NotBlank</span><span class="p">());</span>
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'subject'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">MaxLength</span><span class="p">(</span><span class="mi">50</span><span class="p">));</span>
+
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'body'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">MinLength</span><span class="p">(</span><span class="mi">50</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Per definire i validatori dobbiamo attuare il metodo statico </font></font><tt class="docutils literal"><span class="pre"><font><font>loadValidatorMetadata</font></font></span></tt><font><font> . </font><font>Questo ci fornisce un oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>ClassMetadata</font></font></span></tt><font><font> . </font><font>Possiamo utilizzare questo oggetto per impostare vincoli di proprietà sui nostri membri entity. </font><font>La prima dichiarazionei applica il vincolo </font></font><tt class="docutils literal"><span class="pre"><font><font>NotBlank</font></font></span></tt> al membro <tt class="docutils literal"><span class="pre"><font><font>name </font></font></span></tt><font><font>. </font><font>Il validatore </font></font><tt class="docutils literal"><span class="pre"><font><font>NotBlank</font></font></span></tt><font><font> è semplice come sembra, restituirà solo </font></font><tt class="docutils literal"><span class="pre"><font><font>true</font></font></span></tt><font><font> se il valore è la convalida non è vuota. </font><font>Poi abbiamo la convalida di configurazione per il membro email</font></font><font><font>. </font><font>Il servizio Symfony2 Validator  prevede un validatore per </font></font><a class="reference external" href="http://symfony.com/doc/current/reference/constraints/Email.html"><font><font>e-mail</font></font></a><font><font> che saprà anche controllare i record MX per assicurare la convalida. </font><font>Sul </font></font><font><font> membro subject vogliamo impostare un </font></font><tt class="docutils literal"><span class="pre"><font><font>NotBlank</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>un MaxLength</font></font></span></tt><font><font>. </font><font>È possibile applicarepiù validatori ad un solo membro.</font></font></p>
+<p><font><font>Un elenco completo dei </font></font><a class="reference external" href="http://symfony.com/doc/current/reference/constraints.html"><font><font>vincoli di validazione</font></font></a><font><font> è disponibile nelle Symfony2 documenti di riferimento. </font><font>È inoltre possibile </font></font><a class="reference external" href="http://symfony.com/doc/current/cookbook/validation/custom_constraint.html"><font><font>creare validatori personalizzati</font></font></a><font><font> .</font></font></p>
+<p><font><font>Ora, quando si invia il modulo di contatto, i dati forniti saranno trasmessi attraverso i vincoli di convalida. </font><font>Provate a digitare  un indirizzo email non valido. </font><font>Dovreste vedere un messaggio di errore che informa che l'indirizzo email non è valido. </font><font>Ogni validatore fornisce un messaggio predefinito che può essere ignorato, se necessario. </font><font>Per cambiare il messaggio di output dal validatore email è necessario effettuare le seguenti operazioni.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'email'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Email</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+    <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'symblog does not like invalid emails. Give me a real one!'</span>
+<span class="p">)));</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Se si utilizza un browser che supporta HTML5 è probabile che usciranno dei messaggi HTML5 per far rispettare determinati vincoli. </font><font>Questa è la validazione lato client e Symfony2 fisserà vincoli HTML5 idonei, sulla base di </font></font><tt class="docutils literal"><span class="pre"><font><font>Entity</font></font></span></tt><font><font> metadati. </font><font>Potete vedere questo sull'elemento email. </font><font>Il codice HTML di uscita è</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"email"</span> <span class="na">value=</span><span class="s">""</span> <span class="na">required=</span><span class="s">"required"</span> <span class="na">name=</span><span class="s">"contact[email]"</span> <span class="na">id=</span><span class="s">"contact_email"</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p class="last"><font><font>Abbiamo usato  uno dei nuovi campi di input e-mail di tipo HTML5, e  fissato l'attributo richiesto. La </font><font>validazione lato client è buona in quanto non richiede un round trip al server per convalidare il formulario. </font><font>Tuttavia, la convalida lato client non deve essere utilizzata da sola </font><font>Si deve sempre convalidare  i dati dal lato  server , in quanto è abbastanza facile per un utente di by-passare la validazione lato client.</font></font>.</p>
+</div>
+</div>
+<div class="section" id="sending-the-email">
+<h2><font><font>Invio di e-mail </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#sending-the-email" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Mentre il nostro modulo di contatto permetterà agli utenti di inviare richieste di informazioni, ma ancora non succede niente .Andiamo ad</font><font> aggiornare il controller per inviare una e-mail al webmaster blog. </font><font>Symfony2 viene completo con la libreria </font></font><a class="reference external" href="http://swiftmailer.org/"><font><font>Swift Mailer</font></font></a><font><font> per l'invio di email. </font><font>Swift Mailer è una libreria molto potente, qui useremo solo una piccola parte,di ciò che questa libreria può eseguire.</font></font></p>
+<div class="section" id="configure-swift-mailer-settings">
+<h3><font><font>Configurare le impostazioni di Swift Mailer </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#configure-swift-mailer-settings" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Swift Mailer è già configurato out of the box per lavorare nella distribuzione Symfony2 Standard, però abbiamo bisogno di configurare alcune impostazioni per quanto riguarda i metodi di invio e le credenziali. </font><font>Aprire il file di parametri  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / parameters.ini</font></font></span></tt><font><font> e trovare le impostazioni con prefisso </font></font><tt class="docutils literal"><span class="pre"><font><font>mailer_</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-text"><div class="highlight"><pre>mailer_transport="smtp"
+mailer_host="localhost"
+mailer_user=""
+mailer_password=""
+</pre></div>
+</div>
+<p><font><font>Swift Mailer fornisce una serie di metodi per l'invio di messaggi di posta elettronica, incluso l'utilizzo di un server SMTP, utilizzando una installazione locale di sendmail, o anche utilizzando un account GMail. </font><font>Per semplicità useremo un account GMail. </font><font>Aggiornare i parametri con i seguenti, sostituendo il nome utente e la password dove necessario.</font></font></p>
+<div class="highlight-text"><div class="highlight"><pre>mailer_transport="gmail"
+mailer_encryption="ssl"
+mailer_auth_mode="login"
+mailer_host="smtp.gmail.com"
+mailer_user="your_username"
+mailer_password="your_password"
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Avviso</p>
+<p class="last"><font><font>Fate attenzione se si utilizza un sistema di controllo versione (VCS) come Git per il progetto, soprattutto se il repository è pubblico quindi accessibile per vedere il tuo nome utente e la password Gmail . </font><font>È necessario assicurarsi che il file </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / parameters.ini</font></font></span></tt><font><font> venga aggiunto alla lista ignora dei VCS. </font><font>Un approccio comune a questo problema è cambiare il suffisso del nome del file che contiene le informazioni sensibili, come </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / parameters.ini</font></font></span></tt><font><font> con </font></font><tt class="docutils literal"><span class="pre"><font><font>. dist</font></font></span></tt><font><font> . </font><font>È quindi fornire valori predefiniti per le impostazioni in questo file e aggiungere il file vero e proprio, vale a dire </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / parameters.ini</font></font></span></tt><font><font> aggiungerlo alla lista VCS  ignora. </font><font>Dopo di che  distribuiamo il file </font></font><tt class="docutils literal"><span class="pre"><font><font>*. dist</font></font></span></tt><font><font> con il progetto, cosi si permettere allo sviluppatore di rimuovere l' </font></font><tt class="docutils literal"><span class="pre"><font><font>. dist</font></font></span></tt><font><font> estensione e inserire le impostazioni necessarie.</font></font></p>
+</div>
+</div>
+<div class="section" id="update-the-controller">
+<h3><font><font>Aggiornare il controller </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#update-the-controller" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Aggiornare la </font></font><tt class="docutils literal"><span class="pre"><font><font>page</font></font></span></tt><font><font> controller che si  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> con il contenuto sottostante.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">contactAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$form</span><span class="o">-&gt;</span><span class="na">isValid</span><span class="p">())</span> <span class="p">{</span>
+
+        <span class="nv">$message</span> <span class="o">=</span> <span class="nx">\Swift_Message</span><span class="o">::</span><span class="na">newInstance</span><span class="p">()</span>
+            <span class="o">-&gt;</span><span class="na">setSubject</span><span class="p">(</span><span class="s1">'Contact enquiry from symblog'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">setFrom</span><span class="p">(</span><span class="s1">'enquiries@symblog.co.uk'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">setTo</span><span class="p">(</span><span class="s1">'email@email.com'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">setBody</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">renderView</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:contactEmail.txt.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'enquiry'</span> <span class="o">=&gt;</span> <span class="nv">$enquiry</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'mailer'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'session'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">setFlash</span><span class="p">(</span><span class="s1">'blogger-notice'</span><span class="p">,</span> <span class="s1">'Your contact enquiry was successfully sent. Thank you!'</span><span class="p">);</span>
+
+        <span class="c1">// Redirect - This is important to prevent users re-posting</span>
+        <span class="c1">// the form if they refresh the page</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">generateUrl</span><span class="p">(</span><span class="s1">'BloggerBlogBundle_contact'</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Quindi abbiamo  utilizzato la libreria Swift Mailer per creare un </font></font><tt class="docutils literal"><span class="pre"><font><font>Swift_Message</font></font></span></tt><font><font> oggetto , che può essere inviato via email.</font></font></p>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>Come la libreria Swift Mailer non usa namespace, abbiamo bisogno del prefisso \  alla classe Swift Mailer </font></font><font><font> . </font><font>Questo dice a PHP di tornare di nuovo al </font></font>global space<font><font> . </font><font>Avrete bisogno di prefissare tutte le classi e le funzioni che non sono namespace con un </font></font><tt class="docutils literal"><span class="pre"><font><font>\</font></font></span></tt><font><font> . </font><font>Se non avete posizionato il prefisso prima della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Swift_Message</font></font></span></tt><font><font> PHP va a cercare nella classe namespace corrente, che in questo esempio è </font></font><tt class="docutils literal"><span class="pre"><font><font>Blogger \ BlogBundle \ controller</font></font></span></tt><font><font> , causando un errore ..</font></font></p>
+</div>
+<p><font><font>Abbiamo anche stabilito un </font></font><font><font> messaggio flash nella sessione. </font><font>I messaggi flash sono messaggi che persistono per esattamente una richiesta. </font><font>Dopo di che vengono automaticamente puliti da Symfony2. </font><font>Il</font></font><font><font> messaggio flash verrà visualizzato nel template di contatto per informare l'utente che il form è stato inviato. </font><font>Come </font></font><tt>il </tt><font><font> messaggio flash persiste esattamente solo per una richiesta, sono l'ideale per avvisare l'utente del successo delle precedenti azioni.</font></font></p>
+<p><font><font>Per visualizzare il </font></font><font><font> messaggio flash abbiamo bisogno di aggiornare il template di contatto si  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / contact.html.twig</font></font></span></tt><font><font> . </font><font>Aggiornare il contenuto del modello con il seguente</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
+
+{# rest of template ... #}
+<span class="nt">&lt;header&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Contact symblog<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/header&gt;</span>
+
+{% if app.session.hasFlash('blogger-notice') %}
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"blogger-notice"</span><span class="nt">&gt;</span>
+        {{ app.session.flash('blogger-notice') }}
+    <span class="nt">&lt;/div&gt;</span>
+{% endif %}
+
+<span class="nt">&lt;p&gt;</span>Want to contact symblog?<span class="nt">&lt;/p&gt;</span>
+
+{# rest of template ... #}
+</pre></div>
+</div>
+<p>This checks to see if a <tt class="docutils literal"><span class="pre">flash</span></tt> message with the identifier
+‘blogger-notice’ is set and outputs it.</p>
+</div>
+<div class="section" id="register-webmaster-email">
+<h3><font><font>Impostazione  email webmaster </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#register-webmaster-email" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Symfony2 fornisce un sistema di configurazione che possiamo utilizzare per definire le nostre impostazioni. </font><font>Useremo questo sistema per impostare l'indirizzo e-mail webmaster piuttosto che codificare l'indirizzo nel controller di cui sopra. </font><font>In questo modo possiamo facilmente riutilizzare questo valore in altri luoghi senza duplicazione del codice. </font><font>Inoltre, quando il blog genera  tanto traffico di invio dei form diventa molto lavoro per voi da affrontare, si può quindi aggiornare l'indirizzo email per passare le e-mail al vostro assistente. </font><font>Create un nuovo file in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / config.yml</font></font></span></tt><font><font> e incollare il seguente codice.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/config.yml</span>
+<span class="l-Scalar-Plain">parameters</span><span class="p-Indicator">:</span>
+    <span class="c1"># Blogger contact email address</span>
+    <span class="l-Scalar-Plain">blogger_blog.emails.contact_email</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">contact@email.com</span>
+</pre></div>
+</div>
+<p><font><font>Quando si definiscono i parametri è buona norma rompere il nome del parametro in un numero di componenti. </font><font>La prima parte dovrebbe essere una versione inferiore del  nome del bundle con sottolineatura per separare le parole. </font><font>Nel nostro esempio abbiamo trasformato il bundle </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>blogger_blog</font></font></span></tt><font><font> . </font><font>La parte restante del nome del parametro può contenere qualsiasi numero di parti separate dal. </font><font>(period). </font><font>Questo ci permette di raggruppare logicamente i parametri.</font></font></p>
+<p><font><font>Affinché l'applicazione Symfony2 utilizzi i nuovi parametri, abbiamo bisogno di importare il file di configurazione nel file principale di configurazione dell'applicazione  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config.yml</font></font></span></tt><font><font> . </font><font>Per raggiungere questo obiettivo, aggiorniamo l' </font></font><tt class="docutils literal"><span class="pre"><font><font>import</font></font></span></tt><font><font> direttiva nella parte superiore del file </font></font></p>
+<div class="highlight-yaml"><pre># app/config/config.yml
+imports:
+    # .. existing import here
+    - { resource: @BloggerBlogBundle/Resources/config/config.yml }</pre>
+</div>
+<p><font><font>Il percorso di importazione è la posizione fisica del file sul disco. </font><font>La direttiva </font></font><tt class="docutils literal"><span class="pre"><font><font>@ BloggerBlogBundle</font></font></span></tt><font><font> risolverà il percorso del </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> che è </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Infine andiamo ad aggiornare l'azione di contatto per  utilizzare il parametro.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">contactAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$form</span><span class="o">-&gt;</span><span class="na">isValid</span><span class="p">())</span> <span class="p">{</span>
+
+        <span class="nv">$message</span> <span class="o">=</span> <span class="nx">\Swift_Message</span><span class="o">::</span><span class="na">newInstance</span><span class="p">()</span>
+            <span class="o">-&gt;</span><span class="na">setSubject</span><span class="p">(</span><span class="s1">'Contact enquiry from symblog'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">setFrom</span><span class="p">(</span><span class="s1">'enquiries@symblog.co.uk'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">setTo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'blogger_blog.emails.contact_email'</span><span class="p">))</span>
+            <span class="o">-&gt;</span><span class="na">setBody</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">renderView</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:contactEmail.txt.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'enquiry'</span> <span class="o">=&gt;</span> <span class="nv">$enquiry</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'mailer'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+
+        <span class="c1">// ..</span>
+    <span class="p">}</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Poiché il file di configurazione viene importato inizialmente nel file di configurazione dell'applicazione si può facilmente sovrascrivere uno qualsiasi dei parametri importati nell'applicazione. </font><font>Ad esempio, aggiungendo quanto segue al fondo della </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config.yml</font></font></span></tt><font><font> questo andra a sovrascrivere i valori impostati nel bundle.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># app/config/config.yml</span>
+<span class="l-Scalar-Plain">parameters</span><span class="p-Indicator">:</span>
+    <span class="c1"># Blogger contact email address</span>
+    <span class="l-Scalar-Plain">blogger_blog.emails.contact_email</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">assistant@email.com</span>
+</pre></div>
+</div>
+<p class="last"><font><font>Questo consente la personalizzazione per il bundle e può  fornire impostazioni predefinite per i valori in cui l'applicazione può eseguire l'override.</font></font></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>osi si ha  facilità ai creare parametri di configurazione del bundle usando questo metodo Symfony2 fornisce anche un metodo per </font></font><a class="reference external" href="http://symfony.com/doc/current/cookbook/bundles/extension.html"><font><font>esporre una configurazione semantica</font></font></a><font><font>. </font><font>Esploreremo questo metodo più avanti nel tutorial.</font></font></p>
+</div>
+</div>
+<div class="section" id="create-the-email-template">
+<h3><font><font>Creare il modello Email </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#create-the-email-template" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Il corpo della e-mail è impostato per il rendering di un template. </font><font>Creare questo template in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / contactEmail.txt.twig</font></font></span></tt><font><font> e aggiungere quanto segue.</font></font></p>
+<div class="highlight-text"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/contactEmail.txt.twig #}
+A contact enquiry was made by {{ enquiry.name }} at {{ "now" | date("Y-m-d H:i") }}.
+
+Reply-To: {{ enquiry.email }}
+Subject: {{ enquiry.subject }}
+Body:
+{{ enquiry.body }}
+</pre>
+  <p><font><font>l contenuto dell'e-mail è solo l'insieme dei dati che l'utente ha inviato.</font></font></p>
+  <p><font><font>Forse avrete notato anche l'estensione di questo template, è diversa dagli altri template che abbiamo creato. </font><font>Questa utilizza l'estensione </font></font><tt class="docutils literal"><span class="pre"><font><font>. txt.twig</font></font></span></tt><font><font> . </font><font>La prima parte della proroga, </font></font><tt class="docutils literal"><span class="pre"><font><font>. txt</font></font></span></tt><font><font> specifica il formato del file da generare. </font><font>I formati più comuni sono :. Txt, html, css,. Js,. Xml e. Json. </font><font>L'ultima parte dell'estensione specifica quale è il motore di template da utilizzare, in questo caso Twig. </font><font>Una proroga di </font></font><tt class="docutils literal"><span class="pre"><font><font>. php</font></font></span></tt><font><font> avrebbe utilizzato PHP per rendere il template..</font></font></p>
+  <p><font><font>Ora quando si  invia una richiesta, una e-mail verrà inviata all'indirizzo indicato nel parametro </font></font><tt class="docutils literal"><span class="pre"><font><font>blogger_blog.emails.contact_email</font></font></span></tt></p>
+  .</div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Symfony2 ci permette di configurare il comportamento della libreria Swift Mailer pur operando in diversi ambienti . </font><font>Possiamo già vedere questo in uso per l </font></font><tt class="docutils literal"><span class="pre"><font><font>test di</font></font></span></tt><font><font> ambiente. </font><font>Per impostazione predefinita, la Distribuzione Symfony2 standard configura Swift Mailer per non inviare messaggi di posta elettronica quando si eseguono i </font></font><tt class="docutils literal"><span class="pre"><font><font>test di</font></font></span></tt><font><font> ambiente. </font><font>Questo si vede nel file di configurazione dei test in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config_test.yml</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># app/config/config_test.yml</span>
+<span class="l-Scalar-Plain">swiftmailer</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">disable_delivery</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p><font><font>Potrebbe essere utile duplicare questa funzionalità per il </font></font><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> ambiente. </font><font>Dopo tutto, non si desidera inviare accidentalmente una e-mail all'indirizzo di posta elettronica sbagliato durante lo sviluppo. </font><font>Per raggiungere questo obiettivo, aggiungiamo lo stesso codice di cui sopra al
+ file </font></font><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> di configurazione  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config_dev.yml</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Ci si potrebbe chiedere come è possibile ora verificare che le email vengono inviate, e più precisamente il contenuto di esse, visto che non saranno più consegnate ad un indirizzo di posta elettronica reale. </font><font>Symfony2 ha una soluzione per questo tramite la barra degli strumenti di sviluppo. </font><font>Quando un'email è inviata una icona di notifica e-mail apparirà nella barra degli strumenti che contiene tutte le informazioni circa l'e-mail che Swift Mailer avrebbe inoltrato.</font></font></p>
+<img alt="Symfony2 toolbar show email notifications" class="align-center" src="pag2_files/email_notifications.jpg">
+<p><font><font>Se si esegue un redirect dopo l'invio di una e-mail, come facciamo per il modulo di contatto, è necessario impostare i </font></font><tt class="docutils literal"><span class="pre"><font><font>intercept_redirects</font></font></span></tt><font><font> impostazione in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / config_dev.yml</font></font></span></tt><font><font> su true per vedere l'email di notifica nella barra degli strumenti.</font></font></p>
+<p><font><font>Avremmo potuto, invece configurare Swift Mailer per inviare tutti i messaggi di posta elettronica a un indirizzo email specifico nel </font></font><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> ambiente ponendo la seguente impostazione nel </font></font><tt class="docutils literal"><span class="pre"><font><font>file dev</font></font></span></tt><font><font> di configurazione  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / confi</font></font></span></tt></p>
+<div class="last highlight-yaml"><div class="highlight"><pre><span class="c1"># app/config/config_dev.yml</span>
+<span class="l-Scalar-Plain">swiftmailer</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">delivery_address</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">development@symblog.dev</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><font><font>Conclusione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html#conclusion" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo dimostrato i concetti dietro la creazione di una delle parte  fondamentale di qualsiasi sito web: il form. </font><font>Symfony2 viene fornito completo di un ottimo Validator e libreria Form che ci permette di separare la logica di convalida del modulo di modo che possa essere utilizzato da altre parti.Poi</font><font> sono state introdotte anche alcune  impostazioni di configurazione personalizzate che possono essere lette nella nostra applicazione.</font></font></p>
+<p>Più avanti indrodurremmo 
+Doctrine 2 eil suo uso in Sy2. Andremo a costruire la show page la pagina che mostra il blog e esploreremo il concetto di Data fixtures per inserire dati gia pronti nel database.</p>
+</div>
+</div>
+
+
+    <div id="disqus_thread">We were unable to load Disqus. If you are a moderator please see our <a href="http://docs.disqus.com/help/83/">troubleshooting guide</a>.</div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="http://disqus.com/" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag1.htm">[Part 1] - Symfony2 Configuration and Templating</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag3.htm">[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer">
+        © Copyright 2011, dsyph3r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  
+<iframe name="easyXDM_DISQUS_net_default4034_provider" id="easyXDM_DISQUS_net_default4034_provider" style="position: absolute; top: -2000px; left: 0px;" src="pag2_files/def.htm" frameborder="0"></iframe></body></html>

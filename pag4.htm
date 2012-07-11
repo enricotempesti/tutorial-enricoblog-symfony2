@@ -1,0 +1,1259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0073)http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>[Part 4] - The Comments Model: Adding comments, Doctrine Repositories and Migrations — symblog - A Symfony2 Tutorial</title>
+    
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina contatti,commenti,aggiungere commenti,doctrine,repositories,symblog" /> 
+    
+    <link rel="stylesheet" href="pag4_files/haiku.css" type="text/css">
+    <link rel="stylesheet" href="pag4_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="pag4_files/print.css" type="text/css">
+    
+    <script src="pag4_files/ga_002.js" async="" type="text/javascript"></script><script gapi_processed="true" src="pag4_files/plusone_002.js" async="" type="text/javascript"></script><script async="" src="pag4_files/cbgapi.loaded_0"></script><script src="pag4_files/cbgapi.txt" async=""></script><script type="text/javascript" async="" src="pag4_files/ga.js"></script><script type="text/javascript" async="" src="pag4_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script gapi_processed="true" type="text/javascript" src="pag4_files/jquery.js"></script>
+    <script type="text/javascript" src="pag4_files/underscore.js"></script>
+    <script type="text/javascript" src="pag4_files/doctools.js"></script>
+    <script type="text/javascript" src="pag4_files/theme_extras.js"></script>
+    <link rel="top" title="symblog - A Symfony2 Tutorial" href="http://tutorial.symblog.co.uk/index.html">
+    <link rel="next" title="[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html">
+    <link rel="prev" title="[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html">
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="pag4_files/css.txt" rel="stylesheet" type="text/css">
+<link href="pag4_files/css1.txt" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  <script type="text/javascript" async="" src="pag4_files/embed.js"></script><script src="pag4_files/thread.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag4_files/defaults.css"><script src="pag4_files/disqus.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag4_files/theme.css"><script src="pag4_files/theme.js" async="" charset="UTF-8"></script><script src="pag4_files/event.js" async="" charset="UTF-8"></script><script src="pag4_files/embed_002.js" async="" type="text/javascript"></script><script charset="UTF-8" async="" src="pag4_files/thread_002.js"></script><link href="pag4_files/defaults_002.css" type="text/css" rel="stylesheet"><script charset="UTF-8" async="" src="pag4_files/disqus_002.js"></script></head>
+  <body data-twttr-rendered="true">
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0px; left: 0px; border: 0px none;" src="pag4_files/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f676974687562.htm" alt="Fork me on GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk/" class="en">EN</a></li>
+                    <li><a href="http://symblog.site90.net/" class="es">ES</a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr">FR</a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp">JP</a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="http://tutorialsymfony2.eu5.org/">Home</a></li>
+                    <li><a href="http://enricoblog.eu5.org">Demo</a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog">Source</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="http://tutorialsymfony2.eu5.org/">symblog</a></h2>
+            <h3><a href="http://tutorialsymfony2.eu5.org/">creating a blog in Symfony2</a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs">Looking for a PHP Development job using Symfony2 to build a cutting edge web application - check out DeskPRO Jobs</a>
+
+  <div class="topnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag3.htm">[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag5.htm">[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <div id="___plusone_0" style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background-color: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; background-position: initial initial; background-repeat: initial initial; "><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="width: 80px; margin: 0px; border-style: none; height: 24px; position: static; left: 0px; top: 0px; visibility: visible;" tabindex="0" vspace="0" id="I0_1338386235153" name="I0_1338386235153" src="pag4_files/fastbutton.htm" title="+1" frameborder="0" scrolling="no" width="100%"></iframe></div>
+        </div>
+
+        <iframe allowtransparency="true" src="pag4_files/tweet_button.htm" class="twitter-share-button twitter-count-horizontal" style="width: 110px; height: 20px;" title="Twitter Tweet Button" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="pag4_files/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="part-4-the-comments-model-adding-comments-doctrine-repositories-and-migrations">
+<h1><font><font>[Parte 4] ​​- Il modello Commenti: Aggiunta di commenti, repository Doctrine e migrazioni </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#part-4-the-comments-model-adding-comments-doctrine-repositories-and-migrations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2><font><font>Panoramica </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#overview" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Questo capitolo si baserà sul modello di blog che abbiamo definito nel capitolo precedente. </font><font>Creeremo il modello di commento, che si occuperà dei commenti dei post ,</font><font> sarà introdotto per creare le relazioni tra i modelli, siccome un post del blog può contenere molti commenti. </font><font>Useremo la Doctrine 2 QueryBuilder e Doctrine 2 classi Repository per recuperare entità dal database.e </font><font>Il concetto di Doctrine 2 Migrazioni  che fornisce un modo programmatico per distribuire le modifiche al database. </font><font>Alla fine di questo capitolo avrete creato il modello commento  legato insieme con il modello blog. </font><font>Avremo anche creato la home page, e  fornito la possibilità per gli utenti di inviare commenti per un post sul blog.</font></font></p>
+</div>
+<div class="section" id="the-homepage">
+<h2>La  Homepage<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#the-homepage" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Inizieremo questo capitolo con la costruzione della homepage. Come </font><font>in vero fashion blogger verranno visualizzati i frammenti di ogni post sul blog, ordinati dal più recente al più vecchio. </font><font>Il post completo sarà disponibile tramite link alla pagina show blog. </font><font>Che abbiamo già costruito .</font></font></p>
+<div class="section" id="retrieving-the-blogs-querying-the-model">
+<h3>Retrieving the blogs: Querying the model<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#retrieving-the-blogs-querying-the-model" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Per visualizzare i blog, abbiamo bisogno di recuperarli dal database. </font><font>Doctrine 2 fornisce la </font></font><a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.1/en/reference/dql-doctrine-query-language.html"><font><font>Dottrina Query Language</font></font></a><font><font> (DQL) e un </font></font><a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.1/en/reference/query-builder.html"><font><font>QueryBuilder</font></font></a><font><font> per raggiungere questo obiettivo (È anche possibile eseguire SQL crudo attraverso Doctrine 2, ma questo metodo è sconsigliato in quanto toglie le astrazioni di Dcttrine 2 dal database  . </font><font>Useremo il </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> in quanto fornisce un bel modo orientato agli oggetti per i generare DQL, che possiamo usare per interrogare il database. </font><font>Andiamo ad aggiornare l' </font></font><tt class="docutils literal"><span class="pre"><font><font>index action </font></font></span></tt><font><font> della </font></font><tt class="docutils literal"><span class="pre"><font><font>pagina</font></font></span></tt><font><font> controller che si trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> per prelevare il blog dal database.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+<span class="k">class</span> <span class="nc">PageController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$em</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDoctrine</span><span class="p">()</span>
+                   <span class="o">-&gt;</span><span class="na">getEntityManager</span><span class="p">();</span>
+
+        <span class="nv">$blogs</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">()</span>
+                    <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+                    <span class="o">-&gt;</span><span class="na">from</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">,</span>  <span class="s1">'b'</span><span class="p">)</span>
+                    <span class="o">-&gt;</span><span class="na">addOrderBy</span><span class="p">(</span><span class="s1">'b.created'</span><span class="p">,</span> <span class="s1">'DESC'</span><span class="p">)</span>
+                    <span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+                    <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:index.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'blogs'</span> <span class="o">=&gt;</span> <span class="nv">$blogs</span>
+        <span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Cominciamo ad ottenere un'istanza del </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> dal </font></font><tt class="docutils literal"><span class="pre"><font><font>EntityManager</font></font></span></tt><font><font> . </font><font>Questo ci permette di iniziare a costruire la query utilizzando i  molti metodi che </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> fornisce. </font><font>L'elenco completo dei metodi disponibili sono visibili tramite la </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> documentazione. </font><font>Un buon punto di partenza è <a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.1/en/reference/query-builder.html#helper-methods">helper methods</a></font></font><font><font> . </font><font>Questi sono i metodi che usiamo, come </font></font><tt class="docutils literal"><span class="pre">select()</span></tt>, <tt class="docutils literal"><span class="pre">from()</span></tt> and <tt class="docutils literal"><span class="pre">addOrderBy()</span></tt>.<font><font>Come nel caso di interazioni precedenti con Doctrine 2, possiamo usare la notazione breve  per fare riferimento al </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità via </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Blog</font></font></span></tt><font><font> (ricordate questo è lo stesso di </font></font><tt class="docutils literal"><span class="pre"><font><font>Blogger \ BlogBundle \ Entity Blog \</font></font></span></tt><font><font> ). </font><font>Quando abbiamo finito specificando i criteri per la query, che chiamiamo </font></font><tt class="docutils literal"><span class="pre"><font><font>GetQuery ()</font></font></span></tt><font><font> che restituisce una </font></font><tt class="docutils literal"><span class="pre"><font><font>DQL</font></font></span></tt><font><font> esempio. </font><font>Non siamo in grado di ottenere risultati dal </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> oggetto, dobbiamo sempre convertirlo ad un </font></font><tt class="docutils literal"><span class="pre"><font><font>DQL</font></font></span></tt><font><font> prima istanza. </font><font>Il </font></font><tt class="docutils literal"><span class="pre"><font><font>DQL</font></font></span></tt><font><font> fornisce ilmetodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getResult ()</font></font></span></tt><font><font> che restituisce un insieme di </font></font><tt class="docutils literal"><span class="pre"><font><font>entità blog</font></font></span></tt><font><font>. </font><font>Vedremo in seguito che il </font></font><tt class="docutils literal"><span class="pre"><font><font>DQL</font></font></span></tt><font><font> istanza ha un </font></font><a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.1/en/reference/dql-doctrine-query-language.html#query-result-formats"><font><font>certo numero di metodi</font></font></a><font><font> per risultati che ritornano tra </font></font><tt class="docutils literal"><span class="pre"><font><font>getSingleResult ()</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>getArrayResult ()</font></font></span></tt><font><font> .</font></font></p>
+<div class="section" id="the-view">
+<h4>The View<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#the-view" title="Permalink to this headline">¶</a></h4>
+<p><font><font>Ora abbiamo una collezione di soggetti </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> che abbiamo bisogno di visualizzarli. </font><font>Sostituire il contenuto del modello homepage  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / index.html.twig</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block body %}
+    {% for blog in blogs %}
+        <span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"blog"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"date"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ blog.created|date('c') }}"</span><span class="nt">&gt;</span>{{ blog.created|date('l, F j, Y') }}<span class="nt">&lt;/time&gt;&lt;/div&gt;</span>
+            <span class="nt">&lt;header&gt;</span>
+                <span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}"</span><span class="nt">&gt;</span>{{ blog.title }}<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+            <span class="nt">&lt;/header&gt;</span>
+
+            <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{{ asset(['images/', blog.image]|join) }}"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"snippet"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;p&gt;</span>{{ blog.blog(500) }}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"continue"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}"</span><span class="nt">&gt;</span>Continue reading...<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+
+            <span class="nt">&lt;footer</span> <span class="na">class=</span><span class="s">"meta"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;p&gt;</span>Comments: -<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;p&gt;</span>Posted by <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{blog.author}}<span class="nt">&lt;/span&gt;</span> at {{ blog.created|date('h:iA') }}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;p&gt;</span>Tags: <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ blog.tags }}<span class="nt">&lt;/span&gt;&lt;/p&gt;</span>
+            <span class="nt">&lt;/footer&gt;</span>
+        <span class="nt">&lt;/article&gt;</span>
+    {% else %}
+        <span class="nt">&lt;p&gt;</span>There are no blog entries for symblog<span class="nt">&lt;/p&gt;</span>
+    {% endfor %}
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Qui abbiamo  una delle strutture di controllo di twig </font></font><tt class="docutils literal"><span class="pre">for..else..endfor</span></tt>
+. <font><font>Se non avete utilizzato un motore di template prima  probabilmente avrete familiarità con il seguente frammento di codice PHP.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$blogs</span><span class="p">))</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    </span><span class="cp">&lt;?php</span> <span class="k">foreach</span> <span class="p">(</span><span class="nv">$blogs</span> <span class="k">as</span> <span class="nv">$blog</span><span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">        &lt;h1&gt;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">getTitle</span><span class="p">()</span> <span class="cp">?&gt;&lt;?</span><span class="nx">h1</span><span class="o">&gt;</span>
+        <span class="o">&lt;!--</span> <span class="nx">rest</span> <span class="nx">of</span> <span class="nx">content</span> <span class="o">--&gt;</span>
+    <span class="o">&lt;?</span><span class="nx">php</span> <span class="k">endforeach</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?php</span> <span class="k">else</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    &lt;p&gt;There are no blog entries&lt;/p&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">endif</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>La struttura di controllo <tt class="docutils literal"><span class="pre">for..else..endfor</span></tt><font><font> è un modo molto più pulito di realizzare questo compito. </font><font>La maggior parte del codice all'interno del template homepage si occupa di emettere le informazioni blog in HTML. </font><font>Tuttavia, ci sono alcune cose che dobbiamo ricordare. </font><font>In primo luogo, ci avvaliamo della funzione Twig</font></font> <tt class="docutils literal"><span class="pre">path</span></tt>  per generare  la rotta per la pagina show blog. Vediamo anche la richiesta di un <tt class="docutils literal"><span class="pre">ID</span></tt> che deve essere presente nell' URL, dobbiamo passare questo come argomento nella funzione <tt class="docutils literal"><span class="pre">path</span></tt>
+. Come nell'esempio qui sotto.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}"</span><span class="nt">&gt;</span>{{ blog.title }}<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+</pre></div>
+</div>
+<p><font><font>In secondo luogo abbiamo in uscita il contenuto del blog utilizzando </font></font><tt class="docutils literal"><span class="pre"><font><font>&lt;p&gt; {{ </font></font></span> <span class="pre"><font><font>blog.blog (500) </font></font></span> <span class="pre"><font><font>}} &lt;/ p&gt;</font></font></span></tt><font><font> . </font><font>I<tt>'</tt></font></font><font><font> argomento 500 che passiamo, è la lunghezza max del post che vogliamo ricevere indietro dalla funzione. </font><font>Per far funzionare tutto questo abbiamo bisogno di aggiornare,il metodo</font></font><tt class="docutils literal"><span class="pre"><font><font>getBlog</font></font></span></tt><font><font> che Doctrine 2 genera per noi in precedenza. </font><font>Aggiornare il
+  metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getBlog</font></font></span></tt><font><font> nel </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getBlog</span><span class="p">(</span><span class="nv">$length</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">is_null</span><span class="p">(</span><span class="nv">$length</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blog</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$length</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blog</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Siccome  il comportamento usuale del metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getBlog</font></font></span></tt><font><font> dovrebbe essere quello di restituire l'intero post del blog, abbiamo impostato il </font></font><tt class="docutils literal"><span class="pre"><font><font>parametro $ length</font></font></span></tt><font><font> a un valore predefinito</font></font> <tt class="docutils literal"><span class="pre">null</span></tt>. Se viene passato <tt class="docutils literal"><span class="pre">null</span></tt> viene ritornato l'intero blog.</p>
+<p><font><font>Ora, se si punta il browser a </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> si dovrebbe vedere la home page che mostra le ultime voci di post del blog. </font><font>Si dovrebbe anche essere in grado di passare al post completo per ogni voce facendo clic sul titolo del blog o del link 'continuare a leggere ...' </font></font></p>
+<img alt="symblog homepage" class="align-center" src="pag4_files/homepage1.jpg">
+<p><font><font>Mentre possiamo fare le interrogazioni  per le entità nel controllore,ma non è il posto migliore </font><font>L'interrogazione sarebbe meglio collocarla all'esterno del controllore per diversi motivi:</font></font></p>
+<blockquote>
+  <div>
+    <ol class="arabic simple">
+      <li><font><font>Saremmo in grado di riutilizzare la query in altre parti dell' applicazione , senza duplicare il codice </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font>.</font></font></li>
+      <li>Possiamo modificare il codice <tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> ,separatamente se dobbiamo apportare modifiche  in futuro.</font></font></li>
+      <li><font><font>Separare la query e il controllore ci permetterebbe di testare la query indipendentemente dal controller.</font></font></li>
+    </ol>
+  </div>
+</blockquote>
+<p><font><font>Doctrine 2 fornisce le classi Repository per facilitare questo.</font></font></p>
+</div>
+</div>
+</div>
+<div class="section" id="doctrine-2-repositories">
+<h2>Doctrine 2 Repositories<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#doctrine-2-repositories" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Abbiamo già introdotto le basi per le classi di Doctrine 2 repository nel capitolo precedente, quando abbiamo creato la pagina di blog show. </font><font>Abbiamo usato l'implementazione predefinita</font></font> della classe <tt class="docutils literal"><span class="pre">Doctrine\ORM\EntityRepository</span></tt>  <font><font>per recuperare un entità blog dal database tramite il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>find ().</font></font></span></tt><font><font>Siccome si desidera creare una query personalizzata, abbiamo bisogno di creare un repository personalizzato. </font><font>Dctrine 2 è in grado di aiutare in questo compito. </font><font>Aggiornare i </font></font><font><font> metadati dell'entità <tt class="docutils literal"><font><font>Blog</font></font></tt> nel file </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> </font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\Entity(repositoryClass="Blogger\BlogBundle\Repository\BlogRepository")</span>
+<span class="sd"> * @ORM\Table(name="blog")</span>
+<span class="sd"> * @ORM\HasLifecycleCallbacks()</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Si può vedere che abbiamo specificato il percorso namespace  per la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> alla quale questa entità è associata. </font><font>Avendo   aggiornato i metadati </font></font><font><font>, abbiamo bisogno di eseguire nuovamente il task</font></font> <tt class="docutils literal"><span class="pre">doctrine:generate:entities</span></tt></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:generate:entities Blogger
+</pre></div>
+</div>
+<p><font><font>Dottrina 2 avrà creato la classe per la shell </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Repository / BlogRepository.php</font></font></span></tt><font><font> .</font></font>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Repository/BlogRepository.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Repository</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\ORM\EntityRepository</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * BlogRepository</span>
+<span class="sd"> *</span>
+<span class="sd"> * This class was generated by the Doctrine ORM. Add your own custom</span>
+<span class="sd"> * repository methods below.</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">BlogRepository</span> <span class="k">extends</span> <span class="nx">EntityRepository</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+</pre>
+  La classe <tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> estende la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>EntityRepository</font></font></span></tt><font><font> che fornisce il </font></font><tt class="docutils literal"><span class="pre"><font><font>metodo find ()</font></font></span></tt><font><font> che abbiamo usato in precedenza.</font><font>i Aggiornare la
+ classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> , spostando il codice </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> dalla </font></font><tt class="docutils literal"><span class="pre"><font><font>pagina</font></font></span></tt><font><font> di controllo in esso.</font></font></div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Repository/BlogRepository.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Repository</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\ORM\EntityRepository</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * BlogRepository</span>
+<span class="sd"> *</span>
+<span class="sd"> * This class was generated by the Doctrine ORM. Add your own custom</span>
+<span class="sd"> * repository methods below.</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">BlogRepository</span> <span class="k">extends</span> <span class="nx">EntityRepository</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getLatestBlogs</span><span class="p">(</span><span class="nv">$limit</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$qb</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'b'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">addOrderBy</span><span class="p">(</span><span class="s1">'b.created'</span><span class="p">,</span> <span class="s1">'DESC'</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">is_null</span><span class="p">(</span><span class="nv">$limit</span><span class="p">))</span>
+            <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">setMaxResults</span><span class="p">(</span><span class="nv">$limit</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+                  <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Abbiamo creato il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getLatestBlogs</font></font></span></tt><font><font> che estrarra le ultime entrate del blog,  nello stesso modo del codice del controller </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> c. </font><font>Nella classe repository abbiamo accesso diretto alla </font></font><tt class="docutils literal"><span class="pre"><font><font>QueryBuilder</font></font></span></tt><font><font> attraverso il
+ metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>createQueryBuilder ()</font></font></span></tt><font><font>. </font><font>Abbiamo anche aggiunto un parametro di default </font></font><tt class="docutils literal"><span class="pre"><font><font>$ limit</font></font></span></tt><font><font> in modo da poter limitare il numero di risultati da restituire. </font><font>Il risultato della ricerca è molto simile a come è stato nel controllore. </font><font>Avrete notato che non abbiamo bisogno di specificare l'entità da utilizzare tramite il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>from ()</font></font></span></tt><font><font>. </font><font>Questo  perché siamo all'interno della </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> che è associata già con il </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità. </font><font>Se guardiamo l'attuazione del metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>createQueryBuilder</font></font></span></tt><font><font> nella classe </font></font><tt class="docutils literal"><span class="pre"><font><font>EntityRepository</font></font></span></tt><font><font> possiamo vedere il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>from ()</font></font></span></tt><font><font> che viene chiamato  per noi.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// Doctrine\ORM\EntityRepository</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">createQueryBuilder</span><span class="p">(</span><span class="nv">$alias</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_em</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">()</span>
+        <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="nv">$alias</span><span class="p">)</span>
+        <span class="o">-&gt;</span><span class="na">from</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_entityName</span><span class="p">,</span> <span class="nv">$alias</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Infine,  aggiorniamo la </font></font><tt class="docutils literal"><span class="pre"><font><font>pagina</font></font></span></tt><font><font> del controller </font></font><tt class="docutils literal"><span class="pre"><font><font>index</font></font></span></tt><font><font> azione per utilizzare la </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogRepository</font></font></span></tt><font><font> </font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+<span class="k">class</span> <span class="nc">PageController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$em</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDoctrine</span><span class="p">()</span>
+                   <span class="o">-&gt;</span><span class="na">getEntityManager</span><span class="p">();</span>
+
+        <span class="nv">$blogs</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span>
+                    <span class="o">-&gt;</span><span class="na">getLatestBlogs</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Page:index.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'blogs'</span> <span class="o">=&gt;</span> <span class="nv">$blogs</span>
+        <span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ora, quando si aggiorna la homepage dovrebbe mostrare esattamente lo stesso di prima. </font><font>Tutto quello che abbiamo fatto è refactoring il nostro codice in modo che le classi sono corrette .</font></font></p>
+</div>
+<div class="section" id="more-on-the-model-creating-the-comment-entity">
+<h2><font><font>Maggiori informazioni sul modello: Creazione del Entity commento </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#more-on-the-model-creating-the-comment-entity" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>I blog sono solo metà della storia quando si tratta di blogging. </font><font>Abbiamo anche bisogno di permettere ai lettori la possibilità di commentare i post del blog. </font><font>Tali osservazioni devono anche essere mantenute, e collegato al </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità siccome un blog può contenere molti commenti.</font></font></p>
+<p><font><font>Inizieremo definendo le basi della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> entità. </font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Comment.php</font></font></span></tt><font><font> e incollare il seguente.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Comment.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Entity</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\ORM\Mapping</span> <span class="k">as</span> <span class="nx">ORM</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\Entity(repositoryClass="Blogger\BlogBundle\Repository\CommentRepository")</span>
+<span class="sd"> * @ORM\Table(name="comment")</span>
+<span class="sd"> * @ORM\HasLifecycleCallbacks()</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">Comment</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Id</span>
+<span class="sd">     * @ORM\Column(type="integer")</span>
+<span class="sd">     * @ORM\GeneratedValue(strategy="AUTO")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$id</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="string")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$user</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="text")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$comment</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="boolean")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$approved</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")</span>
+<span class="sd">     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$blog</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="datetime")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$created</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="datetime")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$updated</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setApproved</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\preUpdate</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setUpdatedValue</span><span class="p">()</span>
+    <span class="p">{</span>
+       <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>La maggior parte di ciò che si vede qui,lo abbiamo già trattato nel capitolo precedente, tuttavia abbiamo usato i metadati per creare un link al </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità. </font><font>Sicome il commento è per un blog, abbiamo impostato un collegamento nell'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> al </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> soggetto a cui appartiene. </font><font>Facciamo questo specificando un collegamento </font></font><tt class="docutils literal"><span class="pre"><font><font>ManyToOne</font></font></span></tt><font><font> inteso a promuovere le entità del </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>. </font><font>Si precisa inoltre che l'inverso di questo collegamento sarà disponibile tramite </font></font><tt class="docutils literal"><span class="pre"><font><font>i commenti</font></font></span></tt><font><font> . </font><font>Per creare questa inversione , abbiamo bisogno di aggiornare le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>del Blog</font></font></span></tt><font><font> in modo che Doctrine 2 sa che un blog può contenere molti commenti. </font><font>Aggiornare il </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> per aggiungere questa mappatura.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Entity</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\ORM\Mapping</span> <span class="k">as</span> <span class="nx">ORM</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Doctrine\Common\Collections\ArrayCollection</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\Entity(repositoryClass="Blogger\BlogBundle\Repository\BlogRepository")</span>
+<span class="sd"> * @ORM\Table(name="blog")</span>
+<span class="sd"> * @ORM\HasLifecycleCallbacks()</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$comments</span><span class="p">;</span>
+
+    <span class="c1">// ..</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">comments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ArrayCollection</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ci sono alcuni cambiamenti da evidenziare qui. </font><font>Per prima cosa sono stati aggiunti i metadati a </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font>. </font><font>Ricordate nel capitolo precedente non abbiamo aggiunto gli eventuali metadati per questo membro perchè non volevamo Doctrine 2 li persistesse. </font><font>Questo è ancora vero, però, ora vogliamo che Doctrine 2 sia in grado di popolare il membro con le pertinenti entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font>. </font><font>Questo è ciò che i metadati realizzano. </font><font>In secondo luogo,si richiede che Doctrine 2 imposti il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> a un oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>ArrayCollection</font></font></span></tt><font><font>. </font><font>Facciamo questo nel </font></font><tt class="docutils literal"><span class="pre"><font><font>costruttore</font></font></span></tt><font><font> . </font><font>Si noti inoltre l' </font></font><tt class="docutils literal"><span class="pre"><font><font>use</font></font></span></tt><font><font> per importare la dichiarazione </font></font><tt class="docutils literal"><span class="pre"><font><font>ArrayCollection</font></font></span></tt><font><font> classe.</font></font></p>
+<p><font><font>Sicome abbiamo creato l'entitàl </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> , e aggiornato il </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità, questo ci consente di generare le funzioni di accesso con Doctrine 2.. </font><font>Eseguire il seguente task Doctrine 2 per raggiungere questo obiettivo.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:generate:entities Blogger
+</pre></div>
+</div>
+<p><font><font>Entrambe le entità dovrebbe essere up-to-date con i metodi di accesso corretti. </font><font>Noterete anche la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentRepository</font></font></span></tt><font><font> che è stata creata in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Repository / CommentRepository.php</font></font></span></tt><font><font> come abbiamo specificato questa nei metadati.</font></font></p>
+<p><font><font>Infine abbiamo bisogno di aggiornare il database in modo da riflettere le modifiche apportate alle nostre entità. </font><font>Potremmo usare il task </font></font></p>
+<p><tt class="docutils literal"><span class="pre">doctrine:schema:update</span></tt><font><font> come segue per fare questo, ma invece introdurremo Dcttrine 2 Migrazioni.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:schema:update --force
+</pre></div>
+</div>
+</div>
+<div class="section" id="doctrine-2-migrations">
+<h2>Doctrine 2 Migrations<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#doctrine-2-migrations" title="Permalink to this headline">¶</a></h2>
+<p>The Doctrine 2 Migrations extension è bundle che non viene con la Symfony2 Standard
+Distribution,dobbiamo installarli come abbiamo fatto con Data Fixtures
+extension . Apriamo il file <tt class="docutils literal"><span class="pre">deps</span></tt> e aggiungiamo il bundle 
+Doctrine 2 Migrations extension nel seguente modo..</p>
+<div class="highlight-text"><div class="highlight"><pre>[doctrine-migrations]
+    git=http://github.com/doctrine/migrations.git
+
+[DoctrineMigrationsBundle]
+    git=http://github.com/symfony/DoctrineMigrationsBundle.git
+    target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle
+</pre></div>
+</div>
+<p>Facciamo l'aggiornamento dei vendor per aggiungere questi cambiamenti.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php bin/vendors install
+</pre>
+</div>
+</div>
+Questo scaricherà l'ultima versione dal repository di github e la installerà nel luogo appropriato
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>Se tu non hai git installato nella tua macchina hai bisogno di scaricarli manualmente.</p>
+<p>doctrine-migrations extension: <a class="reference external" href="http://github.com/doctrine/migrations">Download</a>
+la corrente versione da GitHub ed estrarli nel seguente percorso <tt class="docutils literal"><span class="pre">vendor/doctrine-migrations</span></tt>.</p>
+<p class="last">DoctrineMigrationsBundle: <a class="reference external" href="http://github.com/symfony/DoctrineMigrationsBundle">Download</a>
+la corrente versione da GitHub ed estrarli nel seguente percorso
+<tt class="docutils literal"><span class="pre">vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle</span></tt>.</p>
+</div>
+<p>Prossimo aggiornamento è nel file <tt class="docutils literal"><span class="pre">app/autoload.php</span></tt> per registrare il nuovo namespace.
+Siccome Doctrine 2 Migrations sono anche in <tt class="docutils literal"><span class="pre">Doctrine\DBAL</span></tt> namespace devono essere messi in
+<tt class="docutils literal"><span class="pre">Doctrine\DBAL</span></tt> impostando un nuovo percorso.I Namespaces sono controllati dall'alto al basso cosi dobbiamo impostare i namespace che devono essere controllati prima di altri.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// app/autoload.php</span>
+<span class="c1">// ...</span>
+<span class="nv">$loader</span><span class="o">-&gt;</span><span class="na">registerNamespaces</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+<span class="c1">// ...</span>
+<span class="s1">'Doctrine\\DBAL\\Migrations'</span> <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../vendor/doctrine-migrations/lib'</span><span class="p">,</span>
+<span class="s1">'Doctrine\\DBAL'</span>             <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../vendor/doctrine-dbal/lib'</span><span class="p">,</span>
+<span class="c1">// ...</span>
+<span class="p">));</span>
+</pre>
+   Ora andiamo  a registrare il bundle nel kernel in <tt class="docutils literal"><span class="pre">app/AppKernel.php</span></tt>.</div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// app/AppKernel.php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">registerBundles</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$bundles</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="c1">// ...</span>
+        <span class="k">new</span> <span class="nx">Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle</span><span class="p">(),</span>
+        <span class="c1">// ...</span>
+    <span class="p">);</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The Doctrine 2 Migrations library è ancora in alpha state cosi l'uso su un server di produzione è sconsigliato per ora.</p>
+</div>
+<p><font><font>Siamo ora pronti per aggiornare il database in base alle modifiche dell'i entità. </font><font>Questo è un processo in 2 fasi. </font><font>In primo luogo abbiamo bisogno di ottenere con Doctrine 2 Migrazioni  le differenze tra le entità e lo schema di database corrente. </font><font>Questo viene fatto con </font></font><font><font>la</font></font><tt class="docutils literal"><span class="pre">doctrine:migrations:diff</span></tt> . <font><font>In secondo luogo abbiamo bisogno di eseguire realmente la migrazione basata sulla differenza ottenuta  in precedenza. </font><font>Questo viene fatto con </font></font><tt class="docutils literal"><span class="pre">doctrine:migrations:migrate</span></tt>.</p>
+<p>Eseguiamo i due task e aggiorniamo lo schema del database..</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:migrations:diff
+<span class="nv">$ </span>php app/console doctrine:migrations:migrate
+</pre></div>
+</div>
+<p><font><font>Il database ora riflettere le ultime modifiche di entità e contiene la nuova tabella commenti.</font></font></p>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>Noterete anche una nuova tabella nel database chiamata </font></font><tt class="docutils literal"><span class="pre"><font><font>migration_versions</font></font></span></tt><font><font> . </font><font>Questa memorizza i numeri di versione di migrazione in modo che l' attività di migrazione è in grado di vedere qual'è la versione corrente del database .</font></font></p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Doctrine 2 migrazioni è un ottimo modo per aggiornare il database di produzione come le modifiche possono essere fatte programatically. </font><font>Questo significa che possiamo integrare questa attività in uno script di distribuzione in modo che il database viene aggiornato automaticamente quando si distribuisce una nuova versione dell'applicazione. </font><font>Doctrine 2 Migrazioni ci permettono inoltre di ripristinare le modifiche che ogni migrazione ha creato</font></font> con i metodi <tt class="docutils literal"><span class="pre">up</span></tt> e <tt class="docutils literal"><span class="pre">down</span></tt> .<font><font>Per ripristinare una versione precedente è necessario specificare il numero di versione che si desidera ripristinare utilizzando il task seguente seguente.</font></font></p>
+<div class="last highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:migrations:migrate 20110806183439
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="data-fixtures-revisited">
+<h2>Data Fixtures: Revisited<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#data-fixtures-revisited" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Ora abbiamo l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> questo ci permette di aggiungere alcune fixture per esso. </font><font>E 'sempre una buona idea aggiungere alcune fixture ogni volta che si crea un'entità. </font><font>Sappiamo che un commento deve avere un relativo </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> di entità data la sua configurazione in questo modo nei metadati, Perciò durante la creazione di fixture  per l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Comment</font></font></span></tt><font><font> sarà necessario specificare l'entità l </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>. </font><font>Abbiamo già creato le fixture per l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> possiamo semplicemente aggiornare il file per aggiungere le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Comment</font></font></span></tt><font><font>. </font><font>Questo è forse gestibile per ora, ma cosa succede quando in seguito aggiungerete gli utenti, le categorie del blog, e un intero carico di altre entita al nostro bundle. </font><font>Un modo migliore sarebbe quello di creare un nuovo file per le fixture dell'entitài </font></font><tt class="docutils literal"><span class="pre"><font><font>Comment</font></font></span></tt><font> <font>Il problema di questo approccio è come possiamo accedere alle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog </font></font></span></tt><font><font> da le  blog fixture..</font></font></p>
+<p><font><font>Fortunatamente questo può essere ottenuto facilmente impostando i riferimenti agli oggetti in un unico file di fixture cosi che altri dispositivi possono accedere. </font><font>Aggiornare le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt> di <tt class="docutils literal"><span class="pre"><font><font>DataFixtures</font></font></span></tt><font><font> situati in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / DataFixtures / ORM / BlogFixtures.php</font></font></span></tt><font><font> con il seguente. </font><font>I cambiamenti da notare qui sono l'estensione della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>AbstractFixture</font></font></span></tt><font><font> e gli strumenti del </font></font><tt class="docutils literal"><span class="pre"><font><font>OrderedFixtureInterface</font></font></span></tt><font><font> . </font><font>Si noti inoltre le 2 nuove dichiarazioni use per importare queste classi.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\DataFixtures\ORM</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\Common\DataFixtures\AbstractFixture</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Doctrine\Common\DataFixtures\OrderedFixtureInterface</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Doctrine\Common\Persistence\ObjectManager</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Blog</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BlogFixtures</span> <span class="k">extends</span> <span class="nx">AbstractFixture</span> <span class="k">implements</span> <span class="nx">OrderedFixtureInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">load</span><span class="p">(</span><span class="nx">ObjectManager</span> <span class="nv">$manager</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// ..</span>
+
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">flush</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">addReference</span><span class="p">(</span><span class="s1">'blog-1'</span><span class="p">,</span> <span class="nv">$blog1</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">addReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">,</span> <span class="nv">$blog2</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">addReference</span><span class="p">(</span><span class="s1">'blog-3'</span><span class="p">,</span> <span class="nv">$blog3</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">addReference</span><span class="p">(</span><span class="s1">'blog-4'</span><span class="p">,</span> <span class="nv">$blog4</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">addReference</span><span class="p">(</span><span class="s1">'blog-5'</span><span class="p">,</span> <span class="nv">$blog5</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getOrder</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Aggiungiamo i riferimenti alle entità blog utilizzando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>AddReference ()</font></font></span></tt><font><font>. </font><font>Il primo parametro è un identificatore di riferimento si può utilizzare per</font></font><font><font> recuperare l'oggetto più tardi. </font><font>Infine, dobbiamo attuare il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>GetOrder ()</font></font></span></tt><font><font> per specificare l'ordine di caricamento delle fixture . </font><font>Blog deve essere caricato prima dei commenti in modo da restituire 1.</font></font></p>
+<div class="section" id="comment-fixtures">
+<h3>Comment Fixtures<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#comment-fixtures" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Siamo ora pronti per definire alcune fixture per  nostre entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font>Creare un file di fixture in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / DataFixtures / ORM / CommentFixtures.php</font></font></span></tt><font><font> e aggiungere il seguente contenuto:</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/DataFixtures/ORM/CommentFixtures.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\DataFixtures\ORM</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\Common\DataFixtures\AbstractFixture</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Doctrine\Common\DataFixtures\OrderedFixtureInterface</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Doctrine\Common\Persistence\ObjectManager</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Comment</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Blog</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">CommentFixtures</span> <span class="k">extends</span> <span class="nx">AbstractFixture</span> <span class="k">implements</span> <span class="nx">OrderedFixtureInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">load</span><span class="p">(</span><span class="nx">ObjectManager</span> <span class="nv">$manager</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'symfony'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'To make a long story short. You can\'t go wrong by choosing Symfony! And no one has ever been fired for using Symfony.'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-1'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'David'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'To make a long story short. Choosing a framework must not be taken lightly; it is a long-term commitment. Make sure that you make the right selection!'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-1'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Dade'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Anything else, mom? You want me to mow the lawn? Oops! I forgot, New York, No grass.'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Kate'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Are you challenging me? '</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 06:15:20"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Dade'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Name your stakes.'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 06:18:35"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Kate'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'If I win, you become my slave.'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 06:22:53"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Dade'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Your SLAVE?'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 06:25:15"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Kate'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'You wish! You\'ll do shitwork, scan, crack copyrights...'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 06:46:08"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Dade'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'And if I win?'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 10:22:46"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Kate'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Make it my first-born!'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 11:08:08"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Dade'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Make it our first-date!'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-24 18:56:01"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Kate'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'I don\'t DO dates. But I don\'t lose either, so you\'re on!'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-25 22:28:42"</span><span class="p">));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Stanley'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'It\'s not gonna end like this.'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-3'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Gabriel'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Oh, come on, Stan. Not everything ends the way you think it should. Besides, audiences love happy endings.'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-3'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Mile'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Doesn\'t Bill Gates have something like that?'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-5'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setUser</span><span class="p">(</span><span class="s1">'Gary'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s1">'Bill Who?'</span><span class="p">);</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-5'</span><span class="p">)));</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">flush</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getOrder</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Con le modifiche che abbiamo fatto la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogFixtures</font></font></span></tt><font><font> che estende la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentFixtures</font></font></span></tt><font><font> che estende anche </font></font><tt class="docutils literal"><span class="pre"><font><font>AbstractFixture</font></font></span></tt><font><font> e implementa </font></font><tt class="docutils literal"><span class="pre"><font><font>OrderedFixtureInterface</font></font></span></tt><font> <font> dobbiamo anche implementare il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>GetOrder ()</font></font></span></tt><font><font>. </font><font>Questa volta abbiamo impostato il valore di ritorno a 2, assicurando che queste fixture verranno caricate dopo le fixture blog.</font></font></p>
+<p><font><font>Possiamo anche vedere come i riferimenti aile entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> che abbiamo creato in precedenza vengono utilizzati.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getReference</span><span class="p">(</span><span class="s1">'blog-2'</span><span class="p">)));</span>
+</pre></div>
+</div>
+<p><font><font>Siamo ora pronti per caricare le fixture nel database.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:fixtures:load
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="displaying-comments">
+<h2><font><font>Visualizzazione dei Commenti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#displaying-comments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Ora possiamo visualizzare i commenti relativi ad ogni post. </font><font>Cominciamo con l'aggiornamento del metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentRepository</font></font></span></tt><font><font> per recuperare gli ultimi commenti approvati per un post sul blog.</font></font></p>
+<div class="section" id="comment-repository2">
+  <h3><font><font>Commento Repository </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#comment-repository" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+  <p><font><font>Aprire la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentRepository</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Repository / CommentRepository.php</font></font></span></tt><font><font> e sostituire il contenuto con quanto segue.</font></font></p>
+</div>
+<div class="section" id="comment-repository"><div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Repository/CommentRepository.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Repository</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\ORM\EntityRepository</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * CommentRepository</span>
+<span class="sd"> *</span>
+<span class="sd"> * This class was generated by the Doctrine ORM. Add your own custom</span>
+<span class="sd"> * repository methods below.</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">CommentRepository</span> <span class="k">extends</span> <span class="nx">EntityRepository</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getCommentsForBlog</span><span class="p">(</span><span class="nv">$blogId</span><span class="p">,</span> <span class="nv">$approved</span> <span class="o">=</span> <span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$qb</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createQueryBuilder</span><span class="p">(</span><span class="s1">'c'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'c'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">'c.blog = :blog_id'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">addOrderBy</span><span class="p">(</span><span class="s1">'c.created'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">setParameter</span><span class="p">(</span><span class="s1">'blog_id'</span><span class="p">,</span> <span class="nv">$blogId</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">is_null</span><span class="p">(</span><span class="nv">$approved</span><span class="p">))</span>
+            <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">andWhere</span><span class="p">(</span><span class="s1">'c.approved = :approved'</span><span class="p">)</span>
+               <span class="o">-&gt;</span><span class="na">setParameter</span><span class="p">(</span><span class="s1">'approved'</span><span class="p">,</span> <span class="nv">$approved</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nv">$qb</span><span class="o">-&gt;</span><span class="na">getQuery</span><span class="p">()</span>
+                  <span class="o">-&gt;</span><span class="na">getResult</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Il metodo che abbiamo creato sarà per recuperare i commenti per un post sul blog. </font><font>Per fare questo abbiamo bisogno di aggiungere una clausola where per la nostra query. </font><font>La clausola  utilizza un parametro denominato che viene impostato utilizzando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>setParameter ()</font></font></span></tt><font><font>. </font><font>Si dovrebbe sempre utilizzare i parametri invece di impostare i valori direttamente nella query in questo modo</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">'c.blog = '</span> <span class="o">.</span> <span class="nx">blogId</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><font><font>In questo esempio il valore di </font></font><tt class="docutils literal"><span class="pre"><font><font>$ blogId</font></font></span></tt><font><font> non sarà sanizzato e potrebbe lasciare la query aperta ad un attacco di tipo SQL injection.</font></font></p>
+</div>
+</div>
+<div class="section" id="blog-controller">
+<h2>Blog Controller<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#blog-controller" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Poi abbiamo bisogno di aggiornare la </font></font><tt>show action</tt><font><font> nel  </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> controller per recuperare i commenti per il blog. </font><font>Aggiornare il </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> controller che si trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / BlogController.php</font></font></span></tt></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/BlogController.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">showAction</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$blog</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createNotFoundException</span><span class="p">(</span><span class="s1">'Unable to find Blog post.'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nv">$comments</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Comment'</span><span class="p">)</span>
+                   <span class="o">-&gt;</span><span class="na">getCommentsForBlog</span><span class="p">(</span><span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">());</span>
+
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog:show.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'blog'</span>      <span class="o">=&gt;</span> <span class="nv">$blog</span><span class="p">,</span>
+        <span class="s1">'comments'</span>  <span class="o">=&gt;</span> <span class="nv">$comments</span>
+    <span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Usiamo il nuovo metodo su </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentRepository</font></font></span></tt><font><font> per recuperare i commenti approvati per il blog. </font><font>Ia collezione </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> viene anche inviata al template.</font></font></p>
+<div class="section" id="blog-show-template">
+<h3>Blog show template<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#blog-show-template" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Ora abbiamo un elenco di commenti per il blog si può aggiornare il template show blog per visualizzare i commenti. </font><font>Potremmo semplicemente posizionare il rendering dei commenti direttamente nel template show blog, ma i commenti sono diversi dalle loro entità,  meglio separare il rendering in un altro template, e includere poi tale template. </font><font>Questo ci permettera di riutilizzare il template di rendering commento altrove nell'applicazione. </font><font>Aggiornare il template di show blog  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Blog / show.html.twig</font></font></span></tt></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig #}
+
+{# .. #}
+
+{% block body %}
+    {# .. #}
+
+    <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"comments"</span> <span class="na">id=</span><span class="s">"comments"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"previous-comments"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;h3&gt;</span>Comments<span class="nt">&lt;/h3&gt;</span>
+            {% include 'BloggerBlogBundle:Comment:index.html.twig' with { 'comments': comments } %}
+        <span class="nt">&lt;/section&gt;</span>
+    <span class="nt">&lt;/section&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Si può vedere l'utilizzo di un nuovo tag Twig</font></font> <tt class="docutils literal"><span class="pre">include</span></tt> . <font><font>Ciò include il contenuto del template specificato</font></font> per <tt class="docutils literal"><span class="pre">BloggerBlogBundle:Comment:index.html.twig</span></tt>.
+  <font><font>Possiamo anche passare  altri argomenti al modello. </font><font>In questo caso, abbiamo bisogno di passare  un insieme di </font></font><tt class="docutils literal"><span class="pre"><font><font>entità commento</font></font></span></tt><font><font> per il rendering.</font></font></p>
+</div>
+<div class="section" id="comment-show-template">
+<h3>Comment show template<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#comment-show-template" title="Permalink to this headline">¶</a></h3>
+<p>Il <tt class="docutils literal"><span class="pre">BloggerBlogBundle:Comment:index.html.twig</span></tt> <font><font>che stiamo includendo  non esiste ancora quindi abbiamo bisogno di crearlo</font></font> . <font><font>Dato che questo è solo un template, non abbiamo bisogno di creare una rotta o un controller per questo, abbiamo solo bisogno di creare il file di template. </font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / commento / index.html.twig</font></font></span></tt><font><font> e incollare il seguente codice.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Comment/index.html.twig #}
+
+{% for comment in comments %}
+    <span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"comment {{ cycle(['odd', 'even'], loop.index0) }}"</span> <span class="na">id=</span><span class="s">"comment-{{ comment.id }}"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;header&gt;</span>
+            <span class="nt">&lt;p&gt;&lt;span</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>{{ comment.user }}<span class="nt">&lt;/span&gt;</span> commented <span class="nt">&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ comment.created|date('c') }}"</span><span class="nt">&gt;</span>{{ comment.created|date('l, F j, Y') }}<span class="nt">&lt;/time&gt;&lt;/p&gt;</span>
+        <span class="nt">&lt;/header&gt;</span>
+        <span class="nt">&lt;p&gt;</span>{{ comment.comment }}<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/article&gt;</span>
+{% else %}
+    <span class="nt">&lt;p&gt;</span>There are no comments for this post. Be the first to comment...<span class="nt">&lt;/p&gt;</span>
+{% endfor %}
+</pre></div>
+</div>
+<p><font><font>Come potete vedere abbiamo inserito  una collezione di entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> e visualizzato i commenti. </font><font>Introduciamo anche una delle altre belle  funzioni di Twig, il </font></font><tt class="docutils literal"><span class="pre">cycle</span></tt>
+function. <font><font>Questa funzione permette di scorrere i valori del array che vengono passati progressivamente . </font><font>L'attuale valore di iterazione del ciclo si ottiene tramite la speciale variabile </font></font><tt class="docutils literal"><span class="pre"><font><font>loop.index0</font></font></span></tt><font><font>. </font><font>Questa mantiene un conteggio delle iterazioni del ciclo, a partire da 0. </font><font>Ci sono una serie di altre </font></font><a class="reference external" href="http://www.twig-project.org/doc/templates.html#for"><font><font>variabili speciali</font></font></a><font><font> disponibili quando siamo all'interno di un blocco di codice loop. </font><font>Si può inoltre notare l'impostazione di un ID HTML all'elemento </font></font><tt class="docutils literal"><span class="pre"><font><font>articolo</font></font></span></tt><font><font>. </font><font>Questo ci permetterà di creare in seguito dei permalink ai commenti  creati.</font></font></p>
+</div>
+<div class="section" id="comment-show-css">
+<h3>Comment show CSS<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#comment-show-css" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Infine, andiamo adi aggiungere un po di 'CSS per mantenere i commenti in un certo stile. </font><font>Aggiornare il foglio di stile  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resorces / public / css / blog.css</font></font></span></tt></p>
+<div class="highlight-css"><div class="highlight"><pre><span class="c">/** src/Blogger/BlogBundle/Resorces/public/css/blog.css **/</span>
+<span class="nc">.comments</span> <span class="p">{</span> <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.comments</span> <span class="nc">.odd</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="m">#eee</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.comments</span> <span class="nc">.comment</span> <span class="p">{</span> <span class="k">padding</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.comments</span> <span class="nc">.comment</span> <span class="nt">p</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.comments</span> <span class="nt">h3</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span> <span class="m">#eee</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.comments</span> <span class="nc">.previous-comments</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p><font><font>Se non si utilizza il metodo di collegamento simbolico per fare riferimento al  bundle nella cartella </font></font><tt class="docutils literal"><span class="pre"><font><font>web</font></font></span></tt><font><font> è necessario eseguire nuovamente il task asset per i copiare le modifiche apportate al CSS.</font></font></p>
+<div class="last highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console assets:install web
+</pre></div>
+</div>
+</div>
+<p><font><font>Se ora diamo uno sguardo ad una delle pagine che mostrano i blog, ad esempio </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/2</font></font></span></tt><font><font> si dovrebbe vedere l'output blog commenti.</font></font></p>
+<img alt="symblog show blog comments" class="align-center" src="pag4_files/comments.jpg">
+</div>
+</div>
+<div class="section" id="adding-comments">
+<h2><font><font>Aggiunta di commenti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#adding-comments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>L'ultima parte del capitolo inserirà la funzionalità per gli utenti per  aggiungere commenti al post del blog . </font><font>Ciò sarà possibile attraverso un form su la pagina show blog. </font><font>Siamo  già stati introdotti alla creazione di form in Symfony2 quando abbiamo creato il form di contatto. </font><font>Piuttosto che creare manualmente il form dei commenti, possiamo usare Symfony2 per fare questo per noi. </font><font>Eseguire l'operazione seguente per generare la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentType</font></font></span></tt><font><font> per l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font>.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console generate:doctrine:form BloggerBlogBundle:Comment
+</pre></div>
+</div>
+<p><font><font>Noterete anche qui, l'uso della versione  corta per specificare le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font>.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p class="last">Tu avrai notato anche il  task <tt class="docutils literal"><span class="pre">doctrine:generate:form</span></tt> . Questo genera un differente namespace.
+</p>
+</div>
+<p>il task  generate form  ha creato la classe <tt class="docutils literal"><span class="pre">CommentType</span></tt> in 
+<tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/Form/CommentType.php</span></tt>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Form/CommentType.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Form</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Component\Form\AbstractType</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Form\FormBuilder</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">CommentType</span> <span class="k">extends</span> <span class="nx">AbstractType</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">buildForm</span><span class="p">(</span><span class="nx">FormBuilder</span> <span class="nv">$builder</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$options</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$builder</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'user'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'comment'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'approved'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'created'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'updated'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'blog'</span><span class="p">)</span>
+        <span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'blogger_blogbundle_commenttype'</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Abbiamo già esplorato ciò che sta accadendo qui nella precedente classe </font></font><tt class="docutils literal"><span class="pre"><font><font>EnquiryType</font></font></span></tt><font><font>. </font><font>Potremmo iniziare personalizzando questa classe adesso, ma andiamo prima a visualizzare il form .</font></font></p>
+<div class="section" id="displaying-the-comment-form">
+<h3><font><font>Visualizzazione del form dei commenti </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#displaying-the-comment-form" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Sicome si desidera che l'utente aggiungere commenti dalla pagina di blog show, potremmo creare il form nella </font></font><tt>show action </tt><font><font> del </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> controller e il rendering del template direttamente nello </font></font><tt class="docutils literal"><span class="pre"><font><font>show </font></font></span></tt><font><font> template. </font><font>Tuttavia, sarebbe meglio separare il codice come abbiamo fatto con la visualizzazione dei commenti. </font><font>La differenza tra mostrare i commenti e il form dei commenti è che il form deve essere processato , quindi questa volta è necessario un controller. </font><font>Questo introduce un metodo leggermente diverso da quanto sopra, dove abbiamo appena incluso un modello</font></font></p>
+</div>
+<div class="section" id="routing">
+<h3>Routing<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#routing" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Abbiamo bisogno di creare una nuova rotta per gestire il processo di invio del form. </font><font>Aggiungere un nuovo percorso al file di routing  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">BloggerBlogBundle_comment_create</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/comment/{blog_id}</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Comment</span><span class="p-Indicator">:</span><span class="nv">create</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">POST</span>
+        <span class="l-Scalar-Plain">blog_id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">\d+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-controller">
+<h3>The controller<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#the-controller" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Quindi, abbiamo bisogno di creare il nuovo controller di </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font> che abbiamo indicato in precedenza. </font><font>Creare un file situato in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / CommentController.php</font></font></span></tt><font><font> e incollare il seguente codice.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Controller/CommentController.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Controller\Controller</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Comment</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Form\CommentType</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * Comment controller.</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">CommentController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">newAction</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$blog</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getBlog</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">);</span>
+
+        <span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$blog</span><span class="p">);</span>
+        <span class="nv">$form</span>   <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createForm</span><span class="p">(</span><span class="k">new</span> <span class="nx">CommentType</span><span class="p">(),</span> <span class="nv">$comment</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Comment:form.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'comment'</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">,</span>
+            <span class="s1">'form'</span>   <span class="o">=&gt;</span> <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">createView</span><span class="p">()</span>
+        <span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">createAction</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$blog</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getBlog</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">);</span>
+
+        <span class="nv">$comment</span>  <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+        <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="nv">$blog</span><span class="p">);</span>
+        <span class="nv">$request</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">();</span>
+        <span class="nv">$form</span>    <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createForm</span><span class="p">(</span><span class="k">new</span> <span class="nx">CommentType</span><span class="p">(),</span> <span class="nv">$comment</span><span class="p">);</span>
+        <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">bindRequest</span><span class="p">(</span><span class="nv">$request</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$form</span><span class="o">-&gt;</span><span class="na">isValid</span><span class="p">())</span> <span class="p">{</span>
+            <span class="c1">// TODO: Persist the comment entity</span>
+
+            <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">generateUrl</span><span class="p">(</span><span class="s1">'BloggerBlogBundle_blog_show'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getBlog</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()))</span> <span class="o">.</span>
+                <span class="s1">'#comment-'</span> <span class="o">.</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Comment:create.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'comment'</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="p">,</span>
+            <span class="s1">'form'</span>    <span class="o">=&gt;</span> <span class="nv">$form</span><span class="o">-&gt;</span><span class="na">createView</span><span class="p">()</span>
+        <span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">function</span> <span class="nf">getBlog</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$em</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDoctrine</span><span class="p">()</span>
+                    <span class="o">-&gt;</span><span class="na">getEntityManager</span><span class="p">();</span>
+
+        <span class="nv">$blog</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$blog</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createNotFoundException</span><span class="p">(</span><span class="s1">'Unable to find Blog post.'</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$blog</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="the-controller2">
+  <p><font><font>Creiamo 2 azioni nel controller </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> , una per </font></font><tt class="docutils literal"><span class="pre"><font><font>new</font></font></span></tt><font><font> e una per </font></font><tt class="docutils literal"><span class="pre"><font><font>create</font></font></span></tt><font><font> . </font><font>La </font></font><tt class="docutils literal"><span class="pre"><font><font>new</font></font></span></tt><font><font> azione si occupa di visualizzare il modulo dei commenti, il </font></font><tt class="docutils literal"><span class="pre"><font><font>create</font></font></span></tt><font><font> elabora l'oggetto dell' invio del form  dei commenti. </font><font>Mentre questo può sembrare che occorra una grande quantità di codice, non c'è nulla di nuovo qui, tutto è come  nel capitolo 2, quando abbiamo creato il modulo di contatto. </font><font>Tuttavia, prima di procedere assicuratevi di comprendere appieno ciò che sta accadendo nel controller </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font>.</font></font></p>
+</div>
+<div class="section" id="form-validation2">
+  <h3><font><font>La validazione dei form </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#form-validation" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+  <p><font><font>Non vogliamo che gli utenti siano in grado di presentare osservazioni al blog senza i valori </font></font><tt class="docutils literal"><span class="pre"><font><font>user</font></font></span></tt><font><font> o </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font>. </font><font>Per raggiungere questo torniamo ad osservare i validatori sono stati introdotti  nel capitolo 2 durante la creazione del modulo di richiesta. </font><font>Aggiornare le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Comment.php</font></font></span></tt><font><font> con il seguente.</font></font></p>
+</div>
+<p>&nbsp;</p>
+</div>
+<div class="section" id="form-validation"><div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Comment.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Mapping\ClassMetadata</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Validator\Constraints\NotBlank</span><span class="p">;</span>
+
+<span class="c1">// ..</span>
+<span class="k">class</span> <span class="nc">Comment</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">loadValidatorMetadata</span><span class="p">(</span><span class="nx">ClassMetadata</span> <span class="nv">$metadata</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'user'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">NotBlank</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+            <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'You must enter your name'</span>
+        <span class="p">)));</span>
+        <span class="nv">$metadata</span><span class="o">-&gt;</span><span class="na">addPropertyConstraint</span><span class="p">(</span><span class="s1">'comment'</span><span class="p">,</span> <span class="k">new</span> <span class="nx">NotBlank</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+            <span class="s1">'message'</span> <span class="o">=&gt;</span> <span class="s1">'You must enter a comment'</span>
+        <span class="p">)));</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Collochiamo dei  vincoli in modo che sia l'utente che i membri del commento non possono  essere vuoti. </font><font>dobbiamo anche impostare il </font></font><tt class="docutils literal"><span class="pre"><font><font>messaggio </font></font></span></tt><font><font> per cambiare i valori di default. </font><font>Ricordarsi di aggiungere il namespace per </font></font><tt class="docutils literal"><span class="pre"><font><font>ClassMetadata</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>NotBlank</font></font></span></tt><font><font> come mostrato sopra.</font></font></p>
+</div>
+<div class="section" id="id2">
+<h3>The view<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#id2" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Poi abbiamo bisogno di creare i 2 template per le azioni del controller </font></font><tt class="docutils literal"><span class="pre"><font><font>new</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>create</font></font></span></tt><font><font>. </font><font>Innanzitutto creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / commento / form.html.twig</font></font></span></tt><font><font> e incollare il seguente codice .</font></font></p>
+<div class="highlight-html"><pre>{# src/Blogger/BlogBundle/Resources/views/Comment/form.html.twig #}
+
+&lt;form action="{{ path('BloggerBlogBundle_comment_create', { 'blog_id' : comment.blog.id } ) }}" method="post" {{ form_enctype(form) }} class="blogger"&gt;
+    {{ form_widget(form) }}
+    &lt;p&gt;
+        &lt;input type="submit" value="Submit"&gt;
+    &lt;/p&gt;
+&lt;/form&gt;</pre>
+</div>
+<p><font><font>Lo scopo di questo template è semplice, rendere il form commenti. </font><font>Noterete anche che l' </font></font><tt class="docutils literal"><span class="pre"><font><font>azione</font></font></span></tt><font><font> del form è </font></font><tt class="docutils literal"><span class="pre"><font><font>POST</font></font></span></tt><font><font> per il nuovo percorso che abbiamo creato </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle_comment_create</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Avanti possiamo i aggiungere il template per la vista </font></font><tt class="docutils literal"><span class="pre"><font><font>create</font></font></span></tt><font><font>. </font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / commento / create.html.twig</font></font></span></tt><font><font> e incollare il seguente codice.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block title %}Add Comment{% endblock%}
+
+{% block body %}
+    <span class="nt">&lt;h1&gt;</span>Add comment for blog post "{{ comment.blog.title }}"<span class="nt">&lt;/h1&gt;</span>
+    {% include 'BloggerBlogBundle:Comment:form.html.twig' with { 'form': form } %}
+{% endblock %}
+</pre></div>
+</div>
+<p>La <tt class="docutils literal"><span class="pre">create</span></tt> action del controller <tt class="docutils literal"><span class="pre">Comment</span></tt>  tratta di processare il form, ed ha anche bisogno di mostrarlo, e  non può avere errori . <font><font>Abbiamo riutilizzato il </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Commento: form.html.twig</font></font></span></tt><font><font> per rendere il form attuale ed evitare la duplicazione del codice.</font></font></p>
+<p><font><font>Ora andiamo ad aggiornare il template show blog per rendere il form da aggiungere . </font><font>Aggiornare il template  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Blog / show.html.twig</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig #}
+
+{# .. #}
+
+{% block body %}
+
+    {# .. #}
+
+    <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">"comments"</span> <span class="na">id=</span><span class="s">"comments"</span><span class="nt">&gt;</span>
+        {# .. #}
+
+        <span class="nt">&lt;h3&gt;</span>Add Comment<span class="nt">&lt;/h3&gt;</span>
+        {% render 'BloggerBlogBundle:Comment:new' with { 'blog_id': blog.id } %}
+    <span class="nt">&lt;/section&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p><font><font>Usiamo un altro nuovo tag di Twig qui, il </font></font><tt class="docutils literal"><span class="pre"><font><font>render</font></font></span></tt><font><font> tag. </font><font>Questo tag rende i contenuti di un controllor nel template. </font><font>Nel nostro caso abbiamo reso i i contenuti del</font></font>la controller action <tt class="docutils literal"><span class="pre">BloggerBlogBundle:Comment:new</span></tt></p>
+<p><font><font>Se ora diamo uno sguardo ad una delle pagineche mostrano blog, come </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/2</font></font></span></tt><font><font> noterete un'eccezione Symfony2 .</font></font></p>
+<img alt="toString() Symfony2 Exception" class="align-center" src="pag4_files/to_string_error.jpg">
+<p><font><font>Questa eccezione è stata generata dal template </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Blog: show.html.twig</font></font></span></tt><font><font>. </font><font>Se guardiamo alla riga 25 </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Blog: show.html.twig</font></font></span></tt><font><font> possiamo vedere  che il problema esiste realmente nel processo di inserimento del</font></font></p>
+<p>controller <tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Commento: creare</font></font></span></tt></p>
+<div class="highlight-html"><div class="highlight"><pre>{% render 'BloggerBlogBundle:Comment:create' with { 'blog_id': blog.id } %}
+</pre></div>
+</div>
+<p><font><font>Se guardiamo il messaggio di eccezione  ci dà qualche informazione in più circa la natura del perché l'eccezione è stata causata.</font></font></p>
+<blockquote>
+<div>Entities passed to the choice field must have a “__toString()” method defined</div></blockquote>
+<p><font><font>Questo ci sta dicendo che un campo di scelta che stiamo cercando di rendere non hai il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>__toString ()</font></font></span></tt><font><font> impostato per l'entità  associata con il campo di scelta . </font><font>Un campo di scelta è un elemento del form che offre all'utente una serie di scelte, come un elemento </font></font><tt class="docutils literal"><span class="pre"><font><font>select</font></font></span></tt><font><font> a (discesa). </font><font>È forse vi state chiedendo dove stiamo rendendo un campo di scelta nel modulo dei commenti? </font><font>Se si guarda al form di template commento di nuovo si noterà che il rendering del form utilizza la funzione Twig </font></font><tt class="docutils literal"><span class="pre"><font><font>{{ </font></font></span> <span class="pre"><font><font>form_widget (form) </font></font></span> <span class="pre"><font><font>}}</font></font></span></tt><font><font>. </font><font>Questa funzione emette l'intero form nella sua forma base. </font><font>Quindi, consente di tornare alla classe viene creato il form da, la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>CommentType</font></font></span></tt><font><font>. </font><font>Possiamo vedere che un certo numero di campi vengono aggiunti al modulo attraverso l'oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>FormBuilder</font></font></span></tt><font><font>. </font><font>In particolare si sta aggiungendo un campo </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font>.</font></font></p>
+<p><font><font>Se ricordate il capitolo 2, abbiamo parlato su come il </font></font><tt class="docutils literal"><span class="pre"><font><font>FormBuilder</font></font></span></tt><font><font> cercherà di indovinare il tipo di campo di uscita in base ai metadati relativi al campo. </font><font>Sicome abbiamo impostato un rapporto tra le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font> blog </font></font></span></tt><font><font>, il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>FormBuilder</font></font></span></tt><font><font> ha indovinato il commento come una </font></font><tt class="docutils literal"><span class="pre"><font><font>scelta</font></font></span></tt><font><font> di campo, che consentirebbe all'utente di specificare il post sul blog per attaccare il commento. </font><font>Questo è il motivo per cui abbiamo una </font></font><tt class="docutils literal"><span class="pre"><font><font>scelta</font></font></span></tt><font><font> di campo nel form, e perché la Symfony2 eccezione viene generata. </font><font>Siamo in grado di risolvere questo problema implementando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>__toString ()</font></font></span></tt><font><font> nel entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">__toString</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getTitle</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p class="last"><font><font>I messaggi di errore di Symfony2  sono molto istruttivi nella descrizione del problema che si è verificato. </font><font>Leggere sempre i messaggi di errore in quanto di solito rendono il processo di debug molto più facile. </font><font>I messaggi di errore forniscono anche una traccia completa dello stack in modo da poter vedere i passi che si stavano facendo per causare l'errore.</font></font></p>
+</div>
+<p><font><font>Ora, quando si aggiorna la pagina si dovrebbe vedere in uscita il form dei commenti. </font><font>Noterete anche che sono usciti alcuni campi indesiderati come</font></font> <tt class="docutils literal"><span class="pre">approved</span></tt>,
+<tt class="docutils literal"><span class="pre">created</span></tt>, <tt class="docutils literal"><span class="pre">updated</span></tt> e <tt class="docutils literal"><span class="pre">blog</span></tt>. Questo perchè non abbiamo impostato prima la classe <tt class="docutils literal"><span class="pre">CommentType</span></tt></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p><font><font>Quando  viene eseguito il rendering tutti i campi sembrano essere in uscita nel modo corretto . </font><font>I' </font></font><tt class="docutils literal"><span class="pre"><font><font>user</font></font></span></tt><font><font> campo è un </font></font><tt class="docutils literal"><span class="pre"><font><font>text</font></font></span></tt><font><font> campo, il </font></font><tt class="docutils literal"><span class="pre"><font><font>comment</font></font></span></tt><font><font> è un campo </font></font><tt class="docutils literal"><span class="pre"><font><font>textarea</font></font></span></tt><font><font> , i due campi </font></font><tt class="docutils literal"><span class="pre"><font><font>DateTime</font></font></span></tt><font><font> sono un certo numero </font></font><font><font> che ci permette di specificare il tempo, ecc</font></font></p>
+<p class="last"><font><font>Questo è dovuto al </font></font><tt class="docutils literal"><span class="pre"><font><font>FormBuilders</font></font></span></tt><font><font> che è capace di indovinare il tipo di campo del membro che il rendering richiede. </font><font>E 'in grado di farlo in base ai metadati forniti. </font><font>Avendo  specificato i metadati in modo molto specifico per le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> , il </font></font><tt class="docutils literal"><span class="pre"><font><font>FormBuilder</font></font></span></tt><font><font> è in grado di fare ipotesi precise dei tipi di campo.</font></font></p>
+</div>
+<p><font><font>Andiamo  ora ad aggiornare questa classe  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Form / CommentType.php</font></font></span></tt><font><font> per restituire solo i campi di cui abbiamo bisogno.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Form/CommentType.php</span>
+
+<span class="c1">// ..</span>
+<span class="k">class</span> <span class="nc">CommentType</span> <span class="k">extends</span> <span class="nx">AbstractType</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">buildForm</span><span class="p">(</span><span class="nx">FormBuilder</span> <span class="nv">$builder</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$options</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$builder</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'user'</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'comment'</span><span class="p">)</span>
+        <span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ora, quando si aggiorna la pagina solo l'utente e il campo di commento sono in uscita. </font><font>Se si dovesse inviare il modulo ora, il commento non sarebbe in realtà  salvato nel database. </font><font>Questo perché il modulo controller non fa nulla con le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> se il modulo passa la convalida. </font><font>Quindi, come possiamo mantenere l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font> nel database. </font><font>Avete già visto come eseguire questa operazione durante la creazione </font></font><tt class="docutils literal"><span class="pre"><font><font>DataFixtures</font></font></span></tt><font><font> . </font><font>Aggiornare  l'azione </font></font><tt class="docutils literal"><span class="pre"><font><font>create</font></font></span></tt><font><font> del controller di </font></font><tt class="docutils literal"><span class="pre"><font><font>Commento</font></font></span></tt><font><font> per mantenere l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> nel l database.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Controller/CommentController.php</span>
+
+<span class="c1">// ..</span>
+<span class="k">class</span> <span class="nc">CommentController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">createAction</span><span class="p">(</span><span class="nv">$blog_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// ..</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$form</span><span class="o">-&gt;</span><span class="na">isValid</span><span class="p">())</span> <span class="p">{</span>
+            <span class="nv">$em</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDoctrine</span><span class="p">()</span>
+                       <span class="o">-&gt;</span><span class="na">getEntityManager</span><span class="p">();</span>
+            <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+            <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">flush</span><span class="p">();</span>
+
+            <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">generateUrl</span><span class="p">(</span><span class="s1">'BloggerBlogBundle_blog_show'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getBlog</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()))</span> <span class="o">.</span>
+                <span class="s1">'#comment-'</span> <span class="o">.</span> <span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">getId</span><span class="p">()</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// ..</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>La persistenza dell'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>commento</font></font></span></tt><font><font> è semplice come una chiamata a </font></font><tt class="docutils literal"><span class="pre"><font><font>persist ()</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>flush ()</font></font></span></tt><font><font> . </font><font>Ricordate, il form si occupa solo di oggetti PHP, e Doctrine 2 gestisce e persiste questi oggetti. </font><font>Non vi è alcun collegamento diretto tra l'invio dei dati di un form, ed i dati inviati per persistere sul database.</font></font></p>
+<p><font><font>Si dovrebbe ora essere in grado di aggiungere commenti ai post</font></font></p>
+<img alt="symblog add blog comments" class="align-center" src="pag4_files/add_comments.jpg">
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><font><font>Conclusione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html#conclusion" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo fatto buoni progressi in questo capitolo. </font><font>Il nostro sito blogging sta cominciando a funzionare  più come ci si aspetterebbe. </font><font>Ora abbiamo le basi della homepage e creato  l'entità commento. </font><font>L'utente può ora inviare commenti sui blog e leggere i commenti lasciati dagli altri utenti. </font><font>Abbiamo visto come creare fixture e utilizzato Doctrine 2 Migrazioni peri mantenere una linea con le modifiche all'entità per gli schemi del database .</font></font></p>
+<p><font><font>Ora vediamo di costruire la barra laterale che comprendere la nuvola di tag e commenti recenti. </font><font> Si estenderà anche Twig creando i nostri filtri personalizzati. </font><font>Infine, vedremo come utilizzare bene la libreria Assetic bene per aiutarci a gestire i nostri css,image,js.</font></font></p>
+</div>
+</div>
+
+
+    <div id="disqus_thread">We were unable to load Disqus. If you are a moderator please see our <a href="http://docs.disqus.com/help/83/">troubleshooting guide</a>.<div style="display: none;" id="dsq-content"></div></div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="http://disqus.com/" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag3.htm">[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag5.htm">[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer">
+        © Copyright 2011, dsyph3r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  
+<iframe name="easyXDM_DISQUS_net_default5749_provider" id="easyXDM_DISQUS_net_default5749_provider" style="position: absolute; top: -2000px; left: 0px;" src="pag4_files/def.htm" frameborder="0"></iframe></body></html>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0075)http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>[Part 6] - Testing: Unit and Functional with PHPUnit — symblog - A Symfony2 Tutorial</title>
+    
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina contatti,test,testing,funzionali,symblog" /> 
+    
+    <link rel="stylesheet" href="pag6_files/haiku.css" type="text/css">
+    <link rel="stylesheet" href="pag6_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="pag6_files/print.css" type="text/css">
+    
+    <script src="pag6_files/ga_002.js" async="" type="text/javascript"></script><script gapi_processed="true" src="pag6_files/plusone_002.js" async="" type="text/javascript"></script><script async="" src="pag6_files/cbgapi.loaded_0"></script><script src="pag6_files/cbgapi.txt" async=""></script><script type="text/javascript" async="" src="pag6_files/ga.js"></script><script type="text/javascript" async="" src="pag6_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script gapi_processed="true" type="text/javascript" src="pag6_files/jquery.js"></script>
+    <script type="text/javascript" src="pag6_files/underscore.js"></script>
+    <script type="text/javascript" src="pag6_files/doctools.js"></script>
+    <script type="text/javascript" src="pag6_files/theme_extras.js"></script>
+    <link rel="top" title="symblog - A Symfony2 Tutorial" href="http://tutorial.symblog.co.uk/index.html">
+    <link rel="prev" title="[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic" href="http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html">
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="pag6_files/css.txt" rel="stylesheet" type="text/css">
+<link href="pag6_files/css1.txt" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  <script type="text/javascript" async="" src="pag6_files/embed.js"></script><script src="pag6_files/thread.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag6_files/defaults.css"><script src="pag6_files/disqus.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag6_files/theme.css"><script src="pag6_files/theme.js" async="" charset="UTF-8"></script><script src="pag6_files/event.js" async="" charset="UTF-8"></script><script src="pag6_files/embed_002.js" async="" type="text/javascript"></script><script charset="UTF-8" async="" src="pag6_files/thread_002.js"></script><link href="pag6_files/defaults_002.css" type="text/css" rel="stylesheet"><script charset="UTF-8" async="" src="pag6_files/disqus_002.js"></script>
+  <style type="text/css">
+<!--
+.tip1 {        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+}
+-->
+  </style>
+</head>
+  <body data-twttr-rendered="true">
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0px; left: 0px; border: 0px none;" src="pag6_files/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f676974687562.htm" alt="Fork me on GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk/" class="en">EN</a></li>
+                    <li><a href="http://symblog.site90.net/" class="es">ES</a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr">FR</a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp">JP</a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="http://tutorialsymfony2.eu5.org/">Home</a></li>
+                    <li><a href="http://enricoblog.eu5.org">Demo</a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog">Source</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="http://tutorialsymfony2.eu5.org/">symblog</a></h2>
+            <h3><a href="http://tutorialsymfony2.eu5.org/">creating a blog in Symfony2</a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs">Looking for a PHP Development job using Symfony2 to build a cutting edge web application - check out DeskPRO Jobs</a>
+
+  <div class="topnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag5.htm">[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        </p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <div id="___plusone_0" style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background-color: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; background-position: initial initial; background-repeat: initial initial; "><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="width: 80px; margin: 0px; border-style: none; height: 24px; position: static; left: 0px; top: 0px; visibility: visible;" tabindex="0" vspace="0" id="I0_1338386284581" name="I0_1338386284581" src="pag6_files/fastbutton.htm" title="+1" frameborder="0" scrolling="no" width="100%"></iframe></div>
+        </div>
+
+        <iframe allowtransparency="true" src="pag6_files/tweet_button.htm" class="twitter-share-button twitter-count-horizontal" style="width: 110px; height: 20px;" title="Twitter Tweet Button" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="pag6_files/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="part-6-testing-unit-and-functional-with-phpunit">
+<h1>[Part 6] - Testing: Unit and Functional with PHPUnit<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#part-6-testing-unit-and-functional-with-phpunit" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2><font><font>Panoramica </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#overview" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Finora abbiamo esplorato una buona quantità di terreno esaminando una serie di concetti fondamentali per quanto riguarda lo sviluppo di Symfony2 </font><font>Prima di continuare l'aggiunta di funzionalità è il momento di introdurre il test. </font><font>Vedremo come testare singole funzioni con unit test e su come garantire che i componenti stiano lavorando correttamente con i test funzionali.E' </font><font>con la libreria test PHP </font></font><a class="reference external" href="http://www.phpunit.de/manual/current/en/"><font><font>PHPUnit</font></font></a><font><font> che copriremo i test al centro di Symfony2 .Sic</font><font>ome test è un argomento vasto questi saranno trattati anche nei capitoli successivi. </font><font>Entro la fine di questo capitolo avrete scritto un certo numero di test che coprono sia unit che test funzionali. </font><font>Avremo le richieste del browser, form simulati popolati con i dati e il controllo delle risposte  per garantire che le pagine del sito abbiano l'output in modo corretto. </font><font>Avrete anche verificato quanta  copertura avete con i  test  sul vostro codice di base dell' applicazione.</font></font></p>
+</div>
+<div class="section" id="testing-in-symfony2">
+<h2><font><font>Test in Symfony2 </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#testing-in-symfony2" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><a class="reference external" href="http://www.phpunit.de/manual/current/en/"><font><font>PHPUnit</font></font></a><font><font> è diventato il &quot;de facto standard&quot; per la scrittura di test in PHP, in modo da imparare per usufruirne, in tutti i vostri progetti PHP. </font><font> Inoltre, non dimentichiamo che la maggior parte degli argomenti trattati in questo capitolo sono indipendenti dal linguaggio e quindi possono essere trasferite ad altri linguaggi .</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><font><font>Se state pianificando di scrivere i vostri bundles Symfony2 open source, è molto più probabile di ricevere degli interessi se il bundle è ben testato (e documentato). </font><font>Dai un'occhiata a quelli esistenti di Symfony2  disponibili a </font></font><a class="reference external" href="http://symfony2bundles.org/"><font><font>Symfony2Bundles</font></font></a><font><font> .</font></font></p>
+</div>
+<div class="section" id="unit-testing">
+<h3><font><font>Unit Testing </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#unit-testing" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Unit testing si occupa di garantire che le funzioni di singole unità di codice funzionino correttamente quando vengono utilizzate in modo isolato. </font><font>In una base di codice Object Oriented, come Symfony2, una unità sarebbe una classe e i suoi metodi. </font><font>Ad esempio, potremmo scrivere dei test per le classi di entità di </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>commenti </font></font></span></tt><font><font>. </font><font>Durante la scrittura di unit test, i test devono essere scritti indipendentemente da altri casi di test, vale a dire, il risultato di test case B non dovrebbe dipendere dal risultato di test case A. E 'utile in quanto unit test può essere in grado di creare oggetti mock che consentono di provare facilmente le funzioni di unit test che hanno dipendenze esterne. </font><font>Mocking  consente di simulare una chiamata di funzione, invece di esecutarla effettivamente . </font><font>Un esempio di questo potrebbe essere una classe unit test  che chiama  una API esterno. </font><font>La classe API può utilizzare unlivello di trasporto per comunicare con l'API esterna.Con mock </font><font>potremmo prendere  il metodo di richiesta del livello di trasporto per restituire i risultati  precisi, piuttosto che in realtà usare l'API esterna. </font><font>Unit testing può verificare che i componenti di un'applicazione funzionino correttamente insieme, questo è coperto da l'argomento successivo, collaudo funzionale.</font></font></p>
+</div>
+<div class="section" id="functional-testing">
+<h3><font><font>Testing Funzionale </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#functional-testing" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Il Test di verifica funzionale controlla l'integrazione di diverse componenti all'interno dell'applicazione, come il routing, controller e le viste. </font><font>I test funzionali sono simili ai test manuali che saresti ad eseguire nel browser, come richiede la homepage, cliccando sul link blog e controllando se il blog corretto è indicato. </font><font>Il collaudo funzionale vi offre la possibilità di automatizzare questo processo. </font><font>Symfony2 viene fornito con una serie di classi utili che aiutano con i test funzionali tra cui un </font></font><tt class="docutils literal"><span class="pre"><font><font>client</font></font></span></tt><font><font> in grado dirichiedere pagine  e presentare form e DOM </font></font><tt>Crawler</tt><font><font> che possiamo usare per attraversare la </font></font><tt class="docutils literal"><span class="pre"><font><font>risposta</font></font></span></tt><font><font> da parte del cliente.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title"><font><font>Nota </font></font></p>
+<p class="last"><font><font>Ci sono un certo numero di  software di sviluppo che sono driven by testing. </font><font>Questi includono i processi come il Test Driven Development (TDD) e comportamentali Driven Development (BDD). </font><font>Mentre questi sono fuori  della portata di questa esercitazione si deve essere consapevoli della libreria scritta da </font></font><a class="reference external" href="https://twitter.com/#!/everzet"><font><font>everzet</font></font></a><font><font> che facilita BDD chiamato </font></font><a class="reference external" href="http://behat.org/"><font><font>Béhat</font></font></a><font><font> . </font><font>C'è anche un Symfony2 </font></font><a class="reference external" href="http://docs.behat.org/bundle/index.html"><font><font>BehatBundle</font></font></a><font><font> a disposizione per integrare facilmente Béhat in un progetto Symfony2.</font></font></p>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2><font><font>PHPUnit </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#id2" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Come detto sopra,I test di Symfony2  sono scritti utilizzando PHPUnit. </font><font>Avrete bisogno di installare PHPUnit al fine di eseguire questi test e le prove da questo capitolo. </font><font>Per informazioni dettagliate </font></font><a class="reference external" href="http://www.phpunit.de/manual/current/en/installation.html"><font><font>istruzioni di installazione</font></font></a><font><font> fare riferimento alla documentazione ufficiale sul sito PHPUnit. </font><font>Per eseguire i test in Symfony2 è necessario installare PHPUnit 3.5.11 o successivo. </font><font>PHPUnit è una libreria di test molto grande, quindi i riferimenti alla documentazione ufficiale verrà effettuato per trovare una lettura aggiuntiva.</font></font></p>
+<div class="section" id="assertions">
+<h3><font><font>Asserzioni </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#assertions" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Test di scrittura  concernenti a verificare che il risultato del test reale è pari al risultato del test atteso. </font><font>Ci sono un certo numero di metodi di affermazione disponibili in PHPUnit per aiutarvi in ​​questo compito. </font><font>Alcuni dei metodi affermazione comuni che verranno utilizzati sono elencati di seguito.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// Check 1 === 1 is true</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="mi">1</span> <span class="o">===</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// Check 1 === 2 is false</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertFalse</span><span class="p">(</span><span class="mi">1</span> <span class="o">===</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">// Check 'Hello' equals 'Hello'</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'Hello'</span><span class="p">,</span> <span class="s1">'Hello'</span><span class="p">);</span>
+
+<span class="c1">// Check array has key 'language'</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertArrayHasKey</span><span class="p">(</span><span class="s1">'language'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'language'</span> <span class="o">=&gt;</span> <span class="s1">'php'</span><span class="p">,</span> <span class="s1">'size'</span> <span class="o">=&gt;</span> <span class="s1">'1024'</span><span class="p">));</span>
+
+<span class="c1">// Check array contains value 'php'</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertContains</span><span class="p">(</span><span class="s1">'php'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'php'</span><span class="p">,</span> <span class="s1">'ruby'</span><span class="p">,</span> <span class="s1">'c++'</span><span class="p">,</span> <span class="s1">'JavaScript'</span><span class="p">));</span>
+</pre></div>
+</div>
+<div class="section" id="id">
+  <div class="section" id="assertions2">
+    <p><font><font>Una lista completa delle </font></font><a class="reference external" href="http://www.phpunit.de/manual/current/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions"><font><font>asserzioni</font></font></a><font><font> è disponibile nella documentazione PHPUnit.</font></font></p>
+  </div>
+</div>
+<div class="section" id="running-symfony2-tests2">
+  <h2><font><font>Esecuzione di test Symfony2 </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#running-symfony2-tests" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+  <p><font><font>Prima di iniziare a scrivere qualche test, andiamo ad esaminare come eseguire i test in Symfony2. </font><font>PHPUnit può essere impostato per eseguire questo utilizzando un file di configurazione. </font><font>Nel nostro progetto Symfony2 questo file si trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / phpunit.xml.dist</font></font></span></tt><font><font> . </font><font>Dato che questo file ha il suffisso </font></font><tt class="docutils literal"><span class="pre"><font><font>. dist</font></font></span></tt><font><font> , è necessario copiare il contenuto in un file chiamato </font></font><tt class="docutils literal"><span class="pre"><font><font>app / phpunit.xml</font></font></span></tt><font><font> .</font></font></p>
+</div>
+<p>&nbsp;</p>
+</div>
+</div>
+<div class="section" id="running-symfony2-tests"><div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><font><font>Se si utilizza un VCS come Git, si dovrebbe aggiungere il nuovo </font></font><tt class="docutils literal"><span class="pre"><font><font>app / phpunit.xml</font></font></span></tt><font><font> file ai VCS lista ignora.</font></font></p>
+</div>
+<p><font><font>Se si da  uno sguardo al contenuto del file di configurazione PHPUnit verrà visualizzato il seguente.</font></font></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- app/phpunit.xml --&gt;</span>
+
+<span class="nt">&lt;testsuites&gt;</span>
+    <span class="nt">&lt;testsuite</span> <span class="na">name=</span><span class="s">"Project Test Suite"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;directory&gt;</span>../src/*/*Bundle/Tests<span class="nt">&lt;/directory&gt;</span>
+        <span class="nt">&lt;directory&gt;</span>../src/*/Bundle/*Bundle/Tests<span class="nt">&lt;/directory&gt;</span>
+    <span class="nt">&lt;/testsuite&gt;</span>
+<span class="nt">&lt;/testsuites&gt;</span>
+</pre></div>
+</div>
+<p><font><font>Le seguenti impostazioni configurano alcune directory che fanno parte della nostra suite di test. </font><font>Quando si esegue PHPUnit cercherà nelle directory di cui sopra per i test da eseguire. </font><font>È inoltre possibile passare ulteriori argomenti dalla riga di comando per far eseguire a PHPUnit  i test in directory specifiche, anziché fare le prove nella suite di test. </font><font>Vedrete come raggiungere questo obiettivo più tardi.</font></font></p>
+<p><font><font>Noterete anche che la configurazione  specifica il file di bootstrap  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / bootstrap.php.cache</font></font></span></tt><font><font> . </font><font>Questo file è usato da PHPUnit per ottenere la configurazione dell'ambiente di test.</font></font></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- app/phpunit.xml --&gt;</span>
+
+<span class="nt">&lt;phpunit</span>
+    <span class="na">bootstrap                   =</span> <span class="s">"bootstrap.php.cache"</span> <span class="nt">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+  <div class="highlight-xml">
+    <div class="highlight"></div>
+  </div>
+  <div class="admonition tip">
+    <p class="first admonition-title">Nota</p>
+    <p class="last"><font><font>Per ulteriori informazioni sulla configurazione di PHPUnit con un file XML vedere la </font></font><a class="reference external" href="http://www.phpunit.de/manual/current/en/organizing-tests.html#organizing-tests.xml-configuration"><font><font>documentazione PHPUnit</font></font></a></p>
+  </div>
+  <p class="first admonition-title">&nbsp;</p>
+</div>
+</div>
+<div class="section" id="running-the-current-tests">
+<h2><font><font>Esecuzione dei test attuali </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#running-the-current-tests" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Sicome abbiamo utilizzato uno dei task di i Symfony2  per creare il </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> indietro nel capitolo 1, questo ha anche creato un test di controllo per la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>DefaultController</font></font></span></tt><font><font>.Cosi </font><font>siamo in grado di eseguire questo test eseguendo il comando seguente dalla directory principale del progetto. </font><font>Il </font></font><tt class="docutils literal"><span class="pre"><font><font>c-</font></font></span></tt><font><font> opzione specifica che PHPUnit deve caricare la configurazione dal </font></font><tt class="docutils literal"><span class="pre"><font><font>app</font></font></span></tt><font><font> directory.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app
+</pre></div>
+</div>
+<p><font><font>Una volta che il test è completato si i deve essere informati che il test non è riuscito. </font><font>Se si guarda alla classe </font></font><tt class="docutils literal"><span class="pre"><font><font>DefaultControllerTest</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / controller / DefaultControllerTest.php</font></font></span></tt><font><font> verrà visualizzato il seguente contenuto.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Tests/Controller/DefaultControllerTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Tests\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Test\WebTestCase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">DefaultControllerTest</span> <span class="k">extends</span> <span class="nx">WebTestCase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testIndex</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$client</span> <span class="o">=</span> <span class="k">static</span><span class="o">::</span><span class="na">createClient</span><span class="p">();</span>
+
+        <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/hello/Fabien'</span><span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'html:contains("Hello Fabien")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Questo è un test funzionale per la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>DefaultController</font></font></span></tt><font><font> che Symfony2 ha generato. </font><font>Se vi ricordate il capitolo 1, questo controller ha  un 'azione che ha gestito le richieste a </font></font><tt class="docutils literal"><span class="pre"><font><font>/ ciao / {nome}</font></font></span></tt><font><font> . </font><font>Il fatto che abbiamo rimosso questo controller è il motivo per cui il test  sta fallendo. </font><font>Provate ad andare all'URL </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/hello/Fabien</font></font></span></tt><font><font> nel tuo browser. </font><font>Si devono essere informati che il percorso non è stato trovato. </font><font>Come prova di cui sopra facciamo una richiesta allo stesso URL, che avrà  la stessa risposta, quindi, questo è perché il test ha esito negativo.I </font><font>Testing funzionali sono una grande parte di questo capitolo, saranno coperti in dettaglio più avanti.</font></font></p>
+<p><font><font>Sicome la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>DefaultController</font></font></span></tt><font><font> è stata rimossa, è anche possibile rimuovere questa classe dai test. </font><font>Eliminare la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>DefaultControllerTest</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / controller / DefaultControllerTest.php</font></font></span></tt><font><font> .</font></font></p>
+</div>
+<div class="section" id="id4">
+<h2><font><font>Unit Testing </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#id4" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Come spiegato in precedenza, unit test si occupa di testare le singole unità della vostra applicazione . </font><font>Durante la scrittura di unit test si consiglia di replicare la struttura del Bundle nella cartella test. </font><font>Ad esempio, se si vuole testare la classe dell'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> il file di prova dovrebbe essere in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / Entità / BlogTest.php</font></font></span></tt><font><font> . </font><font>Un layout di esempio della cartella  potrebbe essere il seguente.</font></font></p>
+<div class="highlight-text"><div class="highlight"><pre>src/Blogger/BlogBundle/
+                Entity/
+                    Blog.php
+                    Comment.php
+                Controller/
+                    PageController.php
+                Twig/
+                    Extensions/
+                        BloggerBlogExtension.php
+                Tests/
+                    Entity/
+                        BlogTest.php
+                        CommentTest.php
+                    Controller/
+                        PageControllerTest.php
+                    Twig/
+                        Extensions/
+                            BloggerBlogExtensionTest.php
+</pre></div>
+</div>
+<p><font><font>Si noti che ciascuno dei file di prova sono con suffisso  test.</font></font></p>
+<div class="section" id="testing-the-blog-entity-slugify-method">
+<h3><font><font>Test del Blog Entity - metodo slugify </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#testing-the-blog-entity-slugify-method" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Iniziamo analizzando il metodo slugify nell'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>. </font><font>Andiamo a scrivere alcuni test per assicurare che questo metodo funziona correttamente. </font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / Entità / BlogTest.php</font></font></span></tt><font><font> e aggiungere quanto segue.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Tests/Entity/BlogTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Tests\Entity</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Blog</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BlogTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Abbiamo creato una classe di test per le entitàl </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>. </font><font>Si noti la posizione del file è conforme alla struttura delle cartelle di cui sopra. </font>La classe </font><tt class="docutils literal"><span class="pre"><font><font>BlogTest</font></font></span></tt><font><font> estende la classe di base PHPUnit </font></font><tt class="docutils literal"><span class="pre"><font><font>PHPUnit_Framework_TestCase</font></font></span></tt><font><font> . </font><font>Tutte le prove  scritte per PHPUnit saranno  figlio di questa classe. </font><font>Ti ricorderai dai capitoli precedenti che la </font></font><tt class="docutils literal"><span class="pre"><font><font>\</font></font></span></tt><font><font> deve essere collocato davanti al nome della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PHPUnit_Framework_TestCase</font></font></span></tt><font><font> sic come la classe viene dichiarata nel namespace PHP pubblico.</font></font></p>
+<p><font><font>Ora abbiamo la classe skeleton per i nostri test </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> entità, andiamo a scrivere un insieme di test. </font><font>questi insiemi  di test in PHPUnit sono metodi della classe di test con prefisso </font></font><tt class="docutils literal"><span class="pre"><font><font>test</font></font></span></tt><font><font> , come </font></font><tt class="docutils literal"><span class="pre"><font><font>testSlugify ()</font></font></span></tt><font><font> . </font><font>Aggiornare il </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogTest</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / Entità / BlogTest.php</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Entity/BlogTest.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="k">class</span> <span class="nc">BlogTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testSlugify</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'hello-world'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'Hello World'</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Si tratta di un test di prova molto semplice. </font><font>Si crea un'istanza di una nuova entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> che gestisce un </font></font><tt class="docutils literal"><span class="pre"><font><font>assertEquals ()</font></font></span></tt><font><font> sul risultato del</font></font></p>
+<p>metodo <tt class="docutils literal"><span class="pre"><font><font>slugify</font></font></span></tt><font><font>. </font>Il metodo </font><tt class="docutils literal"><span class="pre"><font><font>assertEquals ()</font></font></span></tt><font><font> richiede 2 argomenti obbligatori, il risultato atteso e il risultato effettivo. </font><font>Un terzo argomento opzionale può essere passato per specificare un messaggio da visualizzare quando il  test fallisce.</font></font></p>
+<p><font><font>Andiamo ad   eseguire il nostro nuovo test . </font><font>Eseguire la seguente riga di comando.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app
+</pre></div>
+</div>
+<p><font><font>Si dovrebbe vedere il seguente output.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>PHPUnit 3.5.11 by Sebastian Bergmann.
+
+.
+
+Time: 1 second, Memory: 4.25Mb
+
+OK <span class="o">(</span>1 <span class="nb">test</span>, 1 assertion<span class="o">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash">
+  <div class="highlight"></div>
+</div>
+<p><font><font>L'uscita dal PHPUnit è molto semplice, inizia visualizzando alcune informazioni PHPUnit e le uscite di un certo numero </font></font><tt class="docutils literal"><span class="pre"><font><font>.</font></font></span></tt><font><font> per ogni test che viene eseguito, nel nostro caso abbiamo solo 1 test in esecuzione in modo che solo uno </font></font><tt class="docutils literal"><span class="pre"><font><font>.</font></font></span></tt><font><font> è in uscita. </font><font>L'ultima affermazione ci informa del risultato dei test. </font><font>Per il nostro </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogTest</font></font></span></tt><font><font> abbiamo  eseguito solo 1 test con 1 affermazione. </font><font>Se si dispone di output a colori sulla linea di comando si vedrà anche l'ultima riga visualizzata in  verde seguito da OK. </font><font>Andiamo ad   aggiornare il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>testSlugify ()</font></font></span></tt><font><font> per vedere cosa succede quando i test fallisce.</font></font></p>
+<p>&nbsp;</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Entity/BlogTest.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testSlugify</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'hello-world'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'Hello World'</span><span class="p">));</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'a day with symfony2'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'A Day With Symfony2'</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ri esecuzione degli unit test come prima. </font><font>L'uscita verrà visualizzata nel modo seguente</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>PHPUnit 3.5.11 by Sebastian Bergmann.
+
+F
+
+Time: 0 seconds, Memory: 4.25Mb
+
+There was 1 failure:
+
+1<span class="o">)</span> Blogger<span class="se">\B</span>logBundle<span class="se">\T</span>ests<span class="se">\E</span>ntity<span class="se">\B</span>logTest::testSlugify
+Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-a day with symfony2
++a-day-with-symfony2
+
+/var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Entity/BlogTest.php:15
+
+FAILURES!
+Tests: 1, Assertions: 2, Failures: 1.
+</pre></div>
+</div>
+<p><font><font>L'uscita è un po diversa questa volta. </font><font>Possiamo vedere </font></font><tt class="docutils literal"><span class="pre"><font><font>.</font></font></span></tt><font><font> per le prove di esecuzione è sostituito da un </font></font><tt class="docutils literal"><span class="pre"><font><font>F</font></font></span></tt><font><font> . </font><font>Questo ci dice il test è fallito. </font><font>Si vedrà anche la </font></font><tt class="docutils literal"><span class="pre"><font><font>E</font></font></span></tt><font><font> l'output di caratteri se il test contiene degli errori. </font><font>PHPUnit successivamente ci notifica in dettaglio gli errori, in questo caso, il 1 errore. </font><font>Possiamo vedere il
+ metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>Blogger \ BlogBundle \ test \ Entity \ BlogTest :: testSlugify</font></font></span></tt><font><font> che è riuscito perché i valori attesi e effettivi erano diversi. </font><font>Se si dispone di output a colori sulla linea di comando si vedrà  l'ultima riga visualizzata in rosso, mostra l'esistenza di fallimenti nei test. </font><font>Correggere il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>testSlugify ()</font></font></span></tt><font><font> in modo che i test eseguiti siano corretti.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Entity/BlogTest.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testSlugify</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'hello-world'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'Hello World'</span><span class="p">));</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'a-day-with-symfony2'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'A Day With Symfony2'</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Prima di passare il test andiamo ad aggiungere ancora qualcosa per il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>slugify ()</font></font></span></tt><font><font>.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Entity/BlogTest.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testSlugify</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'hello-world'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'Hello World'</span><span class="p">));</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'a-day-with-symfony2'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'A Day With Symfony2'</span><span class="p">));</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'hello-world'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'Hello    world'</span><span class="p">));</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'symblog'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">'symblog '</span><span class="p">));</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'symblog'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">slugify</span><span class="p">(</span><span class="s1">' symblog'</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ora abbiamo testato il metodo slugify per l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> , abbiamo bisogno di garantire che il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog </font></font></span></tt> <tt class="docutils literal"><span class="pre"><font><font>$ slug</font></font></span></tt><font><font> sia impostato  correttamente quando il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ title</font></font></span></tt><font><font> del </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> viene aggiornato. </font><font>Aggiungere i seguenti metodi al file </font></font><tt class="docutils literal"><span class="pre"><font><font>BlogTest</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / Entità / BlogTest.php</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Entity/BlogTest.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testSetSlug</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+
+    <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">setSlug</span><span class="p">(</span><span class="s1">'Symfony2 Blog'</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'symfony2-blog'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">getSlug</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testSetTitle</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+
+    <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'Hello World'</span><span class="p">);</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'hello-world'</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">getSlug</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Cominciamo testando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>setSlug</font></font></span></tt><font><font> per garantire che il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ slug</font></font></span></tt><font><font> è slugified correttamente dopo l'aggiornamento. </font><font>Poi andiamo a controllare che il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ slug</font></font></span></tt><font><font> venga aggiornato correttamente quando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>setTitle</font></font></span></tt><font><font> viene chiamato sull'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>.</font></font></p>
+<p><font><font>Eseguire i test per verificare che l'entità l </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> funziona correttamente.</font></font></p>
+</div>
+<div class="section" id="testing-the-twig-extension">
+<h3><font><font>Test per una estensione Twig </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#testing-the-twig-extension" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Nel capitolo precedente abbiamo creato un  estensione di Twig per convertire un </font></font><tt class="docutils literal"><span class="pre"><font><font>DateTime \</font></font></span></tt><font><font> in una stringa che specificava la durata del tempo passato. </font><font>Creare un nuovo file di prova  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / Twig / Extensions / BloggerBlogExtensionTest.php</font></font></span></tt><font><font> e aggiornare con il seguente contenuto.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Tests\Twig\Extensions</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Twig\Extensions\BloggerBlogExtension</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BloggerBlogExtensionTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testCreatedAgo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BloggerBlogExtension</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"0 seconds ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">()));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"34 seconds ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="o">-</span><span class="mi">34</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"1 minute ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"2 minutes ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="o">-</span><span class="mi">120</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"1 hour ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="o">-</span><span class="mi">3600</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"1 hour ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="o">-</span><span class="mi">3601</span><span class="p">)));</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s2">"2 hours ago"</span><span class="p">,</span> <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="o">-</span><span class="mi">7200</span><span class="p">)));</span>
+
+        <span class="c1">// Cannot create time in the future</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setExpectedException</span><span class="p">(</span><span class="s1">'\InvalidArgumentException'</span><span class="p">);</span>
+        <span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">createdAgo</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDateTime</span><span class="p">(</span><span class="mi">60</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">function</span> <span class="nf">getDateTime</span><span class="p">(</span><span class="nv">$delta</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="nb">date</span><span class="p">(</span><span class="s2">"Y-m-d H:i:s"</span><span class="p">,</span> <span class="nb">time</span><span class="p">()</span><span class="o">+</span><span class="nv">$delta</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>L'impostazione della classe è più o meno la stessa di prima, creando un metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>testCreatedAgo ()</font></font></span></tt><font><font> per testare la Twig Extension. </font><font>Vi presentiamo un altro metodo PHPUnit in questo caso un test per il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>setExpectedException ()</font></font></span></tt><font><font>. </font><font>Questo metodo deve essere chiamato prima che l'esecuzione  del metodo possa  generare un'eccezione. </font><font>Sappiamo che il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>createdAgo</font></font></span></tt><font><font> della Twig estensione non può gestire date in futuro e genererà un </font></font><tt class="docutils literal"><span class="pre"><font><font>Exception \</font></font></span></tt><font><font> . </font><font>Il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getDateTime ()</font></font></span></tt><font><font> è semplicemente un metodo di supporto per la creazione di un esempio </font></font><tt class="docutils literal"><span class="pre"><font><font>\ DateTime</font></font></span></tt><font><font>. </font><font>Si noti che non è preceduto da </font></font><tt>test </tt><font><font> in modo PHPUnit non cercherà di eseguirlo come un metodo di test . </font><font>Aprire la riga di comando ed eseguire i test per questo file. </font><font>Si potrebbe semplicemente eseguire il test come prima, ma possiamo anche dire a PHPUnit di eseguire i test per una cartella specifica (e relative sottocartelle) o un file. </font><font>Eseguire il comando seguente.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php
+</pre></div>
+</div>
+<p><font><font>Questo farà eseguire i test per il solo file </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogExtensionTest</font></font></span></tt><font><font>. </font><font>PHPUnit ci informa che i test non sono riusciti. </font><font>L'output è mostrato di seguito.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>1<span class="o">)</span> Blogger<span class="se">\B</span>logBundle<span class="se">\T</span>ests<span class="se">\T</span>wig<span class="se">\E</span>xtension<span class="se">\B</span>loggerBlogExtensionTest::testCreatedAgo
+Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-0 seconds ago
++0 second ago
+
+/var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php:14
+</pre></div>
+</div>
+<p><font><font>Ci aspettavamo che la prima affermazione  restituisse </font></font><tt class="docutils literal"><span class="pre"><font><font>0 </font></font></span> <span class="pre"><font><font>secondi </font></font></span> <span class="pre"><font><font>fa</font></font></span></tt><font><font> , ma non l'ha fatto, la seconda parola non è un plurale. </font><font>Andiamo ad  aggiornare la Twig Extension  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Twig / Extensions / BloggerBlogBundle.php</font></font></span></tt><font><font> per correggere questo</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Twig\Extensions</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BloggerBlogExtension</span> <span class="k">extends</span> <span class="nx">\Twig_Extension</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">createdAgo</span><span class="p">(</span><span class="nx">\DateTime</span> <span class="nv">$dateTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// ..</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Seconds</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nv">$delta</span><span class="p">;</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" second"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// ..</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Eseguire nuovamente i test PHPUnit. </font><font>Si dovrebbe vedere la prima affermazione che passa correttamente, ma il nostro insieme di test non riesce ancora. </font><font>Andiamo ad  esaminare l'uscita successiva.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>1<span class="o">)</span> Blogger<span class="se">\B</span>logBundle<span class="se">\T</span>ests<span class="se">\T</span>wig<span class="se">\E</span>xtension<span class="se">\B</span>loggerBlogExtensionTest::testCreatedAgo
+Failed asserting that two strings are equal.
+--- Expected
++++ Actual
+@@ @@
+-1 hour ago
++60 minutes ago
+
+/var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php:18
+</pre></div>
+</div>
+<p><font><font>Ora possiamo vedere che l'affermazione 5 sta fallendo (si noti il 18 al termine del output , questo ci dà il numero di riga del file in cui l'asserzione non è riuscita). </font><font>Guardando l'insieme di test , possiamo vedere che la Twig Extension non ha funzionato correttamente. Sarebbe dovuto uscire </font><font>1 ora fa  , ma invece è uscito 60 minuti fa. </font><font>Se esaminiamo il codice nel </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogExtension</font></font></span></tt><font><font> Twig estensione possiamo vedere la ragione. </font><font>Confrontiamo il tempo per essere inclusivo, cioè, usiamo </font></font><tt class="docutils literal"><span class="pre"><font><font>&lt;=</font></font></span></tt><font><font> invece di </font></font><tt class="docutils literal"><span class="pre"><font><font>&lt;</font></font></span></tt><font><font> . </font><font>Possiamo  vedere che questo è il caso anche per il controllo delle ore. </font><font>Aggiornare la Twig estensione  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Twig / Extensions / BloggerBlogBundle.php</font></font></span></tt><font><font> per correggere questo.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Twig\Extensions</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BloggerBlogExtension</span> <span class="k">extends</span> <span class="nx">\Twig_Extension</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">createdAgo</span><span class="p">(</span><span class="nx">\DateTime</span> <span class="nv">$dateTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// ..</span>
+
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;</span> <span class="mi">3600</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Mins</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">(</span><span class="nv">$delta</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" minute"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$delta</span> <span class="o">&lt;</span> <span class="mi">86400</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Hours</span>
+            <span class="nv">$time</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">(</span><span class="nv">$delta</span> <span class="o">/</span> <span class="mi">3600</span><span class="p">);</span>
+            <span class="nv">$duration</span> <span class="o">=</span> <span class="nv">$time</span> <span class="o">.</span> <span class="s2">" hour"</span> <span class="o">.</span> <span class="p">((</span><span class="nv">$time</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"s"</span> <span class="o">:</span> <span class="s2">""</span><span class="p">)</span> <span class="o">.</span> <span class="s2">" ago"</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// ..</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-php">
+  <div class="highlight"></div>
+</div>
+<p><font><font>Ora nuovamente eseguire tutti i test utilizzando il seguente comando</font></font></p>
+<p>&nbsp;</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app
+</pre></div>
+</div>
+<p><font><font>Questo eseguirà tutti i nostri test, e mostra che tutti i test passano con successo. </font><font>Anche se abbiamo scritto solo un piccolo numero di unit test si dovrebbe ottenere un idea di come i test siano potenti e importanti  quando si scrive codice. </font><font>Mentre gli errori di cui sopra sono stati trascurabili, erano piccoli errori. </font><font>Testing ci aiuta anche per qualsiasi funzionalità futura si aggiunga al progetto interrompendo funzionalità precedenti. </font><font>Questo conclude la unit testing, per ora. </font><font>Vedremo unit test più a fondo nei capitoli seguenti. </font><font>Provate ad aggiungere alcuni dei vostri   unit test per proprie funzionalità .</font></font></p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2><font><font>Testing Funzionale </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#id5" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo scritto finora test unitari, permette di passare alla sperimentazione di più componenti insieme. </font><font>La prima sezione del collaudo funzionale comporterà la simulazione di richieste di browser per testare le risposte generate.</font></font></p>
+<div class="section" id="testing-the-about-page2">
+  <h3><font><font>Test della pagina About </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#testing-the-about-page" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+  <p><font><font>Iniziamo con il testare la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PageController</font></font></span></tt><font><font> per la pagina About. </font><font>Poiché la pagina About è molto semplice, questo è un buon punto di partenza. </font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / controller / PageControllerTest.php</font></font></span></tt><font><font> e aggiungere il seguente contenuto.</font></font></p>
+</div>
+<div class="section" id="testing-the-about-page"><div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Tests\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Test\WebTestCase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">PageControllerTest</span> <span class="k">extends</span> <span class="nx">WebTestCase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testAbout</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$client</span> <span class="o">=</span> <span class="k">static</span><span class="o">::</span><span class="na">createClient</span><span class="p">();</span>
+
+        <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/about'</span><span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'h1:contains("About symblog")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Abbiamo già visto un test di controllo molto simile a questo quando abbiamo brevemente esaminato la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>DefaultControllerTest</font></font></span></tt><font><font>. </font><font>Questo sta testando la pagina di symblog about, controllando che la stringa </font></font><tt class="docutils literal">about <span class="pre"><font><font>symblog</font></font></span></tt><font><font> sia presente nel codice HTML generato, in particolare all'interno del tag </font></font><tt class="docutils literal"><span class="pre"><font><font>H1</font></font></span></tt><font><font>. </font>La classe </font><tt class="docutils literal"><span class="pre"><font><font>PageControllerTest</font></font></span></tt><font><font> non estende l' </font></font><tt class="docutils literal"><span class="pre"><font><font>\ PHPUnit_Framework_TestCase</font></font></span></tt><font><font> come abbiamo visto con gli esempi di test unitari, si estende invece la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>WebTestCase</font></font></span></tt><font><font> . </font><font>Questa classe è parte del FrameworkBundle Symfony2.</font></font></p>
+<p><font><font>Come spiegato prima dell'inizio delle lezioni di prova PHPUnit deve estendere la </font></font><tt class="docutils literal"><span class="pre"><font><font>\ PHPUnit_Framework_TestCase</font></font></span></tt><font><font> , ma quando la funzionalità extra o comune sono necessarie in casi di test a risposta multipla è utile incapsulare questo nella sua classe e avere le classi di test che estendono questo. </font><font>Il </font></font><tt class="docutils literal"><span class="pre"><font><font>WebTestCase</font></font></span></tt><font><font> fa esattamente questo, fornisce una serie di metodi utili per l'esecuzione di prove funzionali in Symfony2. </font><font>Dai un'occhiata al file </font></font><tt class="docutils literal"><span class="pre"><font><font>WebTestCase</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>vendor / symfony / src / Symfony / Bundle / FrameworkBundle / Test / WebTestCase.php</font></font></span></tt><font><font> per vedrete che questa classe estende la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>\ PHPUnit_Framework_TestCase</font></font></span></tt><font><font>.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php</span>
+
+<span class="k">abstract</span> <span class="k">class</span> <span class="nc">WebTestCase</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Se si da un occhiata al metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>createClient ()</font></font></span></tt><font><font> nella classe </font></font><tt class="docutils literal"><span class="pre"><font><font>WebTestCase</font></font></span></tt><font><font> si può vedere che crea un'istanza del Kernel Symfony2. </font><font>Seguendo i metodi  noterete anche che lo </font></font><tt>sviluppo </tt><font><font> è impostato a </font></font><tt class="docutils literal"><span class="pre"><font><font>test</font></font></span></tt><font><font> (a meno che non sia sovrascritto come uno degli argomenti </font></font><tt class="docutils literal"><span class="pre"><font><font>createClient ()</font></font></span></tt><font><font> ). </font><font>Questa è l'ambiente </font></font><tt>test </tt><font><font> del quale abbiamo parlato nel capitolo precedente.</font></font></p>
+<p><font><font>Guardando indietro alla nostra classe di test si può vedere il </font></font><tt class="docutils literal"><span class="pre"><font><font>createClient ()</font></font></span></tt><font><font> dove viene chiamato il metodo per ottenere il test attivo e funzionante. </font><font>Dobbiamo  quindi chiamare il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>request ()</font></font></span></tt><font><font> sul client per simulare che un browser richieda HTTP GET all'URL </font></font><tt class="docutils literal"><span class="pre"><font><font>/ about</font></font></span></tt><font><font> (questo sarebbe proprio come quando si visita </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/about</font></font></span></tt><font><font> nel proprio browser). </font><font>La richiesta ci dà indietro un oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> , che contiene la </font></font><tt class="docutils literal"><span class="pre"><font><font>response</font></font></span></tt><font><font> . </font>La classe </font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> è molto utile in quanto ci permette di attraversare il codice HTML restituito. </font><font>Usiamo il </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> , per verificare cheil tag ' </font></font><tt class="docutils literal"><span class="pre"><font><font>H1</font></font></span></tt><font><font> nel codice HTML di risposta contenga le parole </font></font><tt class="docutils literal"><span class="pre"><font><font>about </font></font></span> <span class="pre"><font><font>symblog</font></font></span></tt><font><font> . </font><font>Noterete che, anche se stiamo estendendo la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>WebTestCase</font></font></span></tt><font><font> usiamo ancora il metodo Assert come prima (ricordate la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PageControllerTest</font></font></span></tt><font><font> è ancora figlio della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>\ PHPUnit_Framework_TestCase</font></font></span></tt><font><font> ).</font></font></p>
+<p><font><font>Andiamo ad  eseguire il </font></font><tt class="docutils literal"><span class="pre"><font><font>PageControllerTest</font></font></span></tt><font><font> utilizzando il seguente comando. </font><font>Questo è usato solo per eseguire  i test per il file che si sta attualmente controllando . </font><font>Man mano che la suite di test diventa grande ,questa prova di funzionamento può diventare onerosa.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
+</pre></div>
+</div>
+<p><font><font>Si dovrebbe ottenere il  messaggio </font></font><tt class="docutils literal"><span class="pre"><font><font>OK </font></font></span> <span class="pre"><font><font>(1 </font></font></span> <span class="pre"><font><font>test, </font></font></span> <span class="pre"><font><font>1 </font></font></span> <span class="pre"><font><font>affermazione)</font></font></span></tt><font><font> farci sapere che 1 test (il </font></font><tt class="docutils literal"><span class="pre"><font><font>testAbout ()</font></font></span></tt><font><font> ) ha funzionato, con 1 affermazione ( </font></font><tt class="docutils literal"><span class="pre"><font><font>assertEquals ()</font></font></span></tt><font><font> ).</font></font></p>
+<p><font><font>Provare a cambiare la stringa </font></font><tt class="docutils literal">about <span class="pre"><font><font>symblog</font></font></span></tt><font><font> con </font></font><tt class="docutils literal"><span class="pre"><font><font>contat</font></font></span></tt><font><font> e poi nuovamente eseguite il test. </font><font>Il test avrà esito negativo in quanto </font></font><tt class="docutils literal"><span class="pre"><font><font>Contact</font></font></span></tt><font><font> non può essere trovato, causando </font></font><tt class="docutils literal"><span class="pre"><font><font>asertEquals</font></font></span></tt><font><font> equiparato a false.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>1<span class="o">)</span> Blogger<span class="se">\B</span>logBundle<span class="se">\T</span>ests<span class="se">\C</span>ontroller<span class="se">\P</span>ageControllerTest::testAbout
+Failed asserting that 0 matches expected 1.
+</pre>
+  <p><font><font>Ripristinare la stringa a </font></font><tt class="docutils literal">about <span class="pre"><font><font>symblog</font></font></span></tt><font><font> prima di continuare.</font></font></p>
+  <p>L'esempio <tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font>  utilizzato permette di attraversare sia i documenti HTML o XML (che significa che il </font></font><tt class="docutils literal"><span class="pre"><font><font>crawler</font></font></span></tt><font><font> funziona solo con le risposte che restituiscono HTML o XML). </font><font>Possiamo usare il </font></font><tt class="docutils literal"><span class="pre"><font><font>crawler</font></font></span></tt><font><font> per attraversare la risposta generata utilizzando metodi quali </font></font><tt class="docutils literal"><span class="pre"><font><font>filter ()</font></font></span></tt><font><font> , </font></font><tt class="docutils literal"><span class="pre"><font><font>first  ()</font></font></span></tt><font><font> , </font></font><tt class="docutils literal"><span class="pre"><font><font>last ()</font></font></span></tt><font><font> , e </font></font><tt class="docutils literal"><span class="pre"><font><font>parents ()</font></font></span></tt><font><font> . </font><font>Se avete usato </font></font><a class="reference external" href="http://jquery.com/"><font><font>jQuery</font></font></a><font><font> prima ci si dovrebbe sentire a casa con la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font>. </font><font>Un elenco completo dei metodi supportati da </font></font><tt class="docutils literal"><span class="pre"><font><font>crawler</font></font></span></tt><font><font> di attraversamento può essere trovato nel capitolo </font></font><a class="reference external" href="http://symfony.com/doc/current/book/testing.html#traversing"><font><font>Testing</font></font></a><font><font> del libro Symfony2. </font><font>Esploreremo più su le caratteristiche dei </font></font><tt class="docutils literal"><span class="pre"><font><font>crowler </font></font></span></tt><font><font> , mentre continuiamo.</font></font></p>
+</div>
+</div>
+</div>
+<div class="section" id="homepage">
+<h3><font><font>Homepage </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#homepage" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Mentre il test per la pagina about era semplice, ha delineato i principi fondamentali del collaudo funzionale nelle pagine del sito.</font></font></p>
+<blockquote>
+  <div>
+    <ol class="arabic simple">
+      <li><font><font>Creare il client</font></font></li>
+      <li><font><font>Richiesta di una pagina</font></font></li>
+      <li><font><font>Controllare la risposta</font></font></li>
+    </ol>
+  </div>
+</blockquote>
+<p><font><font>Si tratta di una semplice panoramica del processo, in realtà ci sono un certo numero di altri passi che potremmo  fare, come fare clic su collegamenti e   popolamento di form per  la presentazione.</font></font></p>
+<p><font><font>Andiamo a  creare un metodo per testare la homepage. </font><font>Sappiamo che la homepage è disponibile tramite l'URL </font></font><tt class="docutils literal"><span class="pre"><font><font>/</font></font></span></tt><font><font> e chei dovrebbe visualizzare i post più recenti del blog. </font><font>Aggiungere un nuovo metodo di </font></font><tt class="docutils literal"><span class="pre"><font><font>testIndex ()</font></font></span></tt><font><font> alla classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PageControllerTest</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / controller / PageControllerTest.php</font></font></span></tt><font><font> come illustrato di seguito.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testIndex</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$client</span> <span class="o">=</span> <span class="k">static</span><span class="o">::</span><span class="na">createClient</span><span class="p">();</span>
+
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/'</span><span class="p">);</span>
+
+    <span class="c1">// Check there are some blog entries on the page</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'article.blog'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Potete vedere gli stessi passaggi  come con i test per la pagina About. </font><font>Esegui il test per garantire che tutto funzioni come previsto.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
+</pre></div>
+</div>
+<p><font><font>Parte del testing funzionale comporta di essere in grado di replicare ciò che un utente avrebbe fatto sul sito. </font><font>Per consentire agli utenti di spostarsi tra le pagine del tuo sito web come fare clic sui link. </font><font>Andiamo a  simulare questa azione ora per verificare che i collegamenti per la pagina show blog lavorino  correttamente quando il titolo del blog è stato cliccato. </font><font>Aggiornare il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>testIndex ()</font></font></span></tt><font><font> nella </font></font><tt class="docutils literal"><span class="pre"><font><font>classe PageControllerTest</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testIndex</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="c1">// Find the first link, get the title, ensure this is loaded on the next page</span>
+    <span class="nv">$blogLink</span>   <span class="o">=</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'article.blog h2 a'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
+    <span class="nv">$blogTitle</span>  <span class="o">=</span> <span class="nv">$blogLink</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">();</span>
+    <span class="nv">$crawler</span>    <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">click</span><span class="p">(</span><span class="nv">$blogLink</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">());</span>
+
+    <span class="c1">// Check the h2 has the blog title in it</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'h2:contains("'</span> <span class="o">.</span> <span class="nv">$blogTitle</span> <span class="o">.</span><span class="s1">'")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>La  prima cosa ,che facciamo utilizziamo il </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> per estrarre il testo all'interno del primo link del titolo  blog. </font><font>Questo viene fatto usando il filtro</font></font><tt class="docutils literal"><span class="pre">article.blog</span> <span class="pre">h2</span> <span class="pre">a</span></tt>. Questo filtro è utilizzato per far ritornare il tag <tt class="docutils literal"><span class="pre">a</span></tt>  all'interno del tag <tt class="docutils literal"><span class="pre">H2</span></tt> dell'articolo <tt class="docutils literal"><span class="pre">article.blog</span></tt>
+.<font><font>Per capire meglio questo, diamo uno sguardo al markup utilizzato sulla home page per la visualizzazione blog.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"blog"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"date"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"2011-09-05T21:06:19+01:00"</span><span class="nt">&gt;</span>Monday, September 5, 2011<span class="nt">&lt;/time&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/app_dev.php/1/a-day-with-symfony2"</span><span class="nt">&gt;</span>A day with Symfony2<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+
+    <span class="c">&lt;!-- .. --&gt;</span>
+<span class="nt">&lt;/article&gt;</span>
+<span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"blog"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"date"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"2011-09-05T21:06:19+01:00"</span><span class="nt">&gt;</span>Monday, September 5, 2011<span class="nt">&lt;/time&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;header&gt;</span>
+        <span class="nt">&lt;h2&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/app_dev.php/2/the-pool-on-the-roof-must-have-a-leak"</span><span class="nt">&gt;</span>The pool on the roof must have a leak<span class="nt">&lt;/a&gt;&lt;/h2&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+
+    <span class="c">&lt;!-- .. --&gt;</span>
+<span class="nt">&lt;/article&gt;</span>
+</pre></div>
+</div>
+<p>Possiamo vedere il filtro  <tt class="docutils literal"><span class="pre">article.blog</span> <span class="pre">h2</span> <span class="pre">a</span></tt> a posto nella struttura markup della homepage
+. <font><font>Noterete anche che c'è più di un</font></font><tt class="docutils literal"><span class="pre">&lt;article</span> <span class="pre">class="blog"&gt;</span></tt> nel markup, <font><font>cioè il filtro </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> restituirà una collezione. </font><font>Sicome vogliamo  solo il primo link , si usa il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>first ()</font></font></span></tt><font><font> su la collezione . </font><font>Infine, si usa il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>text ()</font></font></span></tt><font><font> per estrarre il testo del link, in questo caso sarà il testo </font></font><tt class="docutils literal"><span class="pre"><font><font>Un </font></font></span> <span class="pre"><font><font>giorno </font></font></span> <span class="pre"><font><font>con </font></font></span> <span class="pre"><font><font>Symfony2</font></font></span></tt><font><font> . </font><font>In seguito, il link del titolo blog si fa clic per accedere alla pagina show blog. </font><font>Il metodo client </font></font><tt class="docutils literal"><span class="pre"><font><font>click ()</font></font></span></tt><font><font> prende un oggetto e restituisce il collegamento </font></font><tt class="docutils literal"><span class="pre"><font><font>di risposta</font></font></span></tt><font><font> in un esempio </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font>. </font><font>Si dovrebbe ormai aver notando che l'oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> è un elemento fondamentale al collaudo funzionale.</font></font>onal testing.</p>
+<p>L'oggetto <tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> contiene ora la risposta per la pagina show blog. </font><font>Abbiamo ora bisogno di verificare  il link che ci ha navigato alla pagina giusta. </font><font>Possiamo usare il valore </font></font><tt class="docutils literal"><span class="pre"><font><font>$ BlogTitle</font></font></span></tt><font><font> recuperato in precedenza per verificare questo confrontandolo con il titolo nella risposta.</font></font></p>
+<p><font><font>Eseguire i test per assicurare che la navigazione tra la home page e le pagine show blog  funziona correttamente.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
+</pre></div>
+</div>
+<p>Now you have an understanding of how to navigate through the website pages
+when functional testing, lets move onto testing forms.</p>
+</div>
+<div class="section" id="testing-the-contact-page">
+<h3><font><font>Test della pagina Contact </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#testing-the-contact-page" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Gli utenti di symblog sono in grado di inviare richieste di contatto compilando il form nella pagina contatti </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/contact</font></font></span></tt><font><font> . </font><font>Andiamo a testare che  questo modulo funziona correttamente. </font><font>Per prima cosa dobbiamo delineare quello che dovrebbe accadere quando il modulo viene inviato correttamente (presentato con successo in questo caso significa che non ci sono errori presenti nel form).</font></font></p>
+<blockquote>
+<div>
+  <blockquote>
+    <div>
+      <ol class="arabic simple">
+        <li><font><font>Passare alla pagina contatti</font></font></li>
+        <li><font><font>Compilare il form di contatto con dei valori</font></font></li>
+        <li><font><font>Invio del form</font></font></li>
+        <li><font><font>Controllare la posta elettronica se è stato inviato a symblog</font></font></li>
+        <li><font><font>Controllare se la risposta al client contiene la notifica di invio con successo</font></font></li>
+      </ol>
+    </div>
+  </blockquote>
+  <p><font><font>Fino ad ora abbiamo sperimentato abbastanza per essere in grado di completare i passaggi 1 e 5 da soli. </font><font>Ora vedremo in che modo  testare i 3 passi intermedi.</font></font></p>
+  <p><font><font>Aggiungere un nuovo metodo di </font></font><tt class="docutils literal"><span class="pre"><font><font>testContact ()</font></font></span></tt><font><font> alla classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PageControllerTest</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / controller / PageControllerTest.php</font></font></span></tt><font><font> .</font></font></p>
+</div></blockquote>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testContact</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$client</span> <span class="o">=</span> <span class="k">static</span><span class="o">::</span><span class="na">createClient</span><span class="p">();</span>
+
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/contact'</span><span class="p">);</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'h1:contains("Contact symblog")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">());</span>
+
+    <span class="c1">// Select based on button value, or id or name for buttons</span>
+    <span class="nv">$form</span> <span class="o">=</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">selectButton</span><span class="p">(</span><span class="s1">'Submit'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">form</span><span class="p">();</span>
+
+    <span class="nv">$form</span><span class="p">[</span><span class="s1">'blogger_blogbundle_enquirytype[name]'</span><span class="p">]</span>       <span class="o">=</span> <span class="s1">'name'</span><span class="p">;</span>
+    <span class="nv">$form</span><span class="p">[</span><span class="s1">'blogger_blogbundle_enquirytype[email]'</span><span class="p">]</span>      <span class="o">=</span> <span class="s1">'email@email.com'</span><span class="p">;</span>
+    <span class="nv">$form</span><span class="p">[</span><span class="s1">'blogger_blogbundle_enquirytype[subject]'</span><span class="p">]</span>    <span class="o">=</span> <span class="s1">'Subject'</span><span class="p">;</span>
+    <span class="nv">$form</span><span class="p">[</span><span class="s1">'blogger_blogbundle_enquirytype[body]'</span><span class="p">]</span>       <span class="o">=</span> <span class="s1">'The comment body must be at least 50 characters long as there is a validation constrain on the Enquiry entity'</span><span class="p">;</span>
+
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">submit</span><span class="p">(</span><span class="nv">$form</span><span class="p">);</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-php">
+  <div class="highlight"></div>
+</div>
+<p><font><font>Si inizia nel modo consueto, facendo una richiesta al URL </font></font><tt class="docutils literal"><span class="pre"><font><font>/ contact</font></font></span></tt><font><font> , e controllando se la pagina contiene il corretto titolo </font></font><tt class="docutils literal"><span class="pre"><font><font>H1</font></font></span></tt><font><font>. </font><font>Poi si usa il </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> per selezionare il pulsante per inviare il form. </font><font>Il motivo per cui selezioniamo il pulsante e non il form è che un form può contenere più pulsanti che si potrebbe desiderare di scegliere in modo indipendente. </font><font>Dal pulsante selezionato siamo in grado di recuperare il form . </font><font>Siamo in grado di impostare i valori del form usando l'array subscript notation</font></font><tt class="docutils literal"><span class="pre"><font><font>[]</font></font></span></tt><font><font> . </font><font>Infine, il form viene passato al client con il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>submit ()</font></font></span></tt><font><font> per effettivamente presentare il modulo. </font><font>Come al solito, riceviamo indietro un istanza </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font>.E' </font><font>Utilizzando la risposta </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> che facciamo il controllo per verificare il messaggio flash se è presente nella risposta restituita. </font><font>Eseguire il test per verificare che tutto funzioni correttamente.</font></font></p>
+<p>&nbsp;</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
+</pre></div>
+</div>
+<p><font><font>Il test fallisce . </font><font>Ci viene dato il seguente output da PHPUnit.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre>1<span class="o">)</span> Blogger<span class="se">\B</span>logBundle<span class="se">\T</span>ests<span class="se">\C</span>ontroller<span class="se">\P</span>ageControllerTest::testContact
+Failed asserting that &lt;integer:0&gt; matches expected &lt;integer:1&gt;.
+
+/var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php:53
+
+FAILURES!
+Tests: 3, Assertions: 5, Failures: 1.
+</pre></div>
+</div>
+<p><font><font>L'uscita ci informa che il messaggio flash non è stato trovato nella risposta dal modulo di invio. </font><font>Questo perché quando siamo nell'ambiente </font></font><tt class="docutils literal"><span class="pre"><font><font>test </font></font></span></tt><font><font>,i redirect non vengono eseguiti. </font><font>Quando il form viene convalidato correttamente nella classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PageController</font></font></span></tt><font><font> si ha un redirect . </font><font>Questo reindirizzamento non viene eseguito; Abbiamo bisogno di dire esplicitamente che il redirect dovrebbe essere seguita. </font><font>La ragione per cui i redirect non vengono rispettati è semplice, si consiglia di verificare prima la risposta  corrente. </font><font>Dimostreremo così che la posta elettronica era stata inviata. </font><font>Aggiornare la classe </font></font><tt class="docutils literal"><span class="pre"><font><font>PageControllerTest</font></font></span></tt><font><font> per impostare il client per eseguire il redirect.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testContact</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">submit</span><span class="p">(</span><span class="nv">$form</span><span class="p">);</span>
+
+    <span class="c1">// Need to follow redirect</span>
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">followRedirect</span><span class="p">();</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Quando si eseguono i test PHPUnit questi dovrebbero essere superati. </font><font>Ora guardiamo alla fase finale di verifica del processo di contatto modulo di invio, punto 4, controlliamo se una e-mail è stata inviata a symblog. </font><font>Sappiamo già che le email non saranno consegnate nell'ambiente di </font></font><tt>test</tt><font><font> a causa della seguente configurazione.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># app/config/config_test.yml</span>
+
+<span class="l-Scalar-Plain">swiftmailer</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">disable_delivery</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p><font><font>Siamo in grado di testare se le email sono state inviate utilizzando le informazioni raccolte dal profiler web. </font><font> La verifica del profiler deve essere fatto prima che il reindirizzamento avvenga, in quanto le informazioni contenute nel profiler andranno perse. </font><font>Aggiornare il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>testContact ()</font></font></span></tt><font><font> con il seguente .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testContact</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">submit</span><span class="p">(</span><span class="nv">$form</span><span class="p">);</span>
+
+    <span class="c1">// Check email has been sent</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$profile</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getProfile</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="nv">$swiftMailerProfiler</span> <span class="o">=</span> <span class="nv">$profile</span><span class="o">-&gt;</span><span class="na">getCollector</span><span class="p">(</span><span class="s1">'swiftmailer'</span><span class="p">);</span>
+
+        <span class="c1">// Only 1 message should have been sent</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$swiftMailerProfiler</span><span class="o">-&gt;</span><span class="na">getMessageCount</span><span class="p">());</span>
+
+        <span class="c1">// Get the first message</span>
+        <span class="nv">$messages</span> <span class="o">=</span> <span class="nv">$swiftMailerProfiler</span><span class="o">-&gt;</span><span class="na">getMessages</span><span class="p">();</span>
+        <span class="nv">$message</span>  <span class="o">=</span> <span class="nb">array_shift</span><span class="p">(</span><span class="nv">$messages</span><span class="p">);</span>
+
+        <span class="nv">$symblogEmail</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getContainer</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'blogger_blog.emails.contact_email'</span><span class="p">);</span>
+        <span class="c1">// Check message is being sent to correct address</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertArrayHasKey</span><span class="p">(</span><span class="nv">$symblogEmail</span><span class="p">,</span> <span class="nv">$message</span><span class="o">-&gt;</span><span class="na">getTo</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Need to follow redirect</span>
+    <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">followRedirect</span><span class="p">();</span>
+
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Dopo l'invio del form controlliamo per vedere se il profiler è disponibile siccome potrebbe essere stato disabilitato da un'impostazione di configurazione per l'ambiente corrente.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><font><font>Ricordate i test non devono essere eseguiti nell'ambiente di </font></font><tt class="docutils literal"><span class="pre"><font><font>test</font></font></span></tt><font><font> , possono essere eseguiti nell'ambiente </font></font><tt class="docutils literal"><span class="pre"><font><font>prod</font></font></span></tt><font><font> in cui cose come il profiler non saranno disponibili.</font></font></p>
+</div>
+<p><font><font>Se siamo in grado di ottenere il profiler facciamo una richiesta per recuperare il </font></font><tt class="docutils literal"><span class="pre"><font><font>SwiftMailer</font></font></span></tt><font><font> collettore. </font><font>Il </font></font><tt class="docutils literal"><span class="pre"><font><font>SwiftMailer</font></font></span></tt><font><font> collettore lavora dietro le quinte per raccogliere informazioni su come il servizio email viene utilizzato. </font><font>Possiamo usare questo per ottenere informazioni in merito, di come le email sono state inviate.</font></font></p>
+<p><font><font>Poi si usa il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>getMessageCount ()</font></font></span></tt><font><font> per controllare che 1 mail è stata inviata. </font><font>Questo è sufficiente a garantire che almeno una e-mail sia inviata, ma non verifica che l'email verrà inviata alla posizione corretta. </font><font>Potrebbe essere molto imbarazzante o addirittura dannoso  inviare a un indirizzo email errato. </font></font></p>
+<p><font><font>Ora nuovamente eseguire i test per verificare che tutto funzioni correttamente.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
+</pre>
+  <h3><font><font>Test sull'Aggiunta di commenti nel blog </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#testing-adding-blog-comments" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+  <p><font><font> Utilizziamo le conoscenze che abbiamo acquisito dai test precedenti per la pagina dei contatti per testare il processoi per presentare un commento nel blog. </font><font>Ancora una volta dobbiamo delineare quello che dovrebbe accadere quando il form viene inviato correttamente.</font></font></p>
+  <blockquote>
+    <div>
+      <ol class="arabic simple">
+        <li><font><font>Passare a una pagina di blog</font></font></li>
+        <li><font><font>Popolare il form di commento  con i valori</font></font></li>
+        <li><font><font>Invio del form</font></font></li>
+        <li><font><font>Controllare che il nuovo commento venga aggiunto alla fine della lista commento nel blog</font></font></li>
+        <li><font><font>Verificate anche i commenti più recenti della barra laterale per garantire che il commento sia in cima alla lista</font></font></li>
+      </ol>
+    </div>
+  </blockquote>
+  <p><font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / controller / BlogControllerTest.php</font></font></span></tt><font><font> e aggiungere iil seguente..</font></font></p>
+</div>
+</div>
+</div>
+<div class="section" id="testing-adding-blog-comments"><div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Tests/Controller/BlogControllerTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Tests\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Test\WebTestCase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BlogControllerTest</span> <span class="k">extends</span> <span class="nx">WebTestCase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testAddBlogComment</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$client</span> <span class="o">=</span> <span class="k">static</span><span class="o">::</span><span class="na">createClient</span><span class="p">();</span>
+
+        <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/1/a-day-with-symfony'</span><span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'h2:contains("A day with Symfony2")'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">());</span>
+
+        <span class="c1">// Select based on button value, or id or name for buttons</span>
+        <span class="nv">$form</span> <span class="o">=</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">selectButton</span><span class="p">(</span><span class="s1">'Submit'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">form</span><span class="p">();</span>
+
+        <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">submit</span><span class="p">(</span><span class="nv">$form</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'blogger_blogbundle_commenttype[user]'</span>          <span class="o">=&gt;</span> <span class="s1">'name'</span><span class="p">,</span>
+            <span class="s1">'blogger_blogbundle_commenttype[comment]'</span>       <span class="o">=&gt;</span> <span class="s1">'comment'</span><span class="p">,</span>
+        <span class="p">));</span>
+
+        <span class="c1">// Need to follow redirect</span>
+        <span class="nv">$crawler</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">followRedirect</span><span class="p">();</span>
+
+        <span class="c1">// Check comment is now displaying on page, as the last entry. This ensure comments</span>
+        <span class="c1">// are posted in order of oldest to newest</span>
+        <span class="nv">$articleCrawler</span> <span class="o">=</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'section .previous-comments article'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">last</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="nv">$articleCrawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'header span.highlight'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">());</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'comment'</span><span class="p">,</span> <span class="nv">$articleCrawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'p'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">last</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">());</span>
+
+        <span class="c1">// Check the sidebar to ensure latest comments are display and there is 10 of them</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'aside.sidebar section'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">last</span><span class="p">()</span>
+                                        <span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'article'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">()</span>
+        <span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="nv">$crawler</span><span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'aside.sidebar section'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">last</span><span class="p">()</span>
+                                            <span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'article'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">first</span><span class="p">()</span>
+                                            <span class="o">-&gt;</span><span class="na">filter</span><span class="p">(</span><span class="s1">'header span.highlight'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">text</span><span class="p">()</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Questa volta dovrebbe passare l'intero test . </font><font>Prima di iniziare la dissezione del codice, eseguire i test per questo file per assicurarsi che tutto funzioni correttamente.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/BlogControllerTest.php
+</pre></div>
+</div>
+<p><font><font>PHPUnit ci dovrebbe informare che il 1 test è stato eseguito con successo. </font><font>Guardando il codice per il </font></font><tt class="docutils literal"><span class="pre"><font><font>testAddBlogComment ()</font></font></span></tt><font><font> possiamo vedere le cose iniziano nel formato usuale, la creazione di un client, richiesta di una pagina e controllo se la pagina è corretta. </font><font>Si prosegue poi per ottenere il form add commento, e inviare il form. </font><font>Il nostro modo di popolare i valori del form è leggermente diverso rispetto alla versione precedente. </font><font>Questa volta si usa il secondo argomento del client per il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>submit()</font></font></span></tt><font><font> per passare i valori del form.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p><font><font>Potremmo anche utilizzare l'interfaccia Object Oriented per impostare i valori dei campi del form. </font><font>Alcuni esempi sono mostrati sotto.</font></font></p>
+<div class="last highlight-php"><div class="highlight"><pre><span class="c1">// Tick a checkbox</span>
+<span class="nv">$form</span><span class="p">[</span><span class="s1">'show_emal'</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">tick</span><span class="p">();</span>
+
+<span class="c1">// Select an option or a radio</span>
+<span class="nv">$form</span><span class="p">[</span><span class="s1">'gender'</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">select</span><span class="p">(</span><span class="s1">'Male'</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<p><font><font>Dopo aver inviato il form, chiediamo al client di eseguire il redirect in modo da poter verificare la risposta. </font><font>Usiamo il </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> di nuovo per ottenere l'ultimo commento blog, che dovrebbe essere quella che abbiamo appena presentato. </font><font>Infine controlliamo gli ultimi commenti nella sidebar per controllare se il commento è anche il primo nella lista.</font></font></p>
+</div>
+<div class="section" id="blog-repository">
+<h3>Blog Repository<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#blog-repository" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Nell''ultima parte dei test funzionali che esploreremo in questo capitolo andiamo a testare i 2 repository Doctrine. </font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Test / repository / BlogRepositoryTest.php</font></font></span></tt><font><font> e aggiungere il seguente cont</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Tests/Repository/BlogRepositoryTest.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Tests\Repository</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Repository\BlogRepository</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Test\WebTestCase</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BlogRepositoryTest</span> <span class="k">extends</span> <span class="nx">WebTestCase</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">     * @var \Blogger\BlogBundle\Repository\BlogRepository</span>
+<span class="sd">     */</span>
+    <span class="k">private</span> <span class="nv">$blogRepository</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setUp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$kernel</span> <span class="o">=</span> <span class="k">static</span><span class="o">::</span><span class="na">createKernel</span><span class="p">();</span>
+        <span class="nv">$kernel</span><span class="o">-&gt;</span><span class="na">boot</span><span class="p">();</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blogRepository</span> <span class="o">=</span> <span class="nv">$kernel</span><span class="o">-&gt;</span><span class="na">getContainer</span><span class="p">()</span>
+                                       <span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'doctrine.orm.entity_manager'</span><span class="p">)</span>
+                                       <span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testGetTags</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$tags</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blogRepository</span><span class="o">-&gt;</span><span class="na">getTags</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$tags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertContains</span><span class="p">(</span><span class="s1">'symblog'</span><span class="p">,</span> <span class="nv">$tags</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">testGetTagWeights</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$tagsWeight</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blogRepository</span><span class="o">-&gt;</span><span class="na">getTagWeights</span><span class="p">(</span>
+            <span class="k">array</span><span class="p">(</span><span class="s1">'php'</span><span class="p">,</span> <span class="s1">'code'</span><span class="p">,</span> <span class="s1">'code'</span><span class="p">,</span> <span class="s1">'symblog'</span><span class="p">,</span> <span class="s1">'blog'</span><span class="p">)</span>
+        <span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$tagsWeight</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="c1">// Test case where count is over max weight of 5</span>
+        <span class="nv">$tagsWeight</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blogRepository</span><span class="o">-&gt;</span><span class="na">getTagWeights</span><span class="p">(</span>
+            <span class="nb">array_fill</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">'php'</span><span class="p">)</span>
+        <span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertTrue</span><span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$tagsWeight</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="c1">// Test case with multiple counts over max weight of 5</span>
+        <span class="nv">$tagsWeight</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blogRepository</span><span class="o">-&gt;</span><span class="na">getTagWeights</span><span class="p">(</span>
+            <span class="nb">array_merge</span><span class="p">(</span><span class="nb">array_fill</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">'php'</span><span class="p">),</span> <span class="nb">array_fill</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'html'</span><span class="p">),</span> <span class="nb">array_fill</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">'js'</span><span class="p">))</span>
+        <span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nv">$tagsWeight</span><span class="p">[</span><span class="s1">'php'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nv">$tagsWeight</span><span class="p">[</span><span class="s1">'js'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$tagsWeight</span><span class="p">[</span><span class="s1">'html'</span><span class="p">]);</span>
+
+        <span class="c1">// Test empty case</span>
+        <span class="nv">$tagsWeight</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">blogRepository</span><span class="o">-&gt;</span><span class="na">getTagWeights</span><span class="p">(</span><span class="k">array</span><span class="p">());</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEmpty</span><span class="p">(</span><span class="nv">$tagsWeight</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Sicome si desidera eseguire i test che richiedono una connessione valida al database si estende la </font></font><tt class="docutils literal"><span class="pre"><font><font>WebTestCase</font></font></span></tt><font><font> questo ci permette di bootstrap del kernel Symfony2. </font><font>Esegui il test per questo file usando il seguente comando.</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit -c app/ src/Blogger/BlogBundle/Tests/Repository/BlogRepositoryTest.php
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="code-coverage">
+<h2>Code Coverage<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#code-coverage" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Prima di proseguire rapidamente permettetemi di toccare il code coverage. </font><font>Coverage code ci dà una visione delle parti del codice,che vengono eseguite quando appunto vengono eseguiti i test . </font><font>Usando questo possiamo vedere le parti del nostro codice che non hanno test eseguiti , e determinare se abbiamo bisogno di scrivere test per queste .</font></font></p>
+<p><font><font>Per emettere l'analisi di coverange code per l'applicazione eseguire il seguente</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>phpunit --coverage-html ./phpunit-report -c app/
+</pre></div>
+</div>
+<p><font><font>Questo produrrà l'analisi code coverage nella cartella </font></font><tt class="docutils literal"><span class="pre"><font><font>PHPUnit-report</font></font></span></tt><font><font> . </font><font>Aprire il file </font></font><tt class="docutils literal"><span class="pre"><font><font>index.html</font></font></span></tt><font><font> nel browser per visualizzare l'output di analisi.</font></font></p>
+<p><font><font>Vedere il capitolo </font></font><a class="reference external" href="http://www.phpunit.de/manual/current/en/code-coverage-analysis.html"><font><font>Code Coverage Analysis</font></font></a><font><font> nella documentazione PHPUnit per ulteriori informazioni.</font></font></p>
+</div>
+<div class="section" id="conclusion">
+<h2><font><font>Conclusione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html#conclusion" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo coperto un certo numero di settori chiave per quanto riguarda i test. </font><font>Abbiamo esplorato sia test unit e test funzionali per assicurare che il nostro sito web funziona correttamente. </font><font>Abbiamo visto come simulare richieste del browser e come utilizzare la classe Symfony2 </font></font><tt class="docutils literal"><span class="pre"><font><font>Crawler</font></font></span></tt><font><font> per verificare le risposte a queste richieste.</font></font></p>
+<p><font><font>Ora vediamo il componente di sicurezza Symfony2, e più specificamente come usarlo per la gestione degli utenti. </font><font>Si andrà anche ad integrare il FOSUserBundle pronto per noi per lavorare sulla sezione admin symblog.</font></font></p>
+</div>
+</div>
+
+
+    <div id="disqus_thread">We were unable to load Disqus. If you are a moderator please see our <a href="http://docs.disqus.com/help/83/">troubleshooting guide</a>.<div style="display: none;" id="dsq-content"></div></div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="http://disqus.com/" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag5.htm">[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        </p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer">
+        © Copyright 2011, dsyph3r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  
+<iframe name="easyXDM_DISQUS_net_default4337_provider" id="easyXDM_DISQUS_net_default4337_provider" style="position: absolute; top: -2000px; left: 0px;" src="pag6_files/def.htm" frameborder="0"></iframe></body></html>

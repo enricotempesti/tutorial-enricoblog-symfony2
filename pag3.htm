@@ -1,0 +1,808 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0065)http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures — symblog - A Symfony2 Tutorial</title>
+    
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina contatti,doctrine 2,data fixture,blog model,symblog" /> 
+    
+    <link rel="stylesheet" href="pag3_files/haiku.css" type="text/css">
+    <link rel="stylesheet" href="pag3_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="pag3_files/print.css" type="text/css">
+    
+    <script src="pag3_files/ga_002.js" async="" type="text/javascript"></script><script gapi_processed="true" src="pag3_files/plusone_002.js" async="" type="text/javascript"></script><script async="" src="pag3_files/cbgapi.loaded_0"></script><script src="pag3_files/cbgapi.txt" async=""></script><script type="text/javascript" async="" src="pag3_files/ga.js"></script><script type="text/javascript" async="" src="pag3_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script gapi_processed="true" type="text/javascript" src="pag3_files/jquery.js"></script>
+    <script type="text/javascript" src="pag3_files/underscore.js"></script>
+    <script type="text/javascript" src="pag3_files/doctools.js"></script>
+    <script type="text/javascript" src="pag3_files/theme_extras.js"></script>
+    <link rel="top" title="symblog - A Symfony2 Tutorial" href="http://tutorial.symblog.co.uk/index.html">
+    <link rel="next" title="[Part 4] - The Comments Model: Adding comments, Doctrine Repositories and Migrations" href="http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html">
+    <link rel="prev" title="[Part 2] - Contact Page: Validators, Forms and Emailing" href="http://tutorial.symblog.co.uk/docs/validators-and-forms.html">
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="pag3_files/css.txt" rel="stylesheet" type="text/css">
+<link href="pag3_files/css1.txt" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  <script type="text/javascript" async="" src="pag3_files/embed.js"></script><script src="pag3_files/thread.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag3_files/defaults.css"><script src="pag3_files/disqus.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag3_files/theme.css"><script src="pag3_files/theme.js" async="" charset="UTF-8"></script><script src="pag3_files/event.js" async="" charset="UTF-8"></script><script src="pag3_files/embed_002.js" async="" type="text/javascript"></script><script charset="UTF-8" async="" src="pag3_files/thread_002.js"></script><link href="pag3_files/defaults_002.css" type="text/css" rel="stylesheet"><script charset="UTF-8" async="" src="pag3_files/disqus_002.js"></script></head>
+  <body data-twttr-rendered="true">
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0px; left: 0px; border: 0px none;" src="pag3_files/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f676974687562.htm" alt="Fork me on GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk/" class="en">EN</a></li>
+                    <li><a href="http://symblog.site90.net/" class="es">ES</a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr">FR</a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp">JP</a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="http://tutorialsymfony2.eu5.org/">Home</a></li>
+                    <li><a href="http://enricoblog.eu5.org">Demo</a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog">Source</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="http://tutorialsymfony2.eu5.org/">symblog</a></h2>
+            <h3><a href="http://tutorialsymfony2.eu5.org/">creating a blog in Symfony2</a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs">Looking for a PHP Development job using Symfony2 to build a cutting edge web application - check out DeskPRO Jobs</a>
+
+  <div class="topnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag2.htm">[Part 2] - Contact Page: Validators, Forms and Emailing</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag4.htm">[Part 4] - The Comments Model: Adding comments,  Doctrine Repositories and Migrations</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <div id="___plusone_0" style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background-color: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; background-position: initial initial; background-repeat: initial initial; "><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="width: 80px; margin: 0px; border-style: none; height: 24px; position: static; left: 0px; top: 0px; visibility: visible;" tabindex="0" vspace="0" id="I0_1338386207999" name="I0_1338386207999" src="pag3_files/fastbutton.htm" title="+1" frameborder="0" scrolling="no" width="100%"></iframe></div>
+        </div>
+
+        <iframe allowtransparency="true" src="pag3_files/tweet_button.htm" class="twitter-share-button twitter-count-horizontal" style="width: 110px; height: 20px;" title="Twitter Tweet Button" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="pag3_files/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="part-3-the-blog-model-using-doctrine-2-and-data-fixtures">
+<h1>[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#part-3-the-blog-model-using-doctrine-2-and-data-fixtures" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#overview" title="Permalink to this headline">¶</a></h2>
+<p>Questo capitolo inizierà esplorando il modello blog. Il modello sarà implementato usando <a class="reference external" href="http://www.doctrine-project.org/projects/orm">Doctrine 2</a> Object
+Relation Mapper (ORM). Doctrine 2 <font><font> ci fornisce la persistenza per i nostri oggetti PHP. </font><font>Fornisce inoltre un linguaggio SQL proprietario chiamato Query Language Doctrine (DQL). </font><font>Oltre a Doctrine 2,  sarà  introdotto anche il concetto di Fixtures dati. </font><font>Questo è  un meccanismo per popolare il nostro  database di prova nello sviluppo con dati di test adeguati. </font><font>Alla fine di questo capitolo avrete definito il modello blog, aggiornato il database per riflettere il nuovo modello, e  creato un insieme  di dati. </font><font>Avrete anche costruito le basi della pagina di blog show.</font></font></p>
+</div>
+<div class="section" id="doctrine-2-the-model">
+<h2>Doctrine 2: The Model<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#doctrine-2-the-model" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Per far funzionare il nostro blog  abbiamo bisogno di un modo per rendere persistenti i dati. </font><font>Doctrine 2 fornisce una libreria ORM progettata esattamente per questo scopo.</font></font><a class="reference external" href="http://www.doctrine-project.org/projects/dbal"><font><font>Database Abstraction Layer</font></font></a><font><font> ci dà l'astrazione di archiviazione tramite la DOP PHP. </font><font>Questo ci permette di utilizzare un numero di storage engine diversi tra cui MySQL, PostgreSQL e SQLite. </font><font>Useremo MySQL per il nostro motore di archiviazione, ma qualsiasi altro motore potrebbe essere facilmente usato..</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Se non si ha familiarità con ORM, spiegheremo il principio di base . </font><font>Nella definizione di </font></font><a class="reference external" href="http://en.wikipedia.org/wiki/Object-relational_mapping"><font><font>Wikipedia</font></font></a><font><font> si legge:</font></font></p>
+<p><font><font>&quot;Object-relational mapping (ORM, O / RM, e O / R mapping) in software per computer è una tecnica di programmazione per la conversione dei dati tra sistemi di tipo incompatibili in linguaggi orientati agli oggetti di programmazione. </font><font>Ciò crea, in effetti, un &quot;database oggetto virtuale&quot; che può essere usato all'interno del linguaggio di programmazione &quot;.</font></font></p>
+<p class="last"><font><font>Ciò che fa l'ORM facilita il lavoro traducendo i dati da un database relazionale come MySQL PHP in oggetti che possiamo manipolare. </font><font>Questo ci permette di incapsulare le funzionalità di una tabella all'interno di una classe. </font><font>Pensate a una tabella utente, probabilmente ha campi come nome utente, password, first_name, cognome, email e nato. </font><font>Con un ORM questo diventa una classe con membri username, password, first_name, ecc, che ci permette di chiamare metodi quali </font></font><tt class="docutils literal"><span class="pre"><font><font>getUsername ()</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>setPassword ()</font></font></span></tt><font><font> . </font><font>ORM vanno ben oltre questo, però, sono anche in grado di recuperare tabelle correlate , sia allo stesso tempo, come noi recuperiamo l'oggetto utente, o altrimenti in seguito. </font><font>Ora consideriamo il nostro utente ha alcuni amici ad esso collegati. </font><font>Questo sarebbe una tabella amici, memorizzare la chiave primaria della tabella utente all'interno di esso. </font><font>Utilizzando l' ORM ora potremmo effettuare una chiamata come </font></font><tt class="docutils literal"><span class="pre"><font><font>$ user-&gt; getFriends ()</font></font></span></tt><font><font> per recuperare gli oggetti della tabella amici. </font><font>Se questo non bastasse, l'ORM si occupa anche della persistenza in modo da poter creare oggetti in PHP, chiamare un metodo come </font></font><tt class="docutils literal"><span class="pre"><font><font>save ()</font></font></span></tt><font><font> e lasciare che l' ORM con i dettagli effettivamente persista i dati nel database. </font><font>Qui useremo la libreria di  Doctrine 2 ORM, si avrà molto più familiarità con ciò che è un ORM  nell'andare avanti in questo tutorial.</font></font></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p> Tu potresti optare per usare Doctrine 2 Object Document Mapper (ODM) library. <font><font>Ci sono un certo numero di varianti in questa biblioteca per implementazioni di </font></font><a class="reference external" href="http://www.mongodb.org/"><font><font>MongoDB</font></font></a><font><font> e </font></font><a class="reference external" href="http://couchdb.apache.org/"><font><font>CouchDB</font></font></a><font><font> . </font><font>Vedere la pagina </font></font><a class="reference external" href="http://www.doctrine-project.org/projects"><font><font>Doctrine Projects</font></font></a><font><font>  per ulteriori informazioni.</font></font></p>
+<p class="last">C'è anche <a class="reference external" href="http://symfony.com/doc/current/cookbook/doctrine/mongodb.html">cookbook</a>
+che spiega come impostare un ODM con Symfony2.</p>
+</div>
+<div class="section" id="the-blog-entity">
+<h3><font><font>L'Entità Blog </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#the-blog-entity" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Inizieremo con la creazione della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> con le sue entità . </font><font>Abbiamo già  introdotto le entità nel capitolo precedente, quando abbiamo creato l'entità per </font></font><tt class="docutils literal"><span class="pre"><font><font>Enquiry</font></font></span></tt><font><font>. </font><font>Poiché lo scopo di un'entità è di contenere i dati, ha perfettamente senso usarne una per rappresentare una voce di blog. </font><font>Con la definizione di un'entità non stiamo introducendo automaticamente i dati nel database ma come saranno mappati . </font><font>Lo abbiamo visto con la nostra Enquiry </font></font><font><font> entità, laddove i dati contenuti nel entità servivono appena per inviarli  al webmaster.</font></font></p>
+<p><font><font>Creare un nuovo file si  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> e incollare il seguente codice .</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Entity</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$title</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$author</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$blog</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$image</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$tags</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$comments</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$created</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$updated</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Come potete vedere questa è una classe PHP semplice. </font><font>Non si estende a nessun parent. </font><font>Ciascuno degli elementi è dichiarato come protetto in modo che siamo in grado di accedervi quando si opera su un oggetto di questa classe. </font><font>Potremmo dichiarare i getter e setter per questi  attributi, ma Doctrine 2 fornisce un task per fare questo. </font><font>Dopo tutto, la scrittura di accesso non è il più esaltante dei compiti di codifica.</font></font></p>
+<p><font><font>Prima di poter eseguire questo compito, è necessario informare Doctrine 2 di come le entità della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> dovrebbero essere mappate al database. </font><font>L'informazione viene specificata con metadati utilizzando Doctrine 2 mappature. </font><font>I metadati possono essere specificati in  diversi formati, tra cui </font></font><tt class="docutils literal"><span class="pre"><font><font>YAML</font></font></span></tt><font><font> , </font></font><tt class="docutils literal"><span class="pre"><font><font>PHP</font></font></span></tt><font><font> , </font></font><tt class="docutils literal"><span class="pre"><font><font>XML</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>annotazioni</font></font></span></tt><font><font> . </font><font>Useremo </font></font><tt class="docutils literal"><span class="pre"><font><font>Annotazioni</font></font></span></tt><font><font> in questo tutorial. </font><font>E 'importante notare che non tutti i membri in seno al soggetto devono essere mantenuti, in modo da non fornire metadati per questi. </font><font>Questo ci dà la flessibilità di scegliere solo i membri che abbiamo bisogno con Doctrine 2 per mapparli al database. </font><font>Sostituire il contenuto della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Entità / Blog.php</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Entity</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\ORM\Mapping</span> <span class="k">as</span> <span class="nx">ORM</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\Entity</span>
+<span class="sd"> * @ORM\Table(name="blog")</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Id</span>
+<span class="sd">     * @ORM\Column(type="integer")</span>
+<span class="sd">     * @ORM\GeneratedValue(strategy="AUTO")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$id</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="string")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$title</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="string", length=100)</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$author</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="text")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$blog</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="string", length="20")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$image</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="text")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$tags</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$comments</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="datetime")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$created</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\Column(type="datetime")</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$updated</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Per prima cosa importiamo il namespace di ORM Doctrine 2 Mapping . </font><font>Questo ci permette di utilizzare </font></font><tt class="docutils literal"><span class="pre"><font><font>le annotazioni</font></font></span></tt><font><font> per descrivere i metadati per l'entità. </font><font>I metadati forniscono informazioni su come i membri dovrebbero essere mappato al database.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><font><font>Abbiamo usato solo un piccolo sottoinsieme dei tipi previsti per la mappatura di Doctrine 2. </font><font>Un elenco completo dei </font></font><a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.0/en/reference/basic-mapping.html#doctrine-mapping-types"><font><font>tipi di mappatura</font></font></a><font><font> si possono trovare sul sito web Doctrine 2. </font><font>Altri tipi di mappature saranno introdotte più avanti nel tutorial.</font></font></p>
+</div>
+<p><font><font>L'occhio attento di voi avrà notato che il </font></font><tt class="docutils literal"><span class="pre"><font><font>membro $ comments</font></font></span></tt><font><font> non ha metadati allegati. </font><font>Questo perché non abbiamo bisogno che  questo persista, si limita a fornire una serie di commenti relativi a un post sul blog. </font><font>Se pensate a  questo senza pensare al database  ha senso. </font><font>I frammenti di codice seguenti lo dimostrano.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// Create a blog object.</span>
+<span class="nv">$blog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+<span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s2">"symblog - A Symfony2 Tutorial"</span><span class="p">);</span>
+<span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s2">"dsyph3r"</span><span class="p">);</span>
+<span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s2">"symblog is a fully featured blogging website ..."</span><span class="p">);</span>
+
+<span class="c1">// Create a comment and add it to our blog</span>
+<span class="nv">$comment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Comment</span><span class="p">();</span>
+<span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">setComment</span><span class="p">(</span><span class="s2">"Symfony2 rocks!"</span><span class="p">);</span>
+<span class="nv">$blog</span><span class="o">-&gt;</span><span class="na">addComment</span><span class="p">(</span><span class="nv">$comment</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><font><font>Il frammento di cui sopra dimostra il comportamento normale che  si vuole da una classe blog  e di comment. </font><font>Internamente il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>$ blog-&gt; addComment ()</font></font></span></tt><font><font>  potrebbe essere implementato come segue.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$comments</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">addComment</span><span class="p">(</span><span class="nx">Comment</span> <span class="nv">$comment</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">comments</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$comment</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Il metodo <tt class="docutils literal"><span class="pre"><font><font>addComment</font></font></span></tt><font><font> aggiunge solo un nuovo oggetto di commento al membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> del blog .Il </font><font>recupero dei commenti sarà  semplice</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$comments</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getComments</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">comments</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-php">
+  <div class="highlight"></div>
+</div>
+<p><font><font>Come si può vedere il membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> è solo un elenco di oggetti </font></font><tt class="docutils literal"><span class="pre"><font><font>comments</font></font></span></tt><font><font>i.</font><font>Doctrine 2 non cambia come funziona.</font><font> sarà in grado di popolare automaticamente questo membro </font></font><tt class="docutils literal"><span class="pre"><font><font>$ comments</font></font></span></tt><font><font> con gli oggetti legati al </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt> oggetto.</p>
+<p><font><font>Ora che abbiamo detto a Doctrine 2 come mappare i membri entità, siamo in grado di generare i metodi di accesso utilizzando il seguente task</font></font></p>
+<p>&nbsp;</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:generate:entities Blogger
+</pre></div>
+</div>
+<p><font><font>Si noterà che il file </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> Entity è stato aggiornato con i metodi di accesso. </font><font>Ogni volta che facciamo un cambiamento ai metadati ORM per le nostre classi di entità siamo in grado di eseguire questo task per generare qualsiasi metodo aggiuntivo. </font><font>Questo comando non apporta modifiche di accesso a quelle già esistente, in modo che i metodi di accesso esistenti non saranno mai  modificati da questo comando. </font><font>Questo è importante perché si può personalizzare in seguito alcune delle funzioni di accesso predefinite.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p><font><font>Anche se abbiamo usato </font></font><tt class="docutils literal"><span class="pre"><font><font>le annotazioni</font></font></span></tt><font><font> nel nostro tutorial , è possibile convertire le informazioni di mapping in altri formati supportati utilizzando la mappatura </font></font><tt class="docutils literal"><span class="pre">doctrine:mapping:convert</span></tt> task. Per esempio il seguente task convertirà la mappatura in formato yaml..</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:mapping:convert --namespace<span class="o">=</span><span class="s2">"Blogger\BlogBundle\Entity\Blog"</span> yaml src/Blogger/BlogBundle/Resources/config/doctrine
+</pre></div>
+</div>
+<p class="last"><font><font>Questo creerà un file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / doctrine / Blogger.BlogBundle.Entity.Blog.orm.yml</font></font></span></tt><font><font> che conterrà le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> mappate in formato </font></font><tt class="docutils literal"><span class="pre"><font><font>YAML</font></font></span></tt>.</p>
+</div>
+</div>
+<div class="section" id="the-database">
+<h3><font><font>Il database </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#the-database" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<div class="section" id="creating-the-database2">
+  <h4><font><font>Creazione del database </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#creating-the-database" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+  <p><font><font>Se avete seguito il tutorial dal capitolo 1 , avresei dovuto utilizzare il  configuratore web per impostare le impostazioni del database. </font><font>Se no, lo avete fatto aggiornate leopzioni del </font></font><tt class="docutils literal"><span class="pre"><font><font>database_ * </font></font></span></tt><font><font>l file dei parametri  in </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / parameters.ini</font></font></span></tt><font><font> .</font></font></p>
+  <p><font><font>E quindi il momento di creare il database utilizzando un altro task Doctrine 2. </font><font>Questo task crea solo il database, non crea tutte le tabelle all'interno del database. </font><font>Se un database con lo stesso nome esiste già l'operazione genererà un errore e il database esistente verrà lasciato intatto.</font></font></p>
+</div>
+<div class="section" id="creating-the-database"><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:database:create
+</pre></div>
+</div>
+  <div class="section" id="creating-the-database3">
+    <p><font><font>Siamo ora pronti per creare la rappresentazione delle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> nel database. </font><font>Ci sono 2 modi che  possiamo utilizzare per questo obiettivo. </font><font>Possiamo usare il task  Doctrine 2 schema per aggiornare il database oppure possiamo usare  il task doctrine  2 migrazioni. </font><font>Per ora useremo il task schema. </font><font>Migrazioni Doctrine sarà introdotto nel capitolo seguente.</font></font></p>
+  </div>
+  <div class="section" id="creating-the-blog-table2">
+    <h4><font><font>Creazione della tabella di blog </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#creating-the-blog-table" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+    <p><font><font>Per creare la tabella blog nel nostra database possiamo i eseguire il task seguente.</font></font></p>
+  </div>
+  <p>&nbsp;</p>
+</div>
+<div class="section" id="creating-the-blog-table"><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:schema:create
+</pre></div>
+</div>
+<p><font><font>Questo modo può eseguire il codice SQL necessario per generare lo schema del database per le entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font>. </font><font>È inoltre possibile passare l'opzione </font></font><tt class="docutils literal"><span class="pre"><font><font> dump-sql</font></font></span></tt><font><font> per estrarre la SQL. </font><font>Se si visualizza il database si vede che la tabella blog è stata creata, con i campi che abbiamo impostato con le informazioni per la mappatura.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Abbiamo usato un certo numero di task di Symfony2 da riga di comando</font></font>  specificando l'opzione help per il singolo task si può avere un ulteriore chiarimento <tt class="docutils literal"><span class="pre">per esempio per doctrine:schema:create</span></tt></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:schema:create --help
+</pre></div>
+</div>
+<p class="last"><font><font>Le informazioni di aiuto  di uscita  mostrerà l'utilizzo, e le opzioni disponibili. </font><font>La maggior parte delle attività sono dotate di una serie di opzioni che possono essere impostate per personalizzare il funzionamento del task.</font></font></p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="integrating-the-model-with-the-view-showing-a-blog-entry">
+<h2><font><font>Integrare il modello con la vista. </font><font>Visualizzazione di un blog </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#integrating-the-model-with-the-view-showing-a-blog-entry" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Ora abbiamo l' entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> creata, e il database aggiornato per riflettere questo, possiamo iniziare a integrare il modello in vista. </font><font>Inizieremo con la costruzione della pagina Show del nostro blog.</font></font></p>
+<div class="section" id="the-show-blog-route">
+<h3>The Show Blog Route<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#the-show-blog-route" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Iniziamo con la creazione di un percorso per l'azione show  blog</font></font><font><font>. </font><font>Un blog sarà identificato dal suo ID univoco, quindi questo ID dovrà essere presente nella URL. </font><font>Aggiornare il file delle rotte per </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / resources / config / routing.yml</font></font></span></tt><font><font> con la seguente</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/routing.yml</span>
+<span class="l-Scalar-Plain">BloggerBlogBundle_blog_show</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/{id}</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Blog</span><span class="p-Indicator">:</span><span class="nv">show</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET</span>
+        <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">\d+</span>
+</pre></div>
+</div>
+<p><font><font>L' ID del  blog deve essere presente nell'URL, abbiamo specificato un </font></font><tt class="docutils literal"><span class="pre"><font><font>id</font></font></span></tt><font><font> segnaposto. </font><font>Questo significa che gli URL come </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.co.uk/1</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.co.uk/my-blog</font></font></span></tt><font><font> corrisponderanno . </font><font>Tuttavia, sappiamo che la ID blog deve essere un numero intero (è definito in questo modo nel mapping entità) in modo che possiamo aggiungere un vincolo che specifica che questo percorso corrisponde solo quando l' </font></font><tt class="docutils literal"><span class="pre"><font><font>id</font></font></span></tt><font><font> parametro contiene un numero intero. </font><font>Ciò si ottiene con l'</font></font><tt class="docutils literal"><span class="pre">id:</span> <span class="pre">\d+</span></tt> <font><font>come requisito per il percorso. </font><font>Ora solo l'esempio del primo URL  corrisponderebbe, </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.co.uk/my-blog</font></font></span></tt><font><font> non corrisponderà più a questo percorso.</font></font><font><font>È anche possibile vedere una route corrispondente che eseguirà la </font></font><tt>show action</tt><font><font> del controller </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle </font></font></span></tt> <tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>. </font><font>Questo controller è ancora da creare</font></font></p>
+</div>
+<div class="section" id="the-show-controller-action">
+<h3>The Show Controller Action<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#the-show-controller-action" title="Permalink to this headline">¶</a></h3>
+<p><font><font>L'unione tra il modello e la vista è il controller, quindi questo è dove inizierà la creazione della pagina show. </font><font>Potremmo aggiungere una nuova </font></font><tt>show action </tt><font><font> per la nostra attuale </font></font><tt class="docutils literal"><span class="pre"><font><font>pagina</font></font></span></tt><font><font> di controllo, ma  questa pagina si occupa di mostrare l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>blog</font></font></span></tt><font><font> sarà quindi più adatto collocarla nel proprio </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> controller.</font></font></p>
+<p><font><font>Creare un nuovo file  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / BlogController.php</font></font></span></tt><font><font> e incollare il seguente.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Controller/BlogController.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Controller\Controller</span><span class="p">;</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * Blog controller.</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">BlogController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">     * Show a blog entry</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">showAction</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$em</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getDoctrine</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getEntityManager</span><span class="p">();</span>
+
+        <span class="nv">$blog</span> <span class="o">=</span> <span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$blog</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">createNotFoundException</span><span class="p">(</span><span class="s1">'Unable to find Blog post.'</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog:show.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'blog'</span>      <span class="o">=&gt;</span> <span class="nv">$blog</span><span class="p">,</span>
+        <span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Abbiamo creato un nuovo controller per l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> e definito la show action</font></font><font><font>. </font><font>Siccome  abbiamo specificato un parametro </font></font><tt class="docutils literal"><span class="pre"><font><font>id</font></font></span></tt> nel <tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle_blog_show</font></font></span></tt><font><font> con la regola di routing, questa verrà passata come argomento al metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>showAction</font></font></span></tt><font><font>. </font><font>Se avessimo specificato altri parametri  nella regola di routing, anche questi dovrebbero essere passati come argomenti separati.</font></font></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota </p>
+<p>Nell'azionedel controller si possono passare anche oggetti di <tt class="docutils literal"><span class="pre">Symfony\Component\HttpFoundation\Request</span></tt> Se tu specifichi questo come parametro .
+  <font><font>Questo può essere utile quando si tratta di form. </font><font>Abbiamo già usato un form nel capitolo 2, ma non abbiamo usato questo metodo  abbiamo utilizzato un metodo helper di </font></font><tt class="docutils literal"><span class="pre"><font><font>Symfony \ Bundle \ \ Controller \ FrameworkBundle controller</font></font></span></tt><font><font> come segue.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">contactAction</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+    <span class="nv">$request</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Avremmo potuto invece aver scritto questo come segue.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// src/Blogger/BlogBundle/Controller/PageController.php</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Component\HttpFoundation\Request</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">contactAction</span><span class="p">(</span><span class="nx">Request</span> <span class="nv">$request</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="last"><font><font>Entrambi i metodi consentono di raggiungere lo stesso scopo. </font><font>Se il controller non ha esteso la
+ classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Symfony \ Bundle \ FrameworkBundle \ Controller \ controller</font></font></span></tt><font><font> l'helper non sarebbe in grado di funzionare.</font></font></p>
+</div>
+<p><font><font>Poi abbiamo bisogno di recuperare l'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> dal database. </font><font>Per prima cosa utilizzeremo un altro metodo di supporto della classe </font></font><tt class="docutils literal"><span class="pre"><font><font>Symfony \ Bundle \ FrameworkBundle \ Controller \ controller</font></font></span></tt><font><font> per ottenere</font></font> the Doctrine2 Entity Manager.<font><font>Il lavoro del </font></font><a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.0/en/reference/working-with-objects.html"><font><font>manager Entity</font></font></a><font><font> è quello di gestire il recupero e la persistenza di oggetti da e verso il database.</font></font>. <font><font>Andiamo quindi ad utilizzare l'oggetto </font></font><tt class="docutils literal"><span class="pre"><font><font>EntityManager</font></font></span></tt><font><font> per ottenere un Doctrine2 </font></font><tt class="docutils literal"><span class="pre"><font><font>Repository</font></font></span></tt><font><font> per </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Blog</font></font></span></tt><font><font> entità. </font><font>La sintassi indicata qui è semplicemente una scorciatoia che può essere utilizzato con Doctrine 2 invece di specificare il nome completo dell'entità, cioè </font></font><tt class="docutils literal"><span class="pre"><font><font>Blogger \ BlogBundle \ Entity \ Blog</font></font></span></tt><font><font> . </font><font>Con l'oggetto repository  chiamiamo </font></font><tt class="docutils literal"><span class="pre"><font><font>find ()</font></font></span></tt><font><font> passando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>$ id</font></font></span></tt><font><font> argomento. </font><font>Questo metodo consente di recuperare l'oggetto con la sua chiave primaria.</font></font></p>
+<p><font><font>Infine si controlla che l'entità è stata trovata, e passiamo questa entità verso la vista. </font><font>Se nessun entità è stato trovato un </font></font><tt class="docutils literal"><span class="pre"><font><font>createNotFoundException</font></font></span></tt><font><font> viene generata. </font><font>Questo alla fine genera una risposta </font></font><tt class="docutils literal"><span class="pre"><font><font>404 </font></font></span> <span class="pre"><font><font>Not </font></font></span> <span class="pre"><font><font>Trovato</font></font></span></tt>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>L'oggetto repository consente di accedere a una serie di metodi di supporto utili compresi</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// Return entities where 'author' matches 'dsyph3r'</span>
+<span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">findBy</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'author'</span> <span class="o">=&gt;</span> <span class="s1">'dsyph3r'</span><span class="p">));</span>
+
+<span class="c1">// Return one entity where 'slug' matches 'symblog-tutorial'</span>
+<span class="nv">$em</span><span class="o">-&gt;</span><span class="na">getRepository</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Blog'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">findOneBySlug</span><span class="p">(</span><span class="s1">'symblog-tutorial'</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="last"><font><font>Creeremo le nostre classi repository personalizzate nel prossimo capitolo, quando abbiamo bisogno di query più complesse.</font></font></p>
+</div>
+</div>
+<div class="section" id="the-view">
+<h3>The View<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#the-view" title="Permalink to this headline">¶</a></h3>
+<p>Ora abbiamo costruito la <tt class="docutils literal"><span class="pre">show</span></tt> action per il <tt class="docutils literal"><span class="pre">Blog</span></tt> controller possiamo concentrarsi su come visualizzare le entità <tt class="docutils literal"><span class="pre">Blog</span></tt> . Come specificato nella <tt class="docutils literal"><span class="pre">show action</span></tt> di rendere il template <tt class="docutils literal"><span class="pre">BloggerBlogBundle:Blog:show.html.twig </span></tt>Andiamo a creare questo template in <tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig</span></tt> incolliamo il seguente codice..</p>
+<div class="highlight-html"><div class="highlight"><pre>{# src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig #}
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block body %}
+    <span class="nt">&lt;article</span> <span class="na">class=</span><span class="s">"blog"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;header&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"date"</span><span class="nt">&gt;&lt;time</span> <span class="na">datetime=</span><span class="s">"{{ blog.created|date('c') }}"</span><span class="nt">&gt;</span>{{ blog.created|date('l, F j, Y') }}<span class="nt">&lt;/time&gt;&lt;/div&gt;</span>
+            <span class="nt">&lt;h2&gt;</span>{{ blog.title }}<span class="nt">&lt;/h2&gt;</span>
+        <span class="nt">&lt;/header&gt;</span>
+        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{{ asset(['images/', blog.image]|join) }}"</span> <span class="na">alt=</span><span class="s">"{{ blog.title }} image not found"</span> <span class="na">class=</span><span class="s">"large"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;div&gt;</span>
+            <span class="nt">&lt;p&gt;</span>{{ blog.blog }}<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/article&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p>Per prima cosa andiamo ad estendere il layout principale in <tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font>. </font><font>Poi  sovrascriviamo il titolo della pagina con il titolo del blog. </font><font>Questo sarà utile per il SEO,  il titolo della pagina del blog è più descrittivo è il titolo predefinito che viene impostato. </font><font>Infine abbiamo l'override del blocco body per l'uscita delle entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>. </font><font>Eusiamo il metodo asset </font></font><font><font> per il rendering dell'immagine blog. </font><font>Le immagini del blog devono essere messe nella cartella </font></font><tt class="docutils literal"><span class="pre"><font><font>web / images</font></font></span></tt><font><font>.</font></font></p>
+<div class="section" id="css">
+<h4>CSS<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#css" title="Permalink to this headline">¶</a></h4>
+<p><font><font>Andiamo ad aggiungere  un po 'styling. </font><font>Aggiornare il foglio di stile  in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resouces / public / css / blog.css</font></font></span></tt><font><font> con il seguente.</font></font></p>
+<div class="highlight-css"><div class="highlight"><pre><span class="nc">.date</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">border-bottom</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">24px</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#666</span><span class="p">;</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">30px</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="nt">img</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">190px</span><span class="p">;</span> <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="m">10px</span> <span class="m">10px</span> <span class="m">0</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="nc">.meta</span> <span class="p">{</span> <span class="k">clear</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="nc">.snippet</span> <span class="nt">p</span><span class="nc">.continue</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="nc">.meta</span> <span class="p">{</span> <span class="k">font-style</span><span class="o">:</span> <span class="k">italic</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#666</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="nc">.meta</span> <span class="nt">p</span> <span class="p">{</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.blog</span> <span class="nt">img</span><span class="nc">.large</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">300px</span><span class="p">;</span> <span class="k">min-height</span><span class="o">:</span> <span class="m">165px</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p><font><font>Se non si utilizza il metodo di collegamento simbolico per fare riferimento alle attività della cartella web/bundle</font></font><font><font> è necessario eseguire nuovamente l'installazione con il task asset per copiare le modifiche apportate al CSS</font></font></p>
+<p>&nbsp;</p>
+<div class="last highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console assets:install web
+</pre>
+</div>
+</div>
+</div>
+<p>noi abbiamo costruito il  controller e la view per <tt class="docutils literal"><span class="pre">show</span></tt> actions
+andiamo a controllare la show page. Punta il tuo browser a
+<tt class="docutils literal"><span class="pre">http://symblog.dev/app_dev.php/1</span></tt>. Non è la pagina che ti aspettavi?</p>
+<img alt="Symfony2 404 Not Found Exception" class="align-center" src="pag3_files/404_not_found.jpg">
+<p>Symfony2 ha generato una risposta <tt class="docutils literal"><span class="pre">404</span> <span class="pre">Not</span> <span class="pre">Found</span></tt> . Questo perchè noi non abbiamo nessun dato nel database, nessuna entità con <tt class="docutils literal"><span class="pre">id</span></tt> uguale a d 1 è stata trovata..</p>
+<p>Tu potresti semplicemente inserire una riga nella tua tabella del database, ma noi andremo ad utilizzare un metodo migliore; Data Fixtures.</p>
+</div>
+</div>
+</div>
+<div class="section" id="data-fixtures">
+<h2>Data Fixtures<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#data-fixtures" title="Permalink to this headline">¶</a></h2>
+<p>Possiamo utilizzare  fixtures per popolare il database con semplici test/dati.Andremo ad utilizzare il bundle Doctrine Fixtures extension . Il bundle Doctrine Fixtures
+extension non viene con la Symfony2 Standard Distribution, abbiamo bisogno di installarlo manualmente.Fortunatamente c'è un task per questo .Aprimao il file deps localizzato nella root del progetto e aggiungiamo il bundle Doctrine fixtures extension cosi come segue..</p>
+<div class="highlight-text"><div class="highlight"><pre>[doctrine-fixtures]
+    git=http://github.com/doctrine/data-fixtures.git
+
+[DoctrineFixturesBundle]
+    git=http://github.com/symfony/DoctrineFixturesBundle.git
+    target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
+</pre></div>
+</div>
+<p>Quindi lanciamo il task vendor install.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php bin/vendors install
+</pre></div>
+</div>
+<p>Questo scaricherà ogni ultima versione dei bundle nel repositories di Github e l'installerà nella posizione desiderata..</p>
+<div class="admonition note">
+<p class="first admonition-title">Nota </p>
+<p>Questo per chi non ha git installato nella propria macchina. .</p>
+<p><a class="reference external" href="https://github.com/doctrine/data-fixtures">Download</a> doctrine-fixtures extension: da GitHub ed estrai il file nella seguente cartella 
+<tt class="docutils literal"><span class="pre">vendor/doctrine-fixtures</span></tt>.</p>
+<p class="last"><a class="reference external" href="https://github.com/symfony/DoctrineFixturesBundle">Download</a> DoctrineFixturesBundle da GitHub e estrai i file nella seguente cartella 
+<tt class="docutils literal"><span class="pre">vendor/bundles/Symfony/Bundle/DoctrineFixturesBundle</span></tt>.</p>
+</div>
+<p>Dopo di che aggiorna il file <tt class="docutils literal"><span class="pre">app/autoloader.php</span></tt> per registrare il nuovo namespace.
+Siccome i DataFixtures sono anche in <tt class="docutils literal"><span class="pre">Doctrine\Common</span></tt> namespace essi devono essere specificati anche in questa directory 
+<tt class="docutils literal"><span class="pre">Doctrine\Common</span></tt> .I Namespaces sono controllati dall'alto al basso cosi specifici namespace devono essere registrati prima di altri..</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// app/autoloader.php</span>
+<span class="c1">// ...</span>
+<span class="nv">$loader</span><span class="o">-&gt;</span><span class="na">registerNamespaces</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+<span class="c1">// ...</span>
+<span class="s1">'Doctrine\\Common\\DataFixtures'</span>    <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../vendor/doctrine-fixtures/lib'</span><span class="p">,</span>
+<span class="s1">'Doctrine\\Common'</span>                  <span class="o">=&gt;</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">'/../vendor/doctrine-common/lib'</span><span class="p">,</span>
+<span class="c1">// ...</span>
+<span class="p">));</span>
+</pre></div>
+</div>
+<p>Ora andiamo a registrare <tt class="docutils literal"><span class="pre">DoctrineFixturesBundle</span></tt> nella kernel localizzata in 
+<tt class="docutils literal"><span class="pre">app/AppKernel.php</span></tt></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="c1">// app/AppKernel.php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">registerBundles</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$bundles</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="c1">// ...</span>
+        <span class="k">new</span> <span class="nx">Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle</span><span class="p">(),</span>
+        <span class="c1">// ...</span>
+    <span class="p">);</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="blog-fixtures">
+<h3>Blog Fixtures<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#blog-fixtures" title="Permalink to this headline">¶</a></h3>
+<p>Ora siamo pronti per definire alcune  fixtures per il nostro blogs. Create il file delle fixture in 
+<tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php</span></tt> aggiungete il seguente contenuto.:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\DataFixtures\ORM</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Doctrine\Common\DataFixtures\FixtureInterface</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Doctrine\Common\Persistence\ObjectManager</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Blogger\BlogBundle\Entity\Blog</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">BlogFixtures</span> <span class="k">implements</span> <span class="nx">FixtureInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">load</span><span class="p">(</span><span class="nx">ObjectManager</span> <span class="nv">$manager</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$blog1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'A day with Symfony2'</span><span class="p">);</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s1">'Lorem ipsum dolor sit amet, consectetur adipiscing eletra electrify denim vel ports.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut velocity magna. Etiam vehicula nunc non leo hendrerit commodo. Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque. Nulla consectetur tempus nisl vitae viverra. Cras el mauris eget erat congue dapibus imperdiet justo scelerisque. Nulla consectetur tempus nisl vitae viverra. Cras elementum molestie vestibulum. Morbi id quam nisl. Praesent hendrerit, orci sed elementum lobortis, justo mauris lacinia libero, non facilisis purus ipsum non mi. Aliquam sollicitudin, augue id vestibulum iaculis, sem lectus convallis nunc, vel scelerisque lorem tortor ac nunc. Donec pharetra eleifend enim vel porta.'</span><span class="p">);</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setImage</span><span class="p">(</span><span class="s1">'beach.jpg'</span><span class="p">);</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s1">'dsyph3r'</span><span class="p">);</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setTags</span><span class="p">(</span><span class="s1">'symfony2, php, paradise, symblog'</span><span class="p">);</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+        <span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">getCreated</span><span class="p">());</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$blog1</span><span class="p">);</span>
+
+        <span class="nv">$blog2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'The pool on the roof must have a leak'</span><span class="p">);</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s1">'Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque. Na. Cras elementum molestie vestibulum. Morbi id quam nisl. Praesent hendrerit, orci sed elementum lobortis.'</span><span class="p">);</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setImage</span><span class="p">(</span><span class="s1">'pool_leak.jpg'</span><span class="p">);</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s1">'Zero Cool'</span><span class="p">);</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setTags</span><span class="p">(</span><span class="s1">'pool, leaky, hacked, movie, hacking, symblog'</span><span class="p">);</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-23 06:12:33"</span><span class="p">));</span>
+        <span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="nv">$blog2</span><span class="o">-&gt;</span><span class="na">getCreated</span><span class="p">());</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$blog2</span><span class="p">);</span>
+
+        <span class="nv">$blog3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'Misdirection. What the eyes see and the ears hear, the mind believes'</span><span class="p">);</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s1">'Lorem ipsumvehicula nunc non leo hendrerit commodo. Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque.'</span><span class="p">);</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setImage</span><span class="p">(</span><span class="s1">'misdirection.jpg'</span><span class="p">);</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s1">'Gabriel'</span><span class="p">);</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setTags</span><span class="p">(</span><span class="s1">'misdirection, magic, movie, hacking, symblog'</span><span class="p">);</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-07-16 16:14:06"</span><span class="p">));</span>
+        <span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="nv">$blog3</span><span class="o">-&gt;</span><span class="na">getCreated</span><span class="p">());</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$blog3</span><span class="p">);</span>
+
+        <span class="nv">$blog4</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'The grid - A digital frontier'</span><span class="p">);</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s1">'Lorem commodo. Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque. Nulla consectetur tempus nisl vitae viverra.'</span><span class="p">);</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setImage</span><span class="p">(</span><span class="s1">'the_grid.jpg'</span><span class="p">);</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s1">'Kevin Flynn'</span><span class="p">);</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setTags</span><span class="p">(</span><span class="s1">'grid, daftpunk, movie, symblog'</span><span class="p">);</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-06-02 18:54:12"</span><span class="p">));</span>
+        <span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="nv">$blog4</span><span class="o">-&gt;</span><span class="na">getCreated</span><span class="p">());</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$blog4</span><span class="p">);</span>
+
+        <span class="nv">$blog5</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'You\'re either a one or a zero. Alive or dead'</span><span class="p">);</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s1">'Lorem ipsum dolor sit amet, consectetur adipiscing elittibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque.'</span><span class="p">);</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setImage</span><span class="p">(</span><span class="s1">'one_or_zero.jpg'</span><span class="p">);</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s1">'Gary Winston'</span><span class="p">);</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setTags</span><span class="p">(</span><span class="s1">'binary, one, zero, alive, dead, !trusting, movie, symblog'</span><span class="p">);</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">(</span><span class="s2">"2011-04-25 15:34:18"</span><span class="p">));</span>
+        <span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="nv">$blog5</span><span class="o">-&gt;</span><span class="na">getCreated</span><span class="p">());</span>
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$blog5</span><span class="p">);</span>
+
+        <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">flush</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Il file fixture dimostra un certo numero di caratteristiche importanti quando si utilizza Doctrine 2, compreso il modo di persistere le entità al database.</font></font></p>
+<p><font><font>Diamo un'occhiata a come creare una voce blog.</font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="nv">$blog1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blog</span><span class="p">();</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setTitle</span><span class="p">(</span><span class="s1">'A day in paradise - A day with Symfony2'</span><span class="p">);</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setBlog</span><span class="p">(</span><span class="s1">'Lorem ipsum dolor sit d us imperdiet justo scelerisque. Nulla consectetur...'</span><span class="p">);</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setImage</span><span class="p">(</span><span class="s1">'beach.jpg'</span><span class="p">);</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setAuthor</span><span class="p">(</span><span class="s1">'dsyph3r'</span><span class="p">);</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setTags</span><span class="p">(</span><span class="s1">'symfony2, php, paradise, symblog'</span><span class="p">);</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+<span class="nv">$blog1</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getCreated</span><span class="p">());</span>
+<span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">persist</span><span class="p">(</span><span class="nv">$blog1</span><span class="p">);</span>
+<span class="c1">// ..</span>
+
+<span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">flush</span><span class="p">();</span>
+</pre></div>
+</div>
+<p><font><font>Iniziamo creando un oggetto di </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> e impostiamo alcuni valori per i suoi membri. </font><font>A questo punto doctrine 2 non sa nulla della </font></font><tt class="docutils literal"><span class="pre"><font><font>Entity</font></font></span></tt><font><font> dell'oggetto</font></font>. E' solo quando facciamo una chiamata a <tt class="docutils literal"><span class="pre">$manager-&gt;persist($blog1)</span></tt> che istruiamo 
+Doctrine 2 come iniziare a mappare queste entità.L'oggetto <tt class="docutils literal"><span class="pre">$manager</span></tt> qui è un istanza dell'oggetto <tt class="docutils literal"><span class="pre">EntityManager</span></tt>  come abbiamo visto in precedenza nel recupero dell'entità dal database <font><font>È importante notare che mentre Doctrine 2 è ora consapevoli della oggetto entità, questo non è ancora mantenuto nel database. </font><font>Una chiamata a </font></font><tt class="docutils literal"><span class="pre"><font><font>$ manager-&gt; flush ()</font></font></span></tt><font><font> è richiesta per questo. </font><font>Il metodo flush fa Doctrine 2 interagire realmente con tutti i database e gestisce l'azione dell'entità. </font><font>Per prestazioni ottimali si dovrebbe usare Doctrine 2 per fare tutte le azioni in un colpo solo.</font></font>. Questo è come noi abbiamo fatto con le nostre  fixtures. Noi creiamo tutte le entità e chiediamo la gestione a , Doctrine 2  e quindi con flush finiamo tutte le operazioni..</p>
+</div>
+<div class="section" id="loading-the-fixtures">
+<h3>Loading the fixtures<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#loading-the-fixtures" title="Permalink to this headline">¶</a></h3>
+<p><font><font>Siamo ora pronti per caricare le fixture nel database</font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>php app/console doctrine:fixtures:load
+</pre></div>
+</div>
+<p><font><font>Se diamo uno sguardo alla pagina</font></font> <tt class="docutils literal"><span class="pre">http://symblog.dev/app_dev.php/1</span></tt> vedremo un blog con tutti i dati del database..</p>
+<img alt="The symblog blog show page" class="align-center" src="pag3_files/blog_show.jpg">
+<p><font><font>Prova a cambiare il parametro dell' </font></font><tt class="docutils literal"><span class="pre"><font><font>id</font></font></span></tt><font><font> nell'URL a 2. </font><font>Dovreste vedere la voce del blog successivo.</font></font></p>
+<p>Se provi a controllare l' URL <tt class="docutils literal"><span class="pre">http://symblog.dev/app_dev.php/100</span></tt> tu vedrai una <tt class="docutils literal"><span class="pre">404</span> <span class="pre">Not</span> <span class="pre">Found</span></tt> exception . <font><font>Ci si aspetterebbe  questo visto che non vi è alcuna </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> entità con un ID di 100. </font><font>Ora provate l'URL </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/symfony2-blog</font></font></span></tt><font><font> . </font><font>Perché non si ottiene un</font></font> <tt class="docutils literal"><span class="pre">404</span> <span class="pre">Not</span> <span class="pre">Found</span></tt> exception? Questo è perchè la <tt class="docutils literal"><span class="pre">show</span></tt> action non viene eseguita. <font><font>L'URL non corrisponde ad alcuna rotta nella domanda a causa del requisito </font></font><tt class="docutils literal"><span class="pre"><font><font>\d+</font></font></span></tt><font><font> che abbiamo impostato sulla rotta </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle_blog_show</font></font></span></tt><font><font>. </font><font>È per questo che si vede un</font></font> <tt class="docutils literal"><span class="pre">No</span> <span class="pre">route</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">"GET</span> <span class="pre">/symfony2-blog"</span></tt> exception.</p>
+</div>
+</div>
+<div class="section" id="timestamps">
+<h2>Timestamps<a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#timestamps" title="Permalink to this headline">¶</a></h2>
+<p><font><font>Infine, in questo capitolo vedremo i 2 membri timestamp sull'entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font>;</font></font>;
+<tt class="docutils literal"><span class="pre">created</span></tt> and <tt class="docutils literal"><span class="pre">updated</span></tt>. <font><font> </font><font>La funzionalità di questi 2 componenti è comunemente indicata come comportamento</font></font> <tt class="docutils literal"><span class="pre">Timestampable</span></tt>  Questi membri prendono il tempo di quando un blog è stato creato e di quando viene aggiornato. <font><font>Poiché non vogliamo dover impostare manualmente questi campi ogni volta che creare o aggiornare un blog, possiamo usare Doctrine 2 per aiutarci.</font></font></p>
+<p>Doctrine 2 viene con un 
+<a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.0/en/reference/events.html">Event System</a> che provvede un <a class="reference external" href="http://www.doctrine-project.org/docs/orm/2.0/en/reference/events.html#lifecycle-callbacks">Lifecycle Callbacks</a>.
+<font><font>Possiamo usare questi eventi di callback per registrare le nostre entità </font></font> e per notificare gli eventi durante la vita delle entità. Some example of events we can be notified about
+include before an update happens, after a persist happens and after a remove happens.
+In order to use Lifecycle Callbacks on our entity we need to register the entity for them.
+This is done using metadata on the entity. Update the <tt class="docutils literal"><span class="pre">Blog</span></tt> entity located at
+<tt class="docutils literal"><span class="pre">src/Blogger/BlogBundle/Entity/Blog.php</span></tt> with the following.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\Entity</span>
+<span class="sd"> * @ORM\Table(name="blog")</span>
+<span class="sd"> * @ORM\HasLifecycleCallbacks()</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><font><font>Ora aggiungiamo un metodo nell' entità </font></font><tt class="docutils literal"><span class="pre"><font><font>Blog</font></font></span></tt><font><font> che registra  l'evento </font></font><tt class="docutils literal"><span class="pre"><font><font>PreUpdate</font></font></span></tt><font><font>. </font><font>Aggiungiamo anche un costruttore per impostare i valori predefiniti per</font></font><tt class="docutils literal"><span class="pre">created</span></tt> and
+<tt class="docutils literal"><span class="pre">updated</span></tt>..</p>
+<div class="highlight-php"><div class="highlight">
+  <pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Entity/Blog.php</span>
+
+<span class="c1">// ..</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * @ORM\Entity</span>
+<span class="sd"> * @ORM\Table(name="blog")</span>
+<span class="sd"> * @ORM\HasLifecycleCallbacks()</span>
+<span class="sd"> */</span>
+<span class="k">class</span> <span class="nc">Blog</span>
+<span class="p">{</span>
+    <span class="c1">// ..</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setCreated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @ORM\preUpdate</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setUpdatedValue</span><span class="p">()</span>
+    <span class="p">{</span>
+       <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">setUpdated</span><span class="p">(</span><span class="k">new</span> <span class="nx">\DateTime</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre>
+</div>
+</div>
+<p>Registriamo l'entità <tt class="docutils literal"><span class="pre">Blog</span></tt> per essere notificata su l'evento <tt class="docutils literal"><span class="pre">preUpdate</span></tt> impostiamo il valore <tt class="docutils literal"><span class="pre">updated</span></tt> per il membro. Andiamo a ricaricare le fixtures e noteremo che 
+<tt class="docutils literal"><span class="pre">created</span></tt> and <tt class="docutils literal"><span class="pre">updated</span></tt> membri sono impostati automaticamente..</p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p><font><font>Siccome che i  membri siano timestampable è un requisito  comune per le entità, vi è un bundle che supporta questo.</font></font><a class="reference external" href="https://github.com/stof/StofDoctrineExtensionsBundle"><font><font>StofDoctrineExtensionsBundle</font></font></a><font><font> fornisce una serie di utili estensioni Doctrine 2  tra cui Timestampable, Sluggable e ordinabili.</font></font></p>
+<p class="last"><font><font>Vedremo come integrare questo bundle più avanti nel tutorial. </font><font>I più impazienti tra di voi possono controllare il </font></font><a class="reference external" href="http://symfony.com/doc/current/cookbook/doctrine/common_extensions.html"><font><font>libro </font></font></a><font><font> per un capitolo su questo argomento.</font></font></p>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><font><font>Conclusione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html#conclusion" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo coperto una serie di concetti per trattare con i modelli in Doctrine 2. </font><font>Abbiamo anche guardato alla definizione di fixture dati per fornirci  un modo semplice per ottenere i dati di prova idonei nel nostro sviluppo dell' applicazione e per i test.</font></font></p>
+<p><font><font>Ora vediamo  come estendere ulteriormente il modello  aggiungendo l'entità commento. </font><font>Si inizierà a costruire la home page e creare un repository personalizzato per fare questo. </font><font>Si introdurrà anche il concetto di Doctrine Migrations e come usare i form che interagiscono con Doctrine 2 per consentire l'invio dei commenti al blog..</font></font></p>
+</div>
+</div>
+
+
+    <div id="disqus_thread">We were unable to load Disqus. If you are a moderator please see our <a href="http://docs.disqus.com/help/83/">troubleshooting guide</a>.<div style="display: none;" id="dsq-content"></div></div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="http://disqus.com/" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p>
+        «&nbsp;&nbsp;<a href="http://tutorialsymfony2.eu5.org/pag2.htm">[Part 2] - Contact Page: Validators, Forms and Emailing</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html">Contents</a>
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+        <a href="http://tutorialsymfony2.eu5.org/pag4.htm">[Part 4] - The Comments Model: Adding comments,  Doctrine Repositories and Migrations</a>&nbsp;&nbsp;»
+        </p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer">
+        © Copyright 2011, dsyph3r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  
+<iframe name="easyXDM_DISQUS_net_default4582_provider" id="easyXDM_DISQUS_net_default4582_provider" style="position: absolute; top: -2000px; left: 0px;" src="pag3_files/def.htm" frameborder="0"></iframe></body></html>

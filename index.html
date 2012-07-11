@@ -1,0 +1,317 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating a blog in Symfony2 &mdash; symblog - A Symfony2 Tutorial</title>
+
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina contatti,content,symblog" /> 
+    
+    <link rel="stylesheet" href="../Downloads/_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../Downloads/_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../Downloads/_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../Downloads/_static/jquery.js"></script>
+    <script type="text/javascript" src="../Downloads/_static/underscore.js"></script>
+    <script type="text/javascript" src="../Downloads/_static/doctools.js"></script>
+    <script type="text/javascript" src="../Downloads/_static/theme_extras.js"></script>
+    <link rel="top" title="symblog - A Symfony2 Tutorial" href="#" />
+    <link rel="next" title="[Part 1] - Symfony2 Configuration and Templating" href="../Downloads/docs/configuration-and-templating.html" />
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href='http://fonts.googleapis.com/css?family=Irish+Grover' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=La+Belle+Aurore' rel='stylesheet' type='text/css'>
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  </head>
+  <body>
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/6429057dfef9e98189338d22e7f6646c6694f032/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk" class="en">EN</a></li>
+                    <li><a href="http://symblog.site90.net/" class="es">ES</a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr">FR</a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp">JP</a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="/index.html">home</a></li>
+                    <li><a href="http://enricoblog.eu5.org">Demo</a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog">Source</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="/">symblog</a></h2>
+            <h3><a href="/">creating a blog in Symfony2</a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs">Looking for a PHP Development job using Symfony2 to build a cutting edge web application - check out DeskPRO Jobs</a>
+
+  <div class="topnav">
+  
+        <p>
+        <a class="uplink" href="#">Contenuti</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="../pag1.htm">[Part 1] - Symfony2 Configurazione e Templating</a>&#160;&#160;»        </p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <g:plusone></g:plusone>
+        </div>
+
+        <a href="http://twitter.com/share" class="twitter-share-button" data-text="Learning #symfony2 with the #symblog blogging tutorial #php" data-count="horizontal" data-via="dsyph3r">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="creating-a-blog-in-symfony2">
+<h1>Creare un blog in Symfony2<a class="headerlink" href="#creating-a-blog-in-symfony2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduzione<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Questo tutorial vi guiderà alla realizzazione di un blog usando <a class="reference external" href="http://symfony.com/">Symfony2</a>. Sarà usata la distribuzione standar di Sy2,, la quale comprende i principali componenti di cui avrai bisogno per costruire i tuoi web site.Il tutorial è divisoin capitoli ed ogni capitolo copre i differenti aspetti principali di Sy2 e i suoi componenti.Questo tutorial ha lo scopo di essere elaborato simile al tutorial <a class="reference external" href="http://www.symfony-project.org/jobeet/1_4/Doctrine/en/">Jobeet</a> di Sy1..</p>
+<div class="section" id="tutorial-parts">
+<h3>Parti del tutorial<a class="headerlink" href="#tutorial-parts" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pag1.htm">[Part 1] - Symfony2 Configuration and Templating</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pag2.htm">[Part 2] - Contact Page: Validators, Forms and Emailing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pag3.htm">[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pag4.htm">[Part 4] - The Comments Model: Adding comments,  Doctrine Repositories and Migrations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pag5.htm">[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pag6.htm">[Part 6] - Testing: Unit and Functional with PHPUnit</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="demo-website">
+<h2>Demo Website<a class="headerlink" href="#demo-website" title="Permalink to this headline">¶</a></h2>
+<p>Symblog demo web site può essere visto qui 
+<a class="reference external" href="http://symblog.co.uk/">http://symblog.co.uk</a>.Una variazione su <a href="http://enricoblog.eu5.org?enricoblog.eu5.org=">http://enricoblog.eu5.org</a>.Il codice sorgente è disponibile su <a class="reference external" href="https://github.com/dsyph3r/symblog">Github</a>. </p>
+<p>&nbsp;</p>
+</div>
+<div class="section" id="coverage">
+<h2>Argomenti trattati<a class="headerlink" href="#coverage" title="Permalink to this headline">¶</a></h2>
+<p>Questo tutorial ha lo scopo di coprire i compiti più comuni che vi troverete di fronte sviluppando un sito con Symfony2.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Bundles</li>
+<li>Controllers</li>
+<li>Templating (Using TWIG)</li>
+<li>Model - Doctrine 2</li>
+<li>Migrations</li>
+<li>Data Fixtures</li>
+<li>Validators</li>
+<li>Forms</li>
+<li>Routing</li>
+<li>Asset Management</li>
+<li>Emailing</li>
+<li>Environments</li>
+<li>Customising Error pages</li>
+<li>Security</li>
+<li>The User &amp; Sessions</li>
+<li>CRUD Generation</li>
+<li>Caching</li>
+<li>Testing</li>
+<li>Deployment</li>
+</ol>
+</div></blockquote>
+<p>Symfony2  è personalizzabile e fornisce vari modi per sviluppare i vari compiti.Un  esempio è che include la scrittura della configurazione in YAML, XML, PHP, o  Annotation, e si possono creare tempating usando Twig o PHP. In questo tutorial noi  useremo  YAML e Annotations per la  configurazione  e Twig per i templating. <a href="http://symfony.com/doc/current/book/index.html">Symfony book</a> è una  grande risorsa (ora tradotto anche in italiano) per esempi e di come di possono  usare altri metodi per lo sviluppo. Se altre persone hanno il piacere di contribuire per altri  medodi possono :fork the repository on <a href="https://github.com/dsyph3r/symblog-docs">Github</a> and send over the  pull requests :)</p>
+</div>
+<div class="section" id="translations">
+<h2>Traduzioni<a class="headerlink" href="#translations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="spanish"></div>
+<div class="section" id="french">
+  <h3>Questa è la traduzione in italiano del sito originale tutorial.symblog.co.uk</h3>
+  </div>
+</div>
+<div class="section" id="author">
+<h2>Autore<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial is being created by <a class="reference external" href="http://twitter.com/#!/dsyph3r">dsyph3r</a>.</p>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/dsyph3r/symblog-docs">source</a> for this tutorial is available on
+Github. If you would like to improve and extend this tutorial simply fork the
+project and send over the pull requests. You can also raise issues using the
+<a class="reference external" href="https://github.com/dsyph3r/symblog-docs/issues">GitHub Issue Tracker</a>. If any
+one is interested in creating a much more visually pleasing design please get in
+<a class="reference external" href="http://twitter.com/#!/dsyph3r">touch</a>!</p>
+</div>
+<div class="section" id="already-a-symfony2-expert">
+<h2>Already a Symfony2 Expert?<a class="headerlink" href="#already-a-symfony2-expert" title="Permalink to this headline">¶</a></h2>
+<p>Do you already know Symfony2 and want to work with it everyday? Are you an expert
+with PHP, and know how to use JavaScript to build amazing web applications? DeskPRO
+currently has a number of vacancies for PHP and Symfony2 developers. Check out the
+<a class="reference external" href="http://www.deskpro.com/jobs">Jobs</a> page at DeskPRO for more information.</p>
+</div>
+<div class="section" id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
+<p>Special thanks to all the contributors of the
+<a class="reference external" href="http://symfony.com/doc/current/">Official Symfony2 documentation</a>. This
+provided an invaluable resource of information.</p>
+<p>Flag Icons sourced from <a class="reference external" href="http://www.famfamfam.com/lab/icons/flags/">famfamfam</a>.</p>
+</div>
+<div class="section" id="searching">
+<h2>Searching<a class="headerlink" href="#searching" title="Permalink to this headline">¶</a></h2>
+<p>Looking for a specific topic? Use the <a class="reference internal" href="../Downloads/search.html"><em>Search Page</em></a>.</p>
+</div>
+</div>
+
+
+    <div id="disqus_thread"></div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p>
+        <a class="uplink" href="#">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="../pag1.htm">[Part 1] - Symfony2 Configuration and Templating</a>&#160;&#160;»
+        </p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer">
+        &copy; Copyright 2011, dsyph3r.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+	  <!-- Histats.com  START  (standard)-->
+<script type="text/javascript">document.write(unescape("%3Cscript src=%27http://s10.histats.com/js15.js%27 type=%27text/javascript%27%3E%3C/script%3E"));</script>
+<a href="http://www.histats.com" target="_blank" title="statistiche web gratis" ><script  type="text/javascript" >
+try {Histats.start(1,1977764,4,24,200,50,"00001001");
+Histats.track_hits();} catch(err){};
+</script></a>
+<noscript><a href="http://www.histats.com" target="_blank"><img  src="http://sstatic1.histats.com/0.gif?1977764&101" alt="statistiche web gratis" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+    </div>
+  </body>
+</html>

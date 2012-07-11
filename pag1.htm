@@ -1,0 +1,2120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0068)http://tutorial.symblog.co.uk/docs/configuration-and-templating.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" class="translated-ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>[Parte 1] - Configurazione e Symfony2 Templating - symblog - A Tutorial Symfony2</title>
+    <meta name="description" content="tutorial per realizzare un blog con il framework Symfony 2 ,come fare blog con symfony 2"/>
+    <meta name="keywords" content="fare,blog,tutorial,symfony,realizzare,costruire,sviluppo,symfony 2,come,istallazione,virtual host,form,pagina template,bundle,pagina blog," /> 
+    
+    <link rel="stylesheet" href="pag1_files/haiku.css" type="text/css">
+    <link rel="stylesheet" href="pag1_files/pygments.css" type="text/css">
+    <link rel="stylesheet" href="pag1_files/print.css" type="text/css">
+    
+    <script src="pag1_files/ga_002.js" async="" type="text/javascript"></script><script gapi_processed="true" src="pag1_files/plusone_002.js" async="" type="text/javascript"></script><script async="" src="pag1_files/cbgapi.loaded_0"></script><script src="pag1_files/cbgapi.txt" async=""></script><script type="text/javascript" async="" src="pag1_files/ga.js"></script><script type="text/javascript" async="" src="pag1_files/plusone.js" gapi_processed="true"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="pag1_files/jquery.js"></script>
+    <script type="text/javascript" src="pag1_files/underscore.js"></script>
+    <script type="text/javascript" src="pag1_files/doctools.js"></script>
+    <script type="text/javascript" src="pag1_files/theme_extras.js"></script>
+    <link rel="top" title="symblog - Un tutorial Symfony2" href="http://tutorialsymfony2.eu5.org/index.html">
+    <link rel="next" title="[Parte 2] - Pagina contatto: validatori, moduli ed e-mail" href="http://tutorialsymfony2.eu5.org/pag2.htm">
+    <link rel="prev" title="Creazione di un blog in Symfony2" href="http://tutorialsymfony2.eu5.org/index.html">
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link href="pag1_files/css.txt" rel="stylesheet" type="text/css">
+<link href="pag1_files/css1.txt" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #header {line-height: 1;font-family: Arial, Helvetica, sans-serif;font-size: 12px; width: 100%; height: 100%; color: #000; font-size: 14px; }
+
+    html { background: none; }
+    a { text-decoration: none !important; color: #F48A00 !important; font-weight: normal !important }
+
+    h1, h2, h3, h4, h5, h6 { color: #000 }
+
+    #header a:link { font-weight: normal !important; }
+
+    #header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    #header .top { border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    #header ul.languages { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; }
+    #header .languages li { display: inline }
+    #header .languages li a { display: inline-block; padding: 10px 10px 10px 25px; border-right: 1px solid #ccc; background-repeat: no-repeat; background-position: 5px center  }
+    #header .en { background-image: url('/_static/images/icons/languages/gb.png'); }
+    #header .es { background-image: url('/_static/images/icons/languages/es.png'); }
+    #header .fr { background-image: url('/_static/images/icons/languages/fr.png'); }
+    #header .jp { background-image: url('/_static/images/icons/languages/jp.png'); }
+    #header ul.navigation { list-style: none; text-align: right; margin-bottom: 0; display: inline-block; float: right; }
+    #header .navigation li { display: inline }
+    #header .navigation li a { display: inline-block; padding: 10px 15px; border-left: 1px solid #ccc; }
+    #header h2 { font-family: 'Irish Grover', cursive; font-size: 92px; text-align: center; line-height: 110px; border-bottom: none; margin: 0px; font-weight: normal; }
+    #header h2 a { color: #000 !important }
+    #header h3 { text-align: center; font-family: 'La Belle Aurore', cursive; font-size: 24px; margin: 0; margin-bottom: 20px; font-weight: normal;  font-weight: normal;}
+
+    .social { float: right;  }
+    .social div { display: inline-block }
+    .social .google div { width: 80px !important; }
+
+    div.content { font-size: 0.9em; margin: 10px 20px 20px; }
+
+    .note, .tip, .warning {
+        border: 1px solid !important;
+        margin: 10px 0px !important;
+        padding:15px 10px 15px 70px !important;
+        background-repeat: no-repeat !important;
+        background-position: 10px center !important;
+    }
+    .note {
+        border-color: #00529B !important;
+        background-color: #DBF3FF !important;
+        background-image: url('../_static/images/icons/note.png') !important;
+    }
+    .tip {
+        border-color: #4F8A10 !important;
+        background-color: #E5F2D0 !important;
+        background-image:url('../_static/images/icons/tip.png') !important;
+        }
+    .warning {
+        border-color: #9F6000 !important;
+        background-color: #FFF7DB !important;
+        background-image: url('../_static/images/icons/warning.png') !important;
+    }
+
+    a.jobs {
+        display:block;
+        background: #F48A00;
+        color: #fff !important;
+        padding: 5px;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+
+</style>
+
+  <script type="text/javascript" async="" src="pag1_files/embed.js"></script><script src="pag1_files/thread.js" async="" charset="UTF-8"></script><link rel="stylesheet" type="text/css" href="pag1_files/defaults.css"><script src="pag1_files/disqus.js" async="" charset="UTF-8"></script><link type="text/css" rel="stylesheet" charset="UTF-8" href="pag1_files/translateelement.css"><script type="text/javascript" charset="UTF-8" src="pag1_files/main.js"></script><script type="text/javascript" charset="UTF-8" src="pag1_files/element_main.js"></script><link rel="stylesheet" type="text/css" href="pag1_files/theme.css"><script src="pag1_files/theme.js" async="" charset="UTF-8"></script><script src="pag1_files/event.js" async="" charset="UTF-8"></script>
+  <style type="text/css">
+<!--
+.Stile1 {
+
+
+	font-family: "Arial", "sans-serif";
+
+
+
+	font-size: 11.0pt;
+
+
+
+	color: #333333;
+}
+div.first {mso-style-name:first;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	margin-top:0cm;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	mso-margin-bottom-alt:auto;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+li.first {mso-style-name:first;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	margin-top:0cm;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	mso-margin-bottom-alt:auto;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+p.first {mso-style-name:first;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	margin-top:0cm;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	mso-margin-bottom-alt:auto;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+div.last {mso-style-name:last;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	mso-margin-top-alt:auto;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	margin-bottom:0cm;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	margin-bottom:.0001pt;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+li.last {mso-style-name:last;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	mso-margin-top-alt:auto;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	margin-bottom:0cm;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	margin-bottom:.0001pt;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+p.last1 {mso-style-name:last;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	mso-margin-top-alt:auto;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	margin-bottom:0cm;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	margin-bottom:.0001pt;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+div.last1 {mso-style-name:last;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	mso-margin-top-alt:auto;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	margin-bottom:0cm;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	margin-bottom:.0001pt;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+li.last1 {mso-style-name:last;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	mso-margin-top-alt:auto;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	margin-bottom:0cm;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	margin-bottom:.0001pt;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+p.last2 {mso-style-name:last;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	mso-margin-top-alt:auto;
+
+
+
+
+
+
+
+	margin-right:0cm;
+
+
+
+
+
+
+
+	margin-bottom:0cm;
+
+
+
+
+
+
+
+	margin-left:0cm;
+
+
+
+
+
+
+
+	margin-bottom:.0001pt;
+
+
+
+
+
+
+
+	mso-pagination:widow-orphan;
+
+
+
+
+
+
+
+	font-size:12.0pt;
+
+
+
+
+
+
+
+	font-family:"Times New Roman","serif";
+
+
+
+
+
+
+
+	mso-fareast-font-family:"Times New Roman";
+
+
+
+
+
+
+
+	mso-fareast-theme-font:minor-fareast;}
+span.o2 {mso-style-name:o2;
+
+
+
+
+
+
+
+	mso-style-unhide:no;
+
+
+
+
+
+
+
+	color:#666666;}
+.Stile3 {
+	font-family: "Arial", "sans-serif";
+
+	font-size: 11.0pt;
+}
+-->
+  </style>
+<script src="pag1_files/embed_002.js" async="" type="text/javascript"></script><script charset="UTF-8" async="" src="pag1_files/thread_002.js"></script><link href="pag1_files/defaults_002.css" type="text/css" rel="stylesheet"><script charset="UTF-8" async="" src="pag1_files/disqus_002.js"></script></head>
+  <body data-twttr-rendered="true">
+
+    <a href="https://github.com/dsyph3r/symblog-docs">
+        <img style="position: absolute; top: 0px; left: 0px; border: 0px none;" src="pag1_files/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f676974687562.htm" alt="Fork me GitHub">
+    </a>
+
+    <header id="header">
+        <div class="top">
+            <nav>
+                <ul class="languages">
+                    <li><a href="http://tutorial.symblog.co.uk/" class="en"><font><font>EN</font></font></a></li>
+                    <li><a href="http://symblog.site90.net/" class="es"><font><font>ES</font></font></a></li>
+                    <li><a href="http://keiruaprod.fr/symblog-fr/" class="fr"><font><font>FR</font></font></a></li>
+		    <li><a href="http://symblog.ganchiku.com/" class="jp"><font><font>JP</font></font></a></li>
+                </ul>
+                <ul class="navigation">
+                    <li><a href="http://tutorialsymfony2.eu5.org/index.html"><font><font>Home</font></font></a></li>
+                    <li><a href="http://enricoblog.eu5.org/"><font><font>Demo</font></font></a></li>
+                    <li><a href="https://github.com/dsyph3r/symblog"><font><font>Fonte</font></font></a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hgroup>
+            <h2><a href="http://tutorialsymfony2.eu5.org/index.html"><font><font>symblog</font></font></a></h2>
+            <h3><a href="http://tutorialsymfony2.eu5.org/index.html"><font><font> creazione di un blog con Symfony2</font></font></a></h3>
+        </hgroup>
+    </header>
+
+    <a class="jobs" href="http://www.deskpro.com/jobs"><font><font>Cerchi un lavoro di sviluppo PHP utilizzando Symfony2 per costruire un applicazione web  - Vai Jobs Deskpro</font></font></a>
+
+    <div class="topnav">
+  
+        <p><font><font>
+        «&nbsp;&nbsp; </font></font><a href="http://tutorialsymfony2.eu5.org/index.html"><font><font>Creazione di un blog in Symfony2</font></font></a><font><font> 
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+         </font></font><a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html"><font><font>Sommario</font></font></a><font><font> 
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+         </font></font><a href="http://tutorialsymfony2.eu5.org/pag2.htm"><font><font>[Parte 2] - Pagina contatto: validatori, moduli ed e-mail</font></font></a><font><font> &nbsp;&nbsp;»
+        </font></font></p>
+
+  </div>
+  <div class="content">
+    <div class="social">
+        <!-- Place this tag where you want the +1 button to render -->
+        <div class="google">
+            <div id="___plusone_0" style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background-color: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; background-position: initial initial; background-repeat: initial initial; "><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="width: 80px; margin: 0px; border-style: none; height: 24px; position: static; left: 0px; top: 0px; visibility: visible;" tabindex="0" vspace="0" id="I0_1338403743325" name="I0_1338403743325" src="pag1_files/fastbutton.htm" title="1" frameborder="0" scrolling="no" width="100%"></iframe></div>
+        </div>
+
+        <iframe allowtransparency="true" src="pag1_files/tweet_button.htm" class="twitter-share-button twitter-count-horizontal" style="width: 110px; height: 20px;" title="Twitter Tweet Button" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="pag1_files/widgets.js"></script>
+    </div>
+
+    
+    
+  <div class="section" id="part-1-symfony2-configuration-and-templating">
+<h1><font><font>[Parte 1] - Symfony2 configurazione e modelli </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#part-1-symfony2-configuration-and-templating" title="Permalink per questo titolo"><font><font>¶</font></font></a></h1>
+<div class="section" id="overview">
+<h2><font><font>Panoramica </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#overview" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">Questo
+
+
+
+
+
+
+
+capitolo spiegherà i primi passi per la creazione di un Symfony2 website.
+
+
+
+
+
+
+
+Scarichiamo e configuriamo Symfony2 <a href="http://symfony.com/doc/current/glossary.html#term-distribution">Standard
+
+
+
+
+
+
+
+Distribution</a>, creiamo Blog bundle e mettiamo insieme<span style="mso-spacerun:yes">&nbsp; </span>il primo HTML templates. Alla fine di questo
+
+
+
+
+
+
+
+capitolo avremo costruito le prime parti di un <span style="mso-spacerun:yes">&nbsp;</span>Symfony2 website che sarà disponibile in un
+
+
+
+
+
+
+
+dominio locale<span style="mso-spacerun:yes">&nbsp; </span>es </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+background:#E2E2E2">http://symblog.dev/</span></span><span style="font-size:
+
+
+
+
+
+
+
+11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">. Il website conterra le
+
+
+
+
+
+
+
+principali strutture HTML e alcuni iniziali contenuti del blog</span></p>
+<p><font><font><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">Argomenti trattati in questo capitolo::</span>:</font></font></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><font><font>Impostazione di un'applicazione Symfony2</font></font></li>
+<li><font><font>Configurazione di un dominio di sviluppo</font></font></li>
+<li><font><font>Symfony2 Bundles</font></font></li>
+<li><font><font>Routing</font></font></li>
+<li><font><font>Controllori</font></font></li>
+<li><font><font>Template con twig</font></font></li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="download-and-setup">
+<h2><font><font>Download e Setup </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#download-and-setup" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><span style="mso-element:para-border-div;border:none;border-bottom:dotted #E0E0E0 1.0pt;
+
+
+
+
+
+
+
+mso-border-bottom-alt:dotted #E0E0E0 .75pt;padding:0cm 0cm 0cm 0cm"><span class="Stile1">Noi useremo la Sy2 Standard</span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">
+ DistribuzioneQuesta distribuzione viene già completa con le principali 
+librerie di Sy2 e i più comuni bundles richiesti per creare un web site.
+ Tu puoi <a href="http://symfony.com/download">Download</a> il pacchetto
+ Sy2 dallo stesso sito di Sy2 Dove puoi anche trovare un eccellente 
+documentazione e prendere dei riferimenti per l'installazione.<a href="http://symfony.com/doc/current/book/installation.html">Installing and
+
+
+
+
+
+
+
+Configuring Symfony2</a> in questa guida puoi seguire il processo per scaricare i pacchetti e come puoi impostare i giusti permessi per le cartelle.</span></span></p>
+<div class="admonition warning">
+  <p class="first"><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333">Attenzione
+    <o:p></o:p>
+  </span></p>
+  <p class="first"><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333">Impostazioni <a href="http://symfony.com/doc/current/book/installation.html#configuration-and-setup">Setting
+    
+    
+    
+    
+    
+    
+    
+    up Permissions</a> porre particolare cura nell'impostare i permessi 
+per le cartelle app/cache e app/log im modo che il server e la linea di 
+comando possano scriverci dentro</span></p>
+  </div>
+</div>
+<div class="section" id="creating-a-development-domain">
+<h2><font><font>Creazione di un dominio di sviluppo </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#creating-a-development-domain" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><span class="Stile1">Lo scopo di questo tutorial è di usare il dominio locale </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+background:#E2E2E2">http://symblog.dev/</span></span><span style="font-size:
+
+
+
+
+
+
+
+11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">, ma puoi anche sceglierne un altro..Queste istruzioni sono specifiche per <a href="http://httpd.apache.org/">Apache</a>
+ e si presume che tu abbia un server Apache installato nella tua 
+macchina.Tu puoi impostare il tuo dominio locale anche su server 
+differenti come <a href="http://nginx.net/">nginx.</a></span></p>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>Questi passaggi sono stati effettuati sulla 
+distribuzione Linux Fedora così i nomi dei percorsi, ecc, possono 
+variare a seconda del sistema operativo.</font></font></p>
+</div>
+<p><span style="font-size:11.0pt; font-family:&quot;Arial&quot;, &quot;sans-serif&quot;; color:#333333">Iniziamo
+ creando un virtual host su Apache apportando le seguenti impostazioni 
+sul file di configurazionenel sul sistema operativo Fedora è localizzato
+ a </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+background:#E2E2E2">/etc/httpd/conf/httpd.conf</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">.
+ Devi editare questo con i privilegi di amministratore.In un sistema 
+operativo windows con xampp per esempio puoi trovare questo file a 
+C:/xampp/apache/config/extra/httpd.vhost.conf
+    <o:p></o:p>
+</span></p>
+<div class="highlight-text"><div class="highlight"><pre><font><font># / Etc / httpd / conf / httpd.conf</font></font><font></font>
+<font></font><font><font>
+NameVirtualHost 127.0.0.1</font></font><font></font>
+<font></font><font><font>
+&lt;VirtualHost 127.0.0.1&gt;</font></font><font></font><font><font>
+  ServerName symblog.dev</font></font><font></font><font><font>
+  DocumentRoot "/ var / www / html / symblog.dev / web"</font></font><font></font><font><font>
+  DirectoryIndex app.php</font></font><font></font><font><font>
+  &lt;Directory "/var/www/html/symblog.dev/web"&gt;</font></font><font></font><font><font>
+    AllowOverride All</font></font><font></font><font><font>
+    Allow from All</font></font><font></font><font><font>
+  &lt;/ Directory&gt;</font></font><font></font><font><font>
+&lt;/ VirtualHost&gt;</font></font><font></font>
+</pre></div>
+</div>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">Ora aggiungi un nuovo dominio in fondo all host file </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+background:#E2E2E2">/etc/hosts</span></span><span style="font-size:11.0pt;
+
+
+
+
+
+
+
+font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">. Ancora con i privilegi di amministratore,In windows puoi mettere questo file in C:/windows/system32/drivers/etc</span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">
+<o:p></o:p>
+</span></p>
+<div class="highlight-text"><div class="highlight"><pre><font><font># / Etc / hosts</font></font><font></font><font><font>
+127.0.0.1 symblog.dev</font></font><font></font>
+</pre></div>
+</div>
+<p><font><font>Infine non dimenticate di riavviare il servizio Apache. </font></font></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv"><font><font>$</font></font></span><font><font> sudo service httpd restart
+</font></font></pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title"><font><font>Punta</font></font></p>
+<p class="last"><font><font>Se vi trovate a creare domini virtuali per tutto il tempo, è possibile semplificare questo processo utilizzando
+ </font></font><a class="reference external" href="http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html"><font><font>host virtuali dinamici</font></font></a><font><font> .</font></font></p>
+</div>
+<p><font><font>Si dovrebbe ora essere in grado di visitare </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> .</font></font></p>
+<img alt="Symfony2 pagina di benvenuto" class="align-center" src="pag1_files/welcome.jpg">
+<p><font><font>Se questa è la tua prima visita alla pagina di benvenuto di Sy2, prendetevi del tempo per visualizzare le pagine demo. </font><font>Ogni pagina  offre frammenti di codice che dimostrano come ogni pagina funziona dietro le quinte.</font></font></p>
+<div class="admonition note">
+  <p class="first"><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333">Note
+        <o:p></o:p>
+  </span></p>
+  <p class="last1"><span style="font-size:11.0pt; font-family:&quot;Arial&quot;, &quot;sans-serif&quot;; color:#333333">Tu
+ noterai una toolbar in fondo alla pagina di benvenuto ,questa è la 
+toolbar di sviluppo e darà a te preziose informazioni circa lo stato 
+dell'applicazione includendo il tempo di apertura,la memoria usata,le 
+query del database,lo stato di autenticazione e molto altro.Di default 
+la toolbar è visibile solo nello sviluppo mostrando la toolbar nella 
+produzione si ha un grande rischio su la sicurezza essendo visibile in 
+essa molte informazioni su la tua applicazione</span></p>
+  <p class="first admonition-title">&nbsp;</p>
+</div>
+</div>
+<div class="section" id="configuring-symfony-web-interface">
+<h2><font><font>Configurazione Symfony: Interfaccia Web </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#configuring-symfony-web-interface" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<div style="mso-element:para-border-div;border:none;border-bottom:dotted #E0E0E0 1.0pt;
+
+
+
+
+
+
+
+mso-border-bottom-alt:dotted #E0E0E0 .75pt;padding:0cm 0cm 0cm 0cm"></div>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">Sy2
+ introduce un web interface per configurare vari aspetti che riguardano 
+un web site come per esempio le impostazioni per il database.Per questo 
+progetto è richiesto un database quindi iniziamo usando il 
+configuratore.
+  <o:p></o:p>
+</span></p>
+<p><span class="Stile1">Apri </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;
+
+
+
+
+
+
+
+color:#333333;background:#E2E2E2">http://symblog.dev/app_dev.php/</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">
+ e clicca sul bottone di configurazione.. Metti i dettagli di 
+impostazione del database (questo tutorial presume l'uso di Mysql ma si 
+può scegliere anche un altro database.Proseguendo si genera un CSFR 
+token utile per la sicurezza dell'applicazione.. Quindi ti saranno 
+mostrate le impostazioni che Sy2 ha generato.Presta attenzione alle 
+comunicazioni sulla pagina,è probabile che la tua</span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+background:#E2E2E2">app/config/parameters.ini</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333"> file
+  
+  
+  
+  
+  
+  
+  
+  non sia scrivibile,quindi sarà necessario copiare e incollare i dati direttamente nel file.</span></p>
+<p>&nbsp;</p>
+</div>
+<div class="section" id="bundles-symfony2-building-blocks">
+<h2><font><font>Bundles: Symfony2 Building Blocks </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#bundles-symfony2-building-blocks" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">I
+ bundles sono i mattoni di base di qualsiasi applicazione Sy2.Difatti il
+ framework Sy2 è di persè un bundle.I bundle ci permettono di separare 
+le funzionalità e forniscono unità di codice che può essere riutilizzato
+ ,essi hanno lo scopo di racchiudere tutte le esigenze come 
+controller,modello,modelli e risorse come css e immagini..Creiamo un 
+bundle per il nostro sito in namespace Blogger,se non si ha familiarità 
+con i namespace si dovrebbe dedicare un approfondimento sull'argomento 
+in quanto Sy2 ne fà largo uso.In Sy2 tutto è namespace. Puoi vedere <a href="http://symfony.com/doc/current/cookbook/tools/autoloader.html">Symfony2
+
+
+
+
+
+
+
+autoloader</a> per avere un idea sul caricamento degli archivi.
+<o:p></o:p>
+</span></p>
+<div class="admonition tip">
+  <p class="first"><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333">Nota
+    <o:p></o:p>
+  </span></p>
+  <p class="last2"><span style="font-size:11.0pt; font-family:&quot;Arial&quot;, &quot;sans-serif&quot;; color:#333333">Una buona comprensione dei namespace può aiutare a risolvere alcuni problemi.</span></p>
+  <p class="first admonition-title">&nbsp;</p>
+</div>
+<div class="section" id="creating-the-bundle">
+<h3><font><font>Creazione del bundle </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#creating-the-bundle" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<h3></h3>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">Per
+ racchiudere le funzionalità del blog creiamo un BlogBundle.Questo 
+ospiterà tutti i file necessari Sy2 è dotato di alcuni comandi che ci</span></p>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333"> possono aiutare per le comuni operazioni da svolgere Uno di questi comandi serve per la creazione di un bundle
+  <o:p></o:p>
+</span></p>
+<p><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">Esegui
+ il sottostante comando.Ti verranno presentate diverse  istruzioni per 
+creare il bundle.Usa tutte le istruzioni predefinite</span></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv2">$ </span><span style="color:#333333">php app/console generate:bundle --namespace</span><span class="o2">=</span><span style="color:#333333">Blogger/BlogBundle --format</span><span class="o2">=</span><span style="color:#333333">yml<o:p></o:p></span></pre>
+</div>
+</div>
+<p><span class="Stile1">Con questa operazione tu hai costruito un layout bundle di base.</span></p>
+<div class="admonition tip">
+<p class="first admonition-title">Nota</p>
+<p class="last"><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333">Se tu non vuoi usare i comandi di Sy2 puoi creare 
+manualmente la tua struttura di cartelle per il bundle.Anche se non è 
+obbligatorio usare essi offrono alcuni vantaggi in velocità e per la 
+copertura delle funzionalità per avere un pacchetto installato e 
+funzionante .</span></p>
+</div>
+<div class="section" id="registering-the-bundle">
+<h4><font><font>Registrazione del bundle </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#registering-the-bundle" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><span class="Stile3">Il tuo bundle </span><span class="pre"><span style="font-size:11.0pt;font-family:
+
+
+
+
+
+
+
+&quot;Courier New&quot;;color:#333333;background:#E2E2E2">BloggerBlogBundle</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333"> è stato registrato nella kernel localizzata int </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;background:
+
+
+
+
+
+
+
+#E2E2E2">app/AppKernel.php</span></span><span style="font-size:11.0pt;
+
+
+
+
+
+
+
+font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">. 
+Sy2 ci richiede di registrare tutti i bundle di cui abbiamo bisogno per 
+far funzionare l'applicazione.Tu noterai che alcuni bundle sono 
+registrati solo negli ambienti </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;background:
+
+
+
+
+
+
+
+#E2E2E2">dev</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333"> o </span><span class="pre"><span style="font-size:11.0pt;
+
+
+
+
+
+
+
+font-family:&quot;Courier New&quot;;color:#333333;background:#E2E2E2">test</span></span><span style="font-size:11.0pt; font-family:&quot;Arial&quot;, &quot;sans-serif&quot;; color:#333333"> caricare questi nell'ambiente </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;background:
+
+
+
+
+
+
+
+#E2E2E2">prod</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+color:#333333"> (production) porterebbe solo ad un sovraccarico per 
+funzionalità non usate Il frammento di codice seguente mostra come il 
+bundle </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+background:#E2E2E2">BloggerBlogBundle è stato registrato.</span></span></p>
+<div class="highlight-php">
+  <div class="highlight">
+    <pre><span class="c1">// app/AppKernel.php</span>
+<span class="k">class</span> <span class="nc">AppKernel</span> <span class="k">extends</span> <span class="nx">Kernel</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">registerBundles</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$bundles</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="c1">// ..</span>
+            <span class="k">new</span> <span class="nx">Blogger\BlogBundle\BloggerBlogBundle</span><span class="p">(),</span>
+        <span class="p">);</span>
+        <span class="c1">// ..</span>
+
+        <span class="k">return</span> <span class="nv">$bundles</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="section" id="routing">
+<h4><font><font>Routing </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#routing" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><span style="font-size:11.0pt; font-family:&quot;Arial&quot;, &quot;sans-serif&quot;; color:#333333">Con il comando precedente è stata creata anche la rotta principale dell'applicazione </span><span class="pre"><span style="font-size:11.0pt;font-family:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&quot;Courier New&quot;;color:#333333;background:#E2E2E2">app/config/routing.yml</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">.
+    <o:p></o:p>
+</span><font><font>.</font></font></p>
+<div class="highlight-yaml">
+  <div class="highlight">
+    <pre><span class="c1"># app/config/routing.yml</span>
+<span class="l-Scalar-Plain">BloggerBlogBundle</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">resource</span><span class="p-Indicator">:</span> <span class="s">"@BloggerBlogBundle/Resources/config/routing.yml"</span>
+    <span class="l-Scalar-Plain">prefix</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">/</span>
+</pre>
+  </div>
+</div>
+<p><span style="font-size:11.0pt; font-family:&quot;Arial&quot;, &quot;sans-serif&quot;; color:#333333">L'opzione prefix ci permette di montare l'intero </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;background:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#E2E2E2">BloggerBlogBundle</span></span><span style="font-size:11.0pt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333"> con un prefisso. Nel nostro caso abbiamo otato per montare il valore predefinito che è</span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;background:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#E2E2E2">/</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+color:#333333">. Se per esempio volete che tutti i percorsi siano preceduti da </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+background:#E2E2E2">/blogger</span></span><span class="Stile1"> cambiate in </span><span class="pre"><span style="font-size:11.0pt;font-family:&quot;Courier New&quot;;color:#333333;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+background:#E2E2E2">prefix:</span></span> <span class="pre"><span style="font-size:11.0pt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+font-family:&quot;Courier New&quot;;color:#333333;background:#E2E2E2">/blogger</span></span><span style="font-size:11.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:#333333">.
+    <o:p></o:p>
+</span><font><font> .</font></font></p>
+</div>
+<div class="section" id="default-structure">
+<h4><font><font>Struttura di default</font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#default-structure" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Sotto la cartella SRC è stato creato un pacchetto 
+predefinito.Questo inizia con il livello superiore alla cartella Blogger
+ che mappa direttamente allo spazio dei nomi Blogger,sotto questo 
+abbiamo BlogBundle che contiene il pacchetto vero e proprio .Il 
+contenuto di questa cartella verra esaminato più avanti seguendo il 
+tutorial.Se avete familiarità con MVC alcune cartelle saranno 
+autoesplicative.</font></font><font><font></font></font></p>
+</div>
+</div>
+<div class="section" id="the-default-controller">
+<h3><font><font>Il controller di default </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#the-default-controller" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Con il comando per la creazione del bundle abbiamo anche 
+creato ,un controller di default.Possiamo eseguire questo controller 
+andando a </font></font><font><font></font></font><tt class="docutils literal"><span class="pre">http://symblog.dev/app_dev.php/hello/symblog</span></tt>
+ si vedrà una semplice pagina di saluto,prova a cambiare la parte 
+symblog del url con il tuo nome .Si può quindi vedere come questa pagina
+ è stata generata</p>
+<div class="section" id="routed">
+<h4><font><font>Routed </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#routed" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> file di rotta che si trova in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt><font><font> contiene la seguente regola di routing.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"><font><font># src/Blogger/BlogBundle/Resources/config/routing.yml
+<span class="l-Scalar-Plain">BloggerBlogBundle_homepage</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/hello/{name}</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Default</span><span class="p-Indicator">:</span><span class="nv">index</span> <span class="p-Indicator">}</span>#</font></font></span>
+<span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>
+    <span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>  <span class="l-Scalar-Plain"><font></font></span>
+    <span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span> <span class="p-Indicator"><font></font></span> <span class="nv"><font></font></span><span class="p-Indicator"><font></font></span> <span class="nv"><font></font></span><span class="p-Indicator"><font></font></span><span class="nv"><font></font></span><span class="p-Indicator"><font></font></span><span class="nv"><font></font></span> <span class="p-Indicator"><font></font></span>
+</pre>
+</div>
+</div>
+<p><font><font>Le rotte sono composte di un percorso e da alcune opzioni
+ di default.Il percorso viene confrontato con l'URL e le opzioni di 
+default se tutto coincide da il via all'eseguzione del controllore.Nel 
+percorso ciao {nome} il valore nome corrisponderà come segnaposto in 
+quanto non specificato .</font></font><font><font></font></font></p>
+</div>
+<div class="section" id="the-controller">
+<h4><font><font>Il controller </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#the-controller" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Il controllore in questo esempio è molto semplice. </font>La classe </font><tt class="docutils literal"><span class="pre"><font><font>DefaultController</font></font></span></tt><font><font>  estende la classel </font></font><tt class="docutils literal"><span class="pre"><font><font>controller</font></font></span></tt><font><font>  che fornisce alcuni metodi utili come il </font></font><tt class="docutils literal"><span class="pre"><font><font>render</font></font></span></tt><font><font> 
+metodo utilizzato qui di seguito. </font><font>Nella rotta abbiamo definito  un segnaposto questo viene passato all' azione come argomento </font></font><tt>$name</tt><font><font> . </font><font>L'azione non fa altro che chiamare il </font></font><tt class="docutils literal"><span class="pre"><font><font>render</font></font></span></tt><font><font> specificando il metodo </font></font><tt class="docutils literal"><span class="pre"><font><font>index.html.twig</font></font></span></tt> nel modulo <tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font>. </font><font>Il formato del nome del modello è </font></font><tt class="docutils literal"><span class="pre"><font><font>bundle: controller: template</font></font></span></tt><font><font> . </font><font>Nel nostro esempio, questo è </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle: Default: index.html.twig</font></font></span></tt><font><font> 
+che corrisponde alla </font></font><tt class="docutils literal"><span class="pre"><font><font>index.html.twig</font></font></span></tt><font><font> modello, nel </font></font><tt class="docutils literal"><span class="pre"><font><font>predefinito</font></font></span></tt><font><font> 
+cartella vista del </font></font><tt class="docutils literal"><span class="pre"><font><font>BloggerBlogBundle</font></font></span></tt><font><font> , o fisicamente al file
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / default / index.html.twig</font></font></span></tt><font><font> . </font><font>Diverse
+ varianti del formato modello può essere usato per rendere i modelli in 
+diverse posizioni all'interno dell'applicazione e dei suoi bundle. </font><font>Vedremo più avanti in questo capitolo.</font></font></p>
+<p><font><font>Ora possiamo passare la variabile $name all'opzione array</font></font><font><font></font></font></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="c1">// src/Blogger/BlogBundle/Controller/DefaultController.php</span>
+
+<span class="k">namespace</span> <span class="nx">Blogger\BlogBundle\Controller</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Bundle\FrameworkBundle\Controller\Controller</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">DefaultController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">(</span><span class="nv">$name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">'BloggerBlogBundle:Default:index.html.twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+</div>
+</div>
+</div>
+<div class="section" id="the-template-the-view">
+<h4><font><font>Il templating (The View) </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#the-template-the-view" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Come potete vedere il templating è molto semplice. </font><font>Viene stampato Ciao seguito dal nome argomento passato dal controllore.</font></font></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><font><font>{# Src / Blogger / BlogBundle / Resources / views / default / index.html.twig #}
+</font></font><font></font><span style="color:#333333">Hello {{ name }}!<o:p></o:p></span></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="cleaning-up">
+<h3><font><font>Pulizia </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#cleaning-up" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Poiché non abbiamo bisogno di alcuni dei file di default creati dal generatore si possono eliminare.</font></font></p>
+<p><font><font>Il file di controllo </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / DefaultController.php</font></font></span></tt><font><font> 
+può essere cancellato, insieme alla cartella di views e il suo contenuto in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / default /</font></font></span></tt><font><font> . </font><font>Togliere infine il percorso definito in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt></p>
+</div>
+</div>
+<div class="section" id="templating">
+<h2><font><font>Templating </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#templating" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Ci sono 2 opzioni di default quando si usa Symfony2 per templating;
+ </font></font><a class="reference external" href="http://www.twig-project.org/"><font><font>Twig</font></font></a><font><font> e PHP. </font><font>Naturalmente è possibile anche non utilizzare nessuna di queste e optare per una libreria diversa. </font><font>Questo è possibile grazie Symfony2
+ </font></font><a class="reference external" href="http://symfony.com/doc/current/book/service_container.html"><font><font>Container Dependency Injection</font></font></a><font><font> .Per la nostra applicazione </font><font>Useremo Twig come  motore di template per una serie di motivi.</font></font></p>
+<ol class="arabic simple">
+<li><font><font>Twig è veloce - Twig compila i template  in classi PHP quindi non c'è poco overhead  da utilizzare ..</font></font></li>
+<li><font><font>Twig è conciso - Twig ci permette di eseguire le funzionalità di modellazione con molto poco codice. </font><font>Confronta questo con il PHP dove alcune affermazioni diventano molto dettagliate.</font></font></li>
+<li><font><font>Twig  supporta l'ereditarietà dei template - Questo è uno dei miei favoriti personali. </font><font>I
+ template hanno la capacità di estendere e sostituire altri templatei 
+che permettono ai template figli  di cambiare le impostazioni di default
+ forniti dai loro genitori.</font></font></li>
+<li><font><font>Twig è sicuro - Twig ha output escaping attivata per 
+impostazione predefinita e fornisce anche un ambiente in sandbox per i 
+template importati.</font></font></li>
+<li><font><font>Twig è estensibile - Twig ha molte funzionalità comuni 
+di base come motore di template, ma per quelle occasioni in cui è 
+necessario alcune funzionalità  su misura in più, Twig può essere 
+facilmente esteso.</font></font></li>
+</ol>
+<p><font><font>Questi sono solo alcuni dei vantaggi di Twig. </font><font> Per maggiori motivi per cui si dovrebbe usare Twig vedi la documentazione ufficiale </font></font><a class="reference external" href="http://www.twig-project.org/"><font><font>Twig</font></font></a><font><font> sito.</font></font></p>
+<div class="section" id="layout-structure">
+<h3><font><font>Struttura del layout </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#layout-structure" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font> Twig supporta l'ereditarietà dei template, andremo ad utilizzare unl
+ </font></font><a class="reference external" href="http://symfony.com/doc/current/book/templating.html#three-level-inheritance"><font><font>livello di terza eredità</font></font></a><font><font> per la nostra applicazione. </font><font>Questo
+ approccio ci consente di modificare la visualizzazione a 3 livelli 
+distinti all'interno dell'applicazione, dandoci un sacco di spazio per 
+le personalizzazioni.</font></font></p>
+<div class="section" id="main-template-level-1">
+<h4><font><font>Template principale - Livello 1 </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#main-template-level-1" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Iniziamo creando il nostro template (blocco di base)per symblog. </font><font>Abbiamo bisogno di 2 file qui, il template.html e il CSS. </font><font> Symfony2 supporta
+ </font></font><a class="reference external" href="http://diveintohtml5.org/"><font><font>HTML5</font></font></a><font><font> quindi andremo ad utilizzarlo.</font></font></p>
+<div class="highlight-html"><pre>&lt;!-- app/Resources/views/base.html.twig --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html"; charset=utf-8" /&gt;
+        &lt;title&gt;{% block title %}symblog{% endblock %} - symblog&lt;/title&gt;
+        &lt;!--[if lt IE 9]&gt;
+            &lt;script src="http://html5shim.googlecode.com/svn/trunk/html5.js"&gt;&lt;/script&gt;
+        &lt;![endif]--&gt;
+        {% block stylesheets %}
+            &lt;link href='http://fonts.googleapis.com/css?family=Irish+Grover' rel='stylesheet' type='text/css'&gt;
+            &lt;link href='http://fonts.googleapis.com/css?family=La+Belle+Aurore' rel='stylesheet' type='text/css'&gt;
+            &lt;link href="{{ asset('css/screen.css') }}" type="text/css" rel="stylesheet" /&gt;
+        {% endblock %}
+        &lt;link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+
+        &lt;section id="wrapper"&gt;
+            &lt;header id="header"&gt;
+                &lt;div class="top"&gt;
+                    {% block navigation %}
+                        &lt;nav&gt;
+                            &lt;ul class="navigation"&gt;
+                                &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+                                &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+                            &lt;/ul&gt;
+                        &lt;/nav&gt;
+                    {% endblock %}
+                &lt;/div&gt;
+
+                &lt;hgroup&gt;
+                    &lt;h2&gt;{% block blog_title %}&lt;a href="#"&gt;symblog&lt;/a&gt;{% endblock %}&lt;/h2&gt;
+                    &lt;h3&gt;{% block blog_tagline %}&lt;a href="#"&gt;creating a blog in Symfony2&lt;/a&gt;{% endblock %}&lt;/h3&gt;
+                &lt;/hgroup&gt;
+            &lt;/header&gt;
+
+            &lt;section class="main-col"&gt;
+                {% block body %}{% endblock %}
+            &lt;/section&gt;
+            &lt;aside class="sidebar"&gt;
+                {% block sidebar %}{% endblock %}
+            &lt;/aside&gt;
+
+            &lt;div id="footer"&gt;
+                {% block footer %}
+                    Symfony2 blog tutorial - created by &lt;a href="https://github.com/dsyph3r"&gt;dsyph3r&lt;/a&gt;
+                {% endblock %}
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        {% block javascripts %}{% endblock %}
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title"><font><font>Nota</font></font></p>
+<p class="last"><font><font>Ci sono 3 file esterni in questo template, uno è JavaScript e CSS 2. </font><font>Il file JavaScript fissa la mancanza di supporto di HTML5 nel browser IE pre versione 9. </font><font>I due file CSS importano i font da</font></font> <font><font> <a class="reference external" href="http://www.google.com/webfonts">Google Web font</a>.</font></font></p>
+</div>
+<p><font><font>Questo template rappresenta la struttura principale del nostro sito blogging. </font><font>La maggior parte del template è costituito da HTML, con la strana Twig direttiva. </font><font> Twig direttiva che esamineremo ora.</font></font></p>
+<p><font><font>Inizieremo, concentrandosi sulla HEAD del documento. </font><font>Vediamo il titolo:</font></font></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><span class="nt"><font><font>&lt;title&gt;{% block title %}symblog{% endblock %} - symblog&lt;/title&gt;</font></font></span><font><font></font></font><span class="nt"><font><font></font></font></span>
+</pre>
+</div>
+</div>
+<p><font><font>La prima cosa che noterete è l'alieno </font></font><tt class="docutils literal"><span class="pre"><font><font>{%</font></font></span></tt><font><font> tag. </font><font>Che non è HTML, e non è assolutamente PHP. </font><font>Questo è uno dei 3 Twig tag. </font><font>Questo tag è il Twig
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>fare </font></font></span> <span class="pre"><font><font>qualcosa di</font></font></span></tt><font><font>. </font><font>Viene utilizzato per eseguire le istruzioni come le istruzioni di controllo e per la definizione di elementi di blocco. </font><font>Un elenco completo delle
+ </font></font><a class="reference external" href="http://www.twig-project.org/doc/templates.html#list-of-control-structures"><font><font>strutture di controllo</font></font></a><font><font> 
+possono essere trovati nella documentazione Twig. </font><font>Il Twig 
+blocco che abbiamo definito nel titolo fa 2 cose, una imposta 
+l'identificatore di blocco al titolo, due fornisce un output di default 
+tra il blocco e la direttiva fineblocco . </font><font>Con la definizione di un blocco si può usufruire di Twig come template peri l'ereditarietà. </font><font>Per esempio, in una pagina per visualizzare un post  vorremmo  il titolo della pagina in modo da riflettere il titolo del blog. </font><font>Siamo in grado di raggiungere questo obiettivo estendendo il modello e l'override del blocco del titolo.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends '::base.html.twig' %}
+
+{% block title %}The blog title goes here{% endblock %}
+</pre>
+</div>
+</div>
+<p><font><font>Nell'esempio precedente abbiamo ampliato la base delle applicazioni del template che prima avevamo definito per il blocco del titolo. </font><font>Avrai notato che nella chiamata del template extends sono scomparse le parti bundle e controller.Per eliminarle abbiamo specificato l'uso del livello template in </font></font><font><font></font></font><tt class="docutils literal"><span class="pre"><font><font>app / resources / views /</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Dopo abbiamo definito un altro title block e impostato alcuni contenuti ,in questo caso il titolo del blog.Cosi il parent template è pronto per contenere un block title che viene poi sovrascritto da quello figlio.Il titolo ora sarà &quot;the blog title goes have symblog&quot;.Questa funzionalità di twig può essere usata per estenderla ad altri template </font></font></p>
+<p>Nel blocco cssviene introdotto l'altro tag di twig .Il tag {{ è il tag &quot;dici qualcosa&quot;<font><font></font></font></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{{ asset('css/screen.css') }}"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span></pre>
+</div>
+</div>
+<p><font><font>Questo tag viene utilizzato per stampare il valore della variabile o espressione. </font><font>Nell'esempio di sopra di essa stampa il valore di ritorno della funzione asset .Che ci fornisce un modo portabile per collegare le attività dell' applicazione come css,javascrit,immagini</font></font></p>
+<p><font><font>Il </font></font><tt class="docutils literal"><span class="pre"><font><font>{{</font></font></span></tt><font><font> tag possono anche essere combinati con dei filtri per manipolare l'output prima della stampa.</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{{ blog.created|date("d-m-Y") }}
+</pre>
+</div>
+</div>
+<p><font><font>Per un elenco completo di filtri controllare la
+ </font></font><a class="reference external" href="http://www.twig-project.org/doc/templates.html#list-of-built-in-filters"><font><font>documentazione Twig</font></font></a><font><font> .</font></font></p>
+<p><font><font>L'ultimo tag twig, che non abbiamo visto nei template è il tag di commento </font></font><tt class="docutils literal"><span class="pre"><font><font>{#</font></font></span></tt><font><font> . </font><font>Il suo utilizzo è il seguente:</font></font></p>
+<div class="highlight-html"><div class="highlight"><pre>{# The quick brown fox jumps over the lazy dog #}
+</pre>
+</div>
+</div>
+<p><font><font>Non ci sono altri concetti introdotti in questo template. </font><font>Esso fornisce il layout principale pronto per personalizzarlo dopo come abbiamo</font></font></p>
+<p><font><font>Ora </font></font><font><font> andiamo ad aggiungere alcuni stili. </font><font>Creare un foglio di stile a </font></font><tt class="docutils literal"><span class="pre"><font><font>web / css / screen.css</font></font></span></tt><font><font> e aggiungere il seguente contenuto. </font><font>Questo aggiungerà stili per il template principale.</font></font></p>
+<div class="highlight-css"><div class="highlight">
+  <pre><span class="nt">html</span><span class="o">,</span><span class="nt">body</span><span class="o">,</span><span class="nt">div</span><span class="o">,</span><span class="nt">span</span><span class="o">,</span><span class="nt">applet</span><span class="o">,</span><span class="nt">object</span><span class="o">,</span><span class="nt">iframe</span><span class="o">,</span><span class="nt">h1</span><span class="o">,</span><span class="nt">h2</span><span class="o">,</span><span class="nt">h3</span><span class="o">,</span><span class="nt">h4</span><span class="o">,</span><span class="nt">h5</span><span class="o">,</span><span class="nt">h6</span><span class="o">,</span><span class="nt">p</span><span class="o">,</span><span class="nt">blockquote</span><span class="o">,</span><span class="nt">pre</span><span class="o">,</span><span class="nt">a</span><span class="o">,</span><span class="nt">abbr</span><span class="o">,</span><span class="nt">acronym</span><span class="o">,</span><span class="nt">address</span><span class="o">,</span><span class="nt">big</span><span class="o">,</span><span class="nt">cite</span><span class="o">,</span><span class="nt">code</span><span class="o">,</span><span class="nt">del</span><span class="o">,</span><span class="nt">dfn</span><span class="o">,</span><span class="nt">em</span><span class="o">,</span><span class="nt">img</span><span class="o">,</span><span class="nt">ins</span><span class="o">,</span><span class="nt">kbd</span><span class="o">,</span><span class="nt">q</span><span class="o">,</span><span class="nt">s</span><span class="o">,</span><span class="nt">samp</span><span class="o">,</span><span class="nt">small</span><span class="o">,
+</span><span class="nt">strike</span><span class="o">,</span><span class="nt">strong</span><span class="o">,</span><span class="nt">sub</span><span class="o">,</span><span class="nt">sup</span><span class="o">,</span><span class="nt">tt</span><span class="o">,</span><span class="nt">var</span><span class="o">,</span><span class="nt">b</span><span class="o">,</span><span class="nt">u</span><span class="o">,</span><span class="nt">i</span><span class="o">,</span><span class="nt">center</span><span class="o">,</span><span class="nt">dl</span><span class="o">,</span><span class="nt">dt</span><span class="o">,</span><span class="nt">dd</span><span class="o">,</span><span class="nt">ol</span><span class="o">,</span><span class="nt">ul</span><span class="o">,</span><span class="nt">li</span><span class="o">,</span><span class="nt">fieldset</span><span class="o">,</span><span class="nt">form</span><span class="o">,</span><span class="nt">label</span><span class="o">,</span><span class="nt">legend</span><span class="o">,</span><span class="nt">table</span><span class="o">,</span><span class="nt">caption</span><span class="o">,</span><span class="nt">tbody</span><span class="o">,</span><span class="nt">tfoot</span><span class="o">,</span><span class="nt">thead</span><span class="o">,</span><span class="nt">tr</span><span class="o">,</span><span class="nt">th</span><span class="o">,</span><span class="nt">td</span><span class="o">,</span><span class="nt">article</span><span class="o">,</span><span class="nt">aside</span><span class="o">,</span><span class="nt">canvas</span><span class="o">
+,</span><span class="nt">details</span><span class="o">,</span><span class="nt">embed</span><span class="o">,</span><span class="nt">figure</span><span class="o">,</span><span class="nt">figcaption</span><span class="o">,</span><span class="nt">footer</span><span class="o">,</span><span class="nt">header</span><span class="o">,</span><span class="nt">hgroup</span><span class="o">,</span><span class="nt">menu</span><span class="o">,</span><span class="nt">nav</span><span class="o">,</span><span class="nt">output</span><span class="o">,</span><span class="nt">ruby</span><span class="o">,</span><span class="nt">section</span><span class="o">,</span><span class="nt">summary</span><span class="o">,</span><span class="nt">time</span><span class="o">,</span><span class="nt">mark</span><span class="o">,</span><span class="nt">audio</span><span class="o">,</span><span class="nt">video</span><span class="p">{</span><span class="k">border</span><span class="o">:</span><span class="m">0</span><span class="p">;</span><span class="k">font-size</span><span class="o">:</span><span class="m">100</span><span class="o">%</span><span class="p">;</span><span class="k">font</span><span class="o">:</span><span class="k">inherit</span><span class="p">;
+</span><span class="k">vertical-align</span><span class="o">:</span><span class="k">baseline</span><span class="p">;</span><span class="k">margin</span><span class="o">:</span><span class="m">0</span><span class="p">;</span><span class="k">padding</span><span class="o">:</span><span class="m">0</span><span class="p">}</span><span class="nt">article</span><span class="o">,</span><span class="nt">aside</span><span class="o">,</span><span class="nt">details</span><span class="o">,</span><span class="nt">figcaption</span><span class="o">,</span><span class="nt">figure</span><span class="o">,</span><span class="nt">footer</span><span class="o">,</span><span class="nt">header</span><span class="o">,</span><span class="nt">hgroup</span><span class="o">,</span><span class="nt">menu</span><span class="o">,</span><span class="nt">nav</span><span class="o">
+,</span><span class="nt">section</span><span class="p">{</span><span class="k">display</span><span class="o">:</span><span class="k">block</span><span class="p">}</span><span class="nt">body</span><span class="p">{</span><span class="k">line-height</span><span class="o">:</span><span class="m">1</span><span class="p">}</span><span class="nt">ol</span><span class="o">,</span><span class="nt">ul</span><span class="p">{</span><span class="k">list-style</span><span class="o">:</span><span class="k">none</span><span class="p">}</span><span class="nt">blockquote</span><span class="o">,</span><span class="nt">q</span><span class="p">{</span><span class="k">quotes</span><span class="o">:</span><span class="k">none</span><span class="p">}</span><span class="nt">blockquote</span><span class="nd">:before</span><span class="o">,</span><span class="nt">blockquote</span><span class="nd">:after</span><span class="o">,</span><span class="nt">q</span><span class="nd">:before</span><span class="o">,
+</span><span class="nt">q</span><span class="nd">:after</span><span class="p">{</span><span class="k">content</span><span class="o">:</span><span class="k">none</span><span class="p">}</span><span class="nt">table</span><span class="p">{</span><span class="k">border-collapse</span><span class="o">:</span><span class="k">collapse</span><span class="p">;</span><span class="k">border-spacing</span><span class="o">:</span><span class="m">0</span><span class="p">}</span>
+
+<span class="nt">body</span> <span class="p">{</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1</span><span class="p">;</span><span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="k">sans-serif</span><span class="p">;</span><span class="k">font-size</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#000</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">14px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.clear</span> <span class="p">{</span> <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nf">#wrapper</span> <span class="p">{</span> <span class="k">margin</span><span class="o">:</span> <span class="m">10px</span> <span class="k">auto</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">1000px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#wrapper</span> <span class="nt">a</span> <span class="p">{</span> <span class="k">text-decoration</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#F48A00</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#wrapper</span> <span class="nt">span</span><span class="nc">.highlight</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#F48A00</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nf">#header</span> <span class="p">{</span> <span class="k">border-bottom</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nc">.top</span> <span class="p">{</span> <span class="k">border-bottom</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nt">ul</span><span class="nc">.navigation</span> <span class="p">{</span> <span class="k">list-style</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nc">.navigation</span> <span class="nt">li</span> <span class="p">{</span> <span class="k">display</span><span class="o">:</span> <span class="k">inline</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nc">.navigation</span> <span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span> <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span> <span class="m">15px</span><span class="p">;</span> <span class="k">border-left</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nt">h2</span> <span class="p">{</span> <span class="k">font-family</span><span class="o">:</span> <span class="s1">'Irish Grover'</span><span class="o">,</span> <span class="k">cursive</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">92px</span><span class="p">;</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">110px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nt">h2</span> <span class="nt">a</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#000</span><span class="p">;</span> <span class="p">}</span>
+<span class="nf">#header</span> <span class="nt">h3</span> <span class="p">{</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span> <span class="k">font-family</span><span class="o">:</span> <span class="s1">'La Belle Aurore'</span><span class="o">,</span> <span class="k">cursive</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">24px</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nc">.main-col</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">700px</span><span class="p">;</span> <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span> <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span> <span class="k">border-right</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.sidebar</span> <span class="p">{</span> <span class="k">width</span><span class="o">:</span> <span class="m">239px</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nc">.main-col</span> <span class="nt">a</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#F48A00</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.main-col</span> <span class="nt">h1</span><span class="o">,</span>
+<span class="nc">.main-col</span> <span class="nt">h2</span>
+    <span class="p">{</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1.2em</span><span class="p">;</span> <span class="k">font-size</span><span class="o">:</span> <span class="m">32px</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#F48A00</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.main-col</span> <span class="nt">p</span> <span class="p">{</span> <span class="k">line-height</span><span class="o">:</span> <span class="m">1.5em</span><span class="p">;</span> <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nf">#footer</span> <span class="p">{</span> <span class="k">border-top</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ccc</span><span class="p">;</span> <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span> <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span> <span class="m">#aaa</span><span class="p">;</span> <span class="p">}</span>
+</pre>
+</div>
+</div>
+</div>
+<div class="section" id="bundle-template-level-2">
+<h4><font><font>Template Bundle - Livello 2 </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#bundle-template-level-2" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Ora andiamo a creare un layout per il bundle Blog. </font><font>Creare un file  in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / resources / views / layout.html.twig</font></font></span></tt><font><font> e aggiungere il seguente contenuto.</font></font></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><span style="color:#333333">{# src/Blogger/BlogBundle/Resources/views/layout.html.twig #}<o:p></o:p></span><font><font>
+{% extends ':: base.html.twig'%}</font></font><font></font>
+<font></font><font><font>
+{% Block% sidebar}</font></font><font></font><font><font>
+    Sidebar contenuti</font></font><font></font><span style="color:#333333">
+{% endblock %}<o:p></o:p></span></pre>
+</div>
+</div>
+<p><font><font>A prima vista questo modello può sembrare un po 'semplice, ma la sua semplicità è la chiave. </font><font>In primo luogo si estende il base template che abbiamo creato in precedenza. </font><font>In secondo luogo si sostituisce il blocco sidebar genitore con qualche contenuto fittizio. </font><font>Come
+ la barra laterale che sarà presente su tutte le pagine del nostro blog ha 
+senso effettuare la personalizzazione a questo livello cI </font><font>si 
+può chiedere perché non  mettere la personalizzazione del modello 
+nell' applicazione in quanto sarà presente su tutte le pagine. </font><font>Questo è semplice, l'applicazione non sa nulla della Bundle e non deve. </font><font>Il bundle deve contenere  tutte le sue funzionalità e rendere la barra laterale è parte di questa funzionalità. </font><font>OK, allora perché non ci basta posizionare la barra laterale in ognuno dei modelli di pagina? </font><font>Anche in questo caso è semplice, avremmo dovuto duplicare il sidebar ogni volta che andiamo ad aggiungere una nuova pagina. </font><font>Inoltre
+ questo template di livello 2 ci dà la flessibilità in futuro di 
+aggiungere altre personalizzazioni che tutti i template i figli 
+erediteranno. </font><font>Per esempio, potremmo voler modificare la 
+copia piè di pagina su tutte le pagine, questo sarebbe un ottimo posto 
+per fare questo.</font></font></p>
+</div>
+<div class="section" id="page-template-level-3">
+<h4><font><font>Modello di pagina - Livello 3 </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#page-template-level-3" title="Permalink per questo titolo"><font><font>¶</font></font></a></h4>
+<p><font><font>Finalmente siamo pronti per il layout controller. </font><font>Questi
+ layout sarà normalmente legato a una azione di controllo, vale a
+ dire, l'azione show blog avrà un template blog show.</font></font></p>
+<p><font><font>Iniziamo creando il controller per la homepage e il relativo template. </font><font>Poiché questa è la prima pagina che stiamo creando è necessario per creare il controller. </font><font>Creare il controller in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> e aggiungere quanto segue:</font></font></p>
+<div class="highlight-php"><div class="highlight">
+  <pre>&lt;?php  
+// src/Blogger/BlogBundle/Controller/PageController.php   
+ namespace Blogger\BlogBundle\Controller;   
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;   
+ class PageController extends Controller 
+ {      
+public function indexAction()      
+{          
+return $this-&gt;render('BloggerBlogBundle:Page:index.html.twig');      
+} 
+}</pre>
+</div>
+</div>
+<p><font><font>Ora creiamo il template per questa azione. </font><font>Come si può vedere nella azione del controllore  stiamo per rendere il template della homepage. </font><font>Creiamo il template in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / index.html.twig</font></font></span></tt></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><font><font>{# Src / Blogger / BlogBundle / Resources / views / Page / index.html.twig #}</font></font><font></font><font><font>
+{% extends 'BloggerBlogBundle :: layout.html.twig'%}</font></font><font></font>
+<font></font><font><font>
+{% Block% body}</font></font><font></font><font><font>
+    Blog homepage</font></font><font></font><span style="color:#333333">
+{% endblock %}<o:p></o:p></span></pre>
+</div>
+</div>
+<p><font><font>Questo introduce il formato finale del template che possiamo specificare.</font></font></p>
+<p><font><font>Ora andiamo ad aggiungere una route per la nostra homepage. </font><font>Aggiornare il Bundle la configurazione di routing trova in </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"><font><font># src/Blogger/BlogBundle/Resources/config/routing.yml
+<span class="l-Scalar-Plain">BloggerBlogBundle_homepage</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Page</span><span class="p-Indicator">:</span><span class="nv">index</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET</span></font></font></span>
+<span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>
+    <span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>  <span class="l-Scalar-Plain"><font></font></span>
+    <span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span> <span class="p-Indicator"><font></font></span> <span class="nv"><font></font></span><span class="p-Indicator"><font></font></span> <span class="nv"><font></font></span><span class="p-Indicator"><font></font></span><span class="nv"><font></font></span><span class="p-Indicator"><font></font></span><span class="nv"><font></font></span> <span class="p-Indicator"><font></font></span>
+    <span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>
+        <span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>  <span class="l-Scalar-Plain"><font></font></span>
+</pre>
+</div>
+</div>
+<p><font><font>Infine abbiamo bisogno di rimuovere il percorso predefinito per la schermata di benvenuto Symfony2. </font><font>Rimuovere ilpercorso </font></font><tt class="docutils literal"><span class="pre"><font><font>_welcome</font></font></span></tt><font><font>  nella parte superiore del </font></font><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> file di routing che si trova in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>app / config / routing_dev.yml</font></font></span></tt><font><font> .</font></font></p>
+<p><font><font>Siamo ora pronti per vedere il nostro template di blogger. </font><font>Puntate il vostro browser per
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/</font></font></span></tt><font><font> .</font></font></p>
+<img alt="symblog layout del modello principale" class="align-center" src="pag1_files/homepage.jpg">
+<p><font><font>Si dovrebbe vedere il layout di base del blog, con il 
+contenuto principale e sidebar che riflette come abbiamo impostato i blocchi dei template.</font></font></p>
+</div>
+</div>
+</div>
+<div class="section" id="the-about-page">
+<h2><font><font>Informazioni su Pagina </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#the-about-page" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Il compito finale in questa parte del tutorial sarà la creazione di una pagina statica per la pagina About. </font><font>Questo dimostrerà come collegare le pagine insieme, e andiamo a rafforzare il metodo a tre livelli per i template,che abbiamo adottato.</font></font></p>
+<div class="section" id="the-route">
+<h3><font><font>La rotta </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#the-route" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Quando si crea una nuova pagina, uno dei primi compiti e di creare il relativo percorso. </font><font>Aprire il </font></font><font><font>file delle rotte che si trova in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / config / routing.yml</font></font></span></tt><font><font> e aggiungere la seguente regola di routing.</font></font></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># src/Blogger/BlogBundle/Resources/config/routing.yml</span>
+<span class="l-Scalar-Plain">BloggerBlogBundle_about</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">pattern</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">/about</span>
+    <span class="l-Scalar-Plain">defaults</span><span class="p-Indicator">:</span> <span class="p-Indicator">{</span> <span class="nv">_controller</span><span class="p-Indicator">:</span> <span class="nv">BloggerBlogBundle</span><span class="p-Indicator">:</span><span class="nv">Page</span><span class="p-Indicator">:</span><span class="nv">about</span> <span class="p-Indicator">}</span>
+    <span class="l-Scalar-Plain">requirements</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">_method</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">GET</span>
+<span class="l-Scalar-Plain"><font></font></span><span class="p-Indicator"><font></font></span>  <span class="l-Scalar-Plain"><font></font></span>
+</pre>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3><font><font>Il controller </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#id2" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Dopo di che apriamo il file </font></font><font><font> di controllo situato in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Controller / PageController.php</font></font></span></tt><font><font> e aggiungiamo l'azione per gestire la pagina About.</font></font></p>
+<div class="highlight-php"><div class="highlight">
+  <pre><span class="c1"><font><font>/ / Src / Blogger / BlogBundle / Controller / PageController.php 
+</font></font></span>class PageController extends Controller 
+ {      
+//  ..       
+ public function aboutAction()     
+{          
+return $this-&gt;render('BloggerBlogBundle:Page:about.html.twig');     
+ }  }</pre>
+</div>
+</div>
+</div>
+<div class="section" id="the-view">
+<h3><font><font>The View </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#the-view" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Per la vista, creare un nuovo file  in
+ </font></font><tt class="docutils literal"><span class="pre"><font><font>src / Blogger / BlogBundle / Resources / views / Page / about.html.twig</font></font></span></tt><font><font> e copiamo il seguente contenuto.</font></font></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><font><font>{# Src / Blogger / BlogBundle / Resources / views / Page / about.html.twig #}</font></font><font></font><font><font>
+{% extends 'BloggerBlogBundle :: layout.html.twig'%}</font></font><font></font>
+<font></font><font><font>
+{% Block title%} {% Circa blocco terminale%}</font></font><font></font>
+<font></font><font><font>
+{% Block% body}</font></font><font></font>
+    <span class="nt"><font><font>&lt;header&gt; </font></font></span>
+        <span class="nt"><font><font>&lt;h1&gt;</font></font></span><font><font> Chi symblog </font></font><span class="nt"><font><font>&lt;/ h1&gt; </font></font></span>
+    <span class="nt"><font><font>&lt;/ header&gt; </font></font></span>
+    <span class="nt"><font><font>&lt;Article&gt; </font></font></span>
+        <span class="nt"><font><font>&lt;p&gt;</font></font></span><font><font> Donec imperdiet ante sed diam consequat et dictum erat faucibus. </font><font>Aliquam sit</font></font><font></font><font><font>
+        amet vehicula leo. </font><font>Morbi urna dui, et tempor ac posuere, rutrum a dui.</font></font><font></font><font><font>
+        Curabitur neque quam, ut ultricies imperdiet id, ornare Varius Arcu. </font><font>Ut congue</font></font><font></font><font><font>
+        urna sit amet tellus malesuada nec Elementum risus molestie. </font><font>Donec Gravida</font></font><font></font><font><font>
+        tellus sed tortor adipiscing fringilla. </font><font>Donec nulla MAURIS, mollis egestas</font></font><font></font><font><font>
+        condimentum laoreet, Lacinia lorem vel. </font><font>Morbi vitae justo sit amet felis</font></font><font></font><font><font>
+        vehicula Commodo uno lacus placerat. </font><font>Mauris a est elit, nec vehicula urna. </font><font>Duis uno</font></font><font></font><font><font>
+        Lacus nisl. </font><font>Vestibolo ante ipsum primis in faucibus orci luctus et ultrices</font></font><font></font><font><font>
+        posuere cubilia curae. </font></font><span class="nt"><font><font>&lt;/ p&gt; </font></font></span>
+    <span class="nt"><font><font>&lt;/ article&gt;</font></font></span><font></font>
+{% endblock %}</pre>
+</div>
+</div>
+<p><font><font>La pagina è su niente di spettacolare. </font><font>La sua azione è solo il rendering di un file di template con un certo contenuto fittizio. </font><font>Ciò  tuttavia ci porta al prossimo compito.</font></font></p>
+</div>
+<div class="section" id="linking-the-pages">
+<h3><font><font>Collegamento delle pagine </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#linking-the-pages" title="Permalink per questo titolo"><font><font>¶</font></font></a></h3>
+<p><font><font>Ora abbiamo la pagina About pronta. </font><font>Dai un'occhiata a </font></font><tt class="docutils literal"><span class="pre"><font><font>http://symblog.dev/app_dev.php/about</font></font></span></tt><font><font> 
+per vederla. </font><font>Allo stato attuale non c'è modo per un 
+utente del vostro blog di vedere la pagina about, a meno di 
+digitare l'URL completo, proprio come abbiamo fatto. </font><font>Come c'era da aspettarsi Symfony2 fornisce entrambi i lati per l'equazione di routing. </font><font>Si può abbinare percorsi come abbiamo visto, e si può anche generare URL da questi percorsi. </font><font>Si dovrebbe sempre utilizzare le funzioni di routing fornite da Symfony2. </font><font>Mai nella vostra applicazione dovrebbe essere tentati di mettere le seguenti.</font></font></p>
+<div class="highlight-html+php"><div class="highlight">
+  <pre>&lt;a href=&quot;/contact&quot;&gt;Contact&lt;/a&gt;    
+&lt;?php $this-&gt;redirect(&quot;/contact&quot;); ?&gt;</pre>
+</div>
+</div>
+<p><font><font>Ci si potrebbe chiedere cosa c'è di sbagliato in questo approccio, può essere il modo di collegare sempre le pagine insieme. </font><font>Tuttavia, vi sono una serie di problemi con questo approccio.</font></font></p>
+<ol class="arabic simple">
+<li><font><font>Esso utilizza un collegamento fisso e ignora il completamente il sistema Symfony2  di routing . </font><font>Se
+ si voleva cambiare la posizione della pagina dei contatti, in qualsiasi
+ punto si dovrebbe trovare tutti i riferimenti  e 
+modificarli.</font></font></li>
+<li><font><font>Si ignora i controller di ambiente.Gli </font><font>Ambienti è qualcosa che non abbiamo ancora spiegato, ma in realtà li abbiamo utilizzati. </font><font>Il </font></font><tt class="docutils literal"><span class="pre"><font><font>app_dev.php</font></font></span></tt><font><font> front controller ci fornisce l'accesso alla nostra applicazione in </font></font><tt class="docutils literal"><span class="pre"><font><font>dev</font></font></span></tt><font><font> ambiente. </font><font>Se si dovesse sostituire il </font></font><tt class="docutils literal"><span class="pre"><font><font>app_dev.php</font></font></span></tt><font><font> con </font></font><tt class="docutils literal"><span class="pre"><font><font>app.php</font></font></span></tt><font><font> verrà eseguita l'applicazione nella </font></font><tt class="docutils literal"><span class="pre"><font><font>prod</font></font></span></tt><font><font> ambiente. </font><font>Il
+ significato di questi ambienti sarà spiegato più avanti nel tutorial, 
+ma per ora è importante notare che il collegamento fisso, sopra definito 
+non mantiene l'attuale contesto di front controller che viene 
+anteposto alla URL.</font></font></li>
+</ol>
+<p><font><font>Il modo corretto per collegare le pagine  è con il </font></font><tt class="docutils literal"><span class="pre"><font><font>percorso</font></font></span></tt><font><font> e </font></font><tt class="docutils literal"><span class="pre"><font><font>url</font></font></span></tt><font><font> metodi forniti da Twig. </font><font>Sono entrambi molto simili, tranne cheil medoto  </font></font><tt class="docutils literal"><span class="pre"><font><font>url</font></font></span></tt><font><font>  ci fornirà URL assoluti. </font></font></p>
+<p><font><font>Aggiorniamo il template principale dell'applicazione  in </font></font><tt class="docutils literal"><span class="pre"><font><font>/ app / views / Resources base.html.twig</font></font></span></tt><font><font>  collegare la pagina about  sulla home page.</font></font></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><span class="c"><font><font>&lt;! - App / Resources / views / base.html.twig -&gt;</font></font></span><font></font>
+{% block navigation %}     
+ &lt;nav&gt;          
+&lt;ul class=&quot;navigation&quot;&gt;              
+&lt;li&gt;&lt;a href=&quot;{{ path('BloggerBlogBundle_homepage') }}&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;              
+&lt;li&gt;&lt;a href=&quot;{{ path('BloggerBlogBundle_about') }}&quot;&gt;About&lt;/a&gt;&lt;/li&gt;              
+&lt;li&gt;&lt;a href=&quot;#&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;          
+&lt;/ul&gt;      
+&lt;/nav&gt;  
+{% endblock %}</pre>
+</div>
+</div>
+<p><font><font>Ora aggiornare il browser per vedere la home e about page e controlliamo se lavorano nel modo previsto.. </font><font>Se si visualizza il sorgente per le pagine si noterà che il link è stato preceduto da </font></font><tt class="docutils literal"><span class="pre"><font><font>/ app_dev.php /</font></font></span></tt><font><font> . </font><font>Questo è il front controller come spiegato sopra, e come si può vedere l'utilizzo del </font></font><tt class="docutils literal"><span class="pre"><font><font>percorso</font></font></span></tt><font><font> l'ha mantenuto.</font></font></p>
+<p><font><font>Infine,i aggiorniamo i collegamenti per reindirizzare il logo  alla homepage. </font><font>Aggiorniamo il template in </font></font><tt class="docutils literal"><span class="pre"><font><font>/ app / views / Resources base.html.twig</font></font></span></tt><font><font> .</font></font></p>
+<div class="highlight-html"><div class="highlight">
+  <pre><span class="c"><font><font>&lt;! - App / Resources / views / base.html.twig -&gt; </font></font></span>
+&lt;hgroup&gt;      
+&lt;h2&gt;{% block blog_title %}&lt;a href=&quot;{{ path('BloggerBlogBundle_homepage') }}&quot;&gt;symblog&lt;/a&gt;{% endblock %}&lt;/h2&gt;     
+ &lt;h3&gt;{% block blog_tagline %}&lt;a href=&quot;{{ path('BloggerBlogBundle_homepage') }}&quot;&gt;creating a blog in Symfony2&lt;/a&gt;{% endblock %}&lt;/h3&gt;  
+&lt;/hgroup&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2><font><font>Conclusione </font></font><a class="headerlink" href="http://tutorial.symblog.co.uk/docs/configuration-and-templating.html#conclusion" title="Permalink per questo titolo"><font><font>¶</font></font></a></h2>
+<p><font><font>Abbiamo coperto le aree di base per quanto riguarda 
+l'applicazione Symfony2 compreso spostare l'applicazione configurata e 
+funzionante. </font><font>Abbiamo cominciato ad esplorare i concetti 
+fondamentali alla base di un'applicazione Symfony2, tra cui routing e il
+  motore twig dei template.</font></font></p>
+<p><font><font>Ora vediamo di creare la pagina Contatto. </font><font>Questa
+ pagina è leggermente più complessa rispetto alla pagina Informazioni in
+ quanto consente agli utenti di interagire con un modulo web per 
+inviarci richieste. </font><font>Il prossimo capitolo introdurrà concpets compresi validatori e form</font></font></p>
+</div>
+</div>
+
+
+    <div id="disqus_thread">We were unable to load Disqus. If you are a moderator please see our <a href="http://docs.disqus.com/help/83/">troubleshooting guide</a>.<div style="display: none;" id="dsq-content"></div></div>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'symblogtutorial';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="http://disqus.com/" class="dsq-brlink"><font><font>commenti del blog powered by </font></font><span class="logo-disqus"><font><font>Disqus</font></font></span></a>
+
+
+  </div>
+  <div class="bottomnav">
+  
+        <p><font><font>
+        «&nbsp;&nbsp; </font></font><a href="http://tutorialsymfony3.eu5.org/index.html"><font><font>Creazione di un blog in Symfony2</font></font></a><font><font> 
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+         </font></font><a class="uplink" href="http://tutorialsymfony2.eu5.org/index.html"><font><font>Sommario</font></font></a><font><font> 
+        &nbsp;&nbsp;::&nbsp;&nbsp;
+         </font></font><a href="http://tutorialsymfony2.eu5.org/pag2.htm"><font><font>[Parte 2] - Pagina contatto: validatori, moduli ed e-mail</font></font></a><font><font> &nbsp;&nbsp;»
+        </font></font></p>
+
+  </div>
+    <!-- Place this render call where appropriate -->
+    <script type="text/javascript">
+      window.___gcfg = {lang: 'en-GB'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17277387-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+    <div class="footer"><font><font>
+        © Copyright 2011, dsyph3r. </font><font>Creato con </font></font><a href="http://sphinx.pocoo.org/"><font><font>Sphinx</font></font></a><font><font> 1.1.2.
+    </font></font></div><div id="goog-gt-tt" class="skiptranslate" dir="ltr"><div style="padding: 8px;"><div><div class="logo"><img src="pag1_files/translate-32.png" height="20" width="20"></div></div></div><div class="top" style="padding: 8px; float: left; width: 100%;"><h1 class="title gray">Original text:</h1></div><div class="middle" style="padding: 8px;"><div class="original-text"></div></div><div class="bottom" style="padding: 8px;"><div class="activity-links"><span class="activity-link">Contribute a better translation</span><span class="activity-link"></span></div><div class="started-activity-container"><hr style="color: #CCC; background-color: #CCC; height: 1px; border: none;"><div class="activity-root"></div></div></div><div class="status-message" style="display: none; "></div></div>
+  
+<iframe name="easyXDM_DISQUS_net_default1175_provider" id="easyXDM_DISQUS_net_default1175_provider" style="position: absolute; top: -2000px; left: 0px;" src="pag1_files/def.htm" frameborder="0"></iframe></body></html>
